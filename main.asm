@@ -1,536 +1,660 @@
-; CLIC3 Board Timer System Implementation
-; Measures S3 ON time and displays on 7-segment displays
-; Implements threshold alarm and status indicators
+;=============================================================================
+; CMPE2003 Design Assignment - S3 Timer System
+; Target: MSP430F5308 on CLIC3 Board
+; Author: [Your Name]
+; Date: October 2025
+;=============================================================================
 
-#include "msp430.h"
+#include "msp430f5308.h"
 
-; ============================================================================
-; CONSTANTS AND DEFINITIONS
-; ============================================================================
+;-----------------------------------------------------------------------------
+; Constants and Definitions
+;-----------------------------------------------------------------------------
+; Timer Constants
+TIMER_1MS       EQU     32      ; For 32kHz ACLK, 32 counts = ~1ms
+TIMER_100MS     EQU     3277    ; For 32kHz ACLK, 3277 counts = ~100ms
+DEBOUNCE_TIME   EQU     20      ; 20ms debounce time
 
-; Timing Constants
-TIMER_FREQ      EQU     32768       ; Timer frequency (32.768 kHz for ACLK)
-TICKS_PER_SEC   EQU     32768       ; Number of ticks per second
-DEBOUNCE_TIME   EQU     50          ; Debounce time in ms
-BLINK_RATE      EQU     16384       ; ~2Hz blink rate (32768/2)
+; LED Definitions (Based on CLIC3 board)
+LED_D0          EQU     01h     ; PJ.0 - Threshold alarm LED
+LED_D7          EQU     80h     ; P3.7 - S3 status indicator
 
-; I/O Pin Definitions
-LED0            EQU     01h         ; PJ.0 - Threshold alarm LED
-LED7            EQU     80h         ; P3.7 - S3 status indicator
-S3_PIN          EQU     08h         ; P1.3 - Switch S3 (example pin)
+; Switch S3 Definition (Adjust based on actual CLIC3 connection)
+S3_PIN          EQU     08h     ; P1.3 (example - verify with CLIC3 schematic)
+S3_PORT         EQU     P1IN
+S3_IE           EQU     P1IE
+S3_IES          EQU     P1IES
+S3_IFG          EQU     P1IFG
+S3_REN          EQU     P1REN
+S3_OUT          EQU     P1OUT
 
-; 7-Segment Display Ports (adjust based on CLIC3 pinout)
-DIS1_PORT       EQU     P2OUT       ; Units display
-DIS2_PORT       EQU     P4OUT       ; Tens display
+; Seven Segment Display Ports (Adjust based on CLIC3)
+SEG_PORT        EQU     P2OUT   ; Port for segment data
+DIS1_EN         EQU     01h     ; P4.0 - Enable for DIS1 (units)
+DIS2_EN         EQU     02h     ; P4.1 - Enable for DIS2 (tens)
 
-; LCD Commands
-LCD_CMD_PORT    EQU     P5OUT
-LCD_DATA_PORT   EQU     P6OUT
-LCD_CLEAR       EQU     01h
-LCD_HOME        EQU     02h
-LCD_ENTRY_MODE  EQU     06h
-LCD_ON          EQU     0Ch
-LCD_LINE1       EQU     80h
-LCD_LINE2       EQU     0C0h
+; LCD Control (Typical 16x2 LCD)
+LCD_DATA        EQU     P2OUT   ; Data port
+LCD_CTRL        EQU     P4OUT   ; Control port
+LCD_RS          EQU     04h     ; Register Select
+LCD_EN          EQU     08h     ; Enable
+LCD_RW          EQU     10h     ; Read/Write
 
-; Memory Locations for Variables
-RSEG DATA16_I
-seconds_count:      DS      2       ; Current seconds count
-threshold_value:    DS      2       ; User-entered threshold
-timer_active:       DS      1       ; Timer active flag
-alarm_active:       DS      1       ; Alarm active flag
-blink_state:        DS      1       ; LED blink state
-debounce_counter:   DS      2       ; Debounce counter
-keypad_buffer:      DS      2       ; Keypad input buffer
-tick_counter:       DS      2       ; Sub-second tick counter
+; Keypad (4x3 matrix typical)
+KEY_PORT_IN     EQU     P5IN
+KEY_PORT_OUT    EQU     P5OUT
+KEY_PORT_DIR    EQU     P5DIR
 
-RSEG CODE
+;-----------------------------------------------------------------------------
+; Variable Definitions in RAM
+;-----------------------------------------------------------------------------
+            RSEG    DATA16_N
+            
+timer_ticks:    DS      2       ; Timer tick counter (100ms ticks)
+elapsed_secs:   DS      1       ; Elapsed time in seconds
+threshold:      DS      1       ; Threshold value in seconds
+s3_state:       DS      1       ; Current S3 state (0=OFF, 1=ON)
+debounce_cnt:   DS      1       ; Debounce counter
+blink_state:    DS      1       ; LED blink state
+blink_counter:  DS      1       ; Blink rate counter
+key_buffer:     DS      1       ; Keyboard input buffer
+input_state:    DS      1       ; Input state machine
+display_buffer: DS      2       ; Seven segment display buffer
 
-; ============================================================================
-; RESET VECTOR AND INITIALIZATION
-; ============================================================================
+; State machine states
+STATE_IDLE      EQU     0
+STATE_THRESHOLD EQU     1
+STATE_TIMING    EQU     2
+STATE_STOPPED   EQU     3
+
+;-----------------------------------------------------------------------------
+; Stack Definition
+;-----------------------------------------------------------------------------
+            RSEG    CSTACK
+            
+;-----------------------------------------------------------------------------
+; Main Program Code
+;-----------------------------------------------------------------------------
+            RSEG    CODE
+            
 RESET:
-    mov.w   #0x2500, SP                 ; Initialize stack pointer
-    mov.w   #WDTPW+WDTHOLD, &WDTCTL     ; Stop watchdog timer
-    
-    ; Initialize ports
-    call    #Init_Ports
-    call    #Init_LCD
-    call    #Init_Timer
-    call    #Init_Interrupts
-    call    #Init_Variables
-    
-    ; Request threshold from user
-    call    #Get_Threshold
-    
-    ; Enable global interrupts
-    bis.w   #GIE, SR
-    
-    ; Main loop
+            mov.w   #SFE(CSTACK), SP        ; Initialize stack pointer
+            mov.w   #WDTPW+WDTHOLD, &WDTCTL ; Stop watchdog timer
+            
+            ; Initialize ports
+            call    #Init_Ports
+            
+            ; Initialize timers
+            call    #Init_Timers
+            
+            ; Initialize LCD
+            call    #Init_LCD
+            
+            ; Initialize variables
+            call    #Init_Variables
+            
+            ; Request threshold entry
+            call    #Request_Threshold
+            
+            ; Enable global interrupts
+            bis.w   #GIE, SR
+            
 Main_Loop:
-    ; Check if timer is active and update display
-    mov.b   &timer_active, R12
-    tst.b   R12
-    jz      Check_Alarm
-    
-    ; Update 7-segment displays with current count
-    call    #Update_Display
-    
-Check_Alarm:
-    ; Check if alarm should be active
-    mov.w   &seconds_count, R12
-    mov.w   &threshold_value, R13
-    cmp.w   R13, R12
-    jlo     No_Alarm
-    
-    ; Activate alarm
-    mov.b   #1, &alarm_active
-    jmp     Continue_Main
-    
-No_Alarm:
-    mov.b   #0, &alarm_active
-    bic.b   #LED0, &PJOUT              ; Turn off alarm LED
-    
-Continue_Main:
-    ; Enter low power mode 0 with interrupts enabled
-    bis.w   #CPUOFF+GIE, SR            ; Enter LPM0
-    nop                                 ; For debugger
-    jmp     Main_Loop
+            ; Check system state and update displays
+            cmp.b   #STATE_TIMING, &input_state
+            jne     Check_Threshold_Exceeded
+            
+            ; Update elapsed time display
+            call    #Update_Time_Display
+            
+Check_Threshold_Exceeded:
+            ; Check if threshold exceeded
+            mov.b   &elapsed_secs, R12
+            cmp.b   &threshold, R12
+            jlo     Main_Continue
+            
+            ; Enable blinking if exceeded
+            mov.b   #1, &blink_state
+            jmp     Main_Sleep
+            
+Main_Continue:
+            mov.b   #0, &blink_state
+            
+Main_Sleep:
+            ; Enter low power mode 0 (SMCLK active for timers)
+            bis.w   #LPM0, SR
+            nop
+            jmp     Main_Loop
 
-; ============================================================================
-; INITIALIZATION ROUTINES
-; ============================================================================
-
+;-----------------------------------------------------------------------------
+; Port Initialization
+;-----------------------------------------------------------------------------
 Init_Ports:
-    ; Configure LED outputs
-    bis.b   #0x0F, &PJDIR              ; PJ.0-PJ.3 as outputs
-    bis.b   #0xF0, &P3DIR              ; P3.4-P3.7 as outputs
-    bic.b   #0x0F, &PJOUT              ; Clear PJ LEDs
-    bic.b   #0xF0, &P3OUT              ; Clear P3 LEDs
-    
-    ; Configure S3 input with pull-up
-    bic.b   #S3_PIN, &P1DIR            ; P1.3 as input
-    bis.b   #S3_PIN, &P1REN            ; Enable pull-up/down
-    bis.b   #S3_PIN, &P1OUT            ; Select pull-up
-    
-    ; Configure 7-segment display ports
-    bis.b   #0xFF, &P2DIR              ; P2 as output for DIS1
-    bis.b   #0xFF, &P4DIR              ; P4 as output for DIS2
-    mov.b   #0x3F, &P2OUT              ; Display 0 initially
-    mov.b   #0x3F, &P4OUT              ; Display 0 initially
-    
-    ; Configure LCD ports
-    bis.b   #0xFF, &P5DIR              ; LCD command port
-    bis.b   #0xFF, &P6DIR              ; LCD data port
-    
-    ret
+            ; Configure LED outputs
+            bis.b   #LED_D0, &PJDIR         ; D0 as output
+            bis.b   #LED_D7, &P3DIR         ; D7 as output
+            
+            ; Clear LEDs initially
+            bic.b   #LED_D0, &PJOUT
+            bic.b   #LED_D7, &P3OUT
+            
+            ; Configure S3 input with pull-up and interrupt
+            bic.b   #S3_PIN, &P1DIR         ; S3 as input
+            bis.b   #S3_PIN, &S3_REN        ; Enable pull resistor
+            bis.b   #S3_PIN, &S3_OUT        ; Pull-up
+            bis.b   #S3_PIN, &S3_IES        ; High-to-low transition
+            bic.b   #S3_PIN, &S3_IFG        ; Clear interrupt flag
+            bis.b   #S3_PIN, &S3_IE         ; Enable interrupt
+            
+            ; Configure seven segment display
+            bis.b   #0FFh, &P2DIR           ; Segment data as output
+            bis.b   #(DIS1_EN+DIS2_EN), &P4DIR ; Display enables
+            
+            ; Configure LCD
+            bis.b   #0FFh, &P2DIR           ; LCD data
+            bis.b   #(LCD_RS+LCD_EN+LCD_RW), &P4DIR ; LCD control
+            
+            ret
 
-Init_Timer:
-    ; Configure Timer A0 for 1-second intervals using ACLK
-    mov.w   #TASSEL_1+MC_1+TACLR, &TA0CTL  ; ACLK, Up mode, clear
-    mov.w   #TICKS_PER_SEC-1, &TA0CCR0     ; 1 second period
-    mov.w   #CCIE, &TA0CCTL0                ; Enable CCR0 interrupt
-    
-    ; Configure Timer A1 for LED blinking (2Hz)
-    mov.w   #TASSEL_1+MC_1+TACLR, &TA1CTL  ; ACLK, Up mode
-    mov.w   #BLINK_RATE-1, &TA1CCR0        ; 0.5 second period
-    mov.w   #CCIE, &TA1CCTL0                ; Enable CCR0 interrupt
-    
-    ret
+;-----------------------------------------------------------------------------
+; Timer Initialization
+;-----------------------------------------------------------------------------
+Init_Timers:
+            ; Timer A0 for 100ms tick (elapsed time measurement)
+            mov.w   #TASSEL_1+MC_0, &TA0CTL ; ACLK source, stop mode
+            mov.w   #TIMER_100MS, &TA0CCR0  ; 100ms period
+            mov.w   #CCIE, &TA0CCTL0        ; Enable CCR0 interrupt
+            
+            ; Timer A1 for LED blinking (500ms period for 2Hz)
+            mov.w   #TASSEL_1+MC_1+TACLR, &TA1CTL ; ACLK, up mode
+            mov.w   #16384, &TA1CCR0        ; ~500ms at 32kHz
+            mov.w   #CCIE, &TA1CCTL0        ; Enable interrupt
+            
+            ret
 
-Init_Interrupts:
-    ; Configure P1.3 interrupt for S3
-    bis.b   #S3_PIN, &P1IE             ; Enable interrupt
-    bis.b   #S3_PIN, &P1IES            ; High-to-low transition
-    bic.b   #S3_PIN, &P1IFG            ; Clear interrupt flag
-    
-    ret
-
+;-----------------------------------------------------------------------------
+; Variable Initialization
+;-----------------------------------------------------------------------------
 Init_Variables:
-    mov.w   #0, &seconds_count
-    mov.w   #10, &threshold_value      ; Default threshold
-    mov.b   #0, &timer_active
-    mov.b   #0, &alarm_active
-    mov.b   #0, &blink_state
-    mov.w   #0, &debounce_counter
-    mov.w   #0, &tick_counter
-    
-    ret
+            mov.w   #0, &timer_ticks
+            mov.b   #0, &elapsed_secs
+            mov.b   #10, &threshold         ; Default 10 seconds
+            mov.b   #0, &s3_state
+            mov.b   #0, &debounce_cnt
+            mov.b   #0, &blink_state
+            mov.b   #STATE_IDLE, &input_state
+            
+            ret
 
-; ============================================================================
-; LCD ROUTINES
-; ============================================================================
-
+;-----------------------------------------------------------------------------
+; LCD Initialization (4-bit mode)
+;-----------------------------------------------------------------------------
 Init_LCD:
-    push    R12
-    
-    ; Wait for LCD to power up
-    mov.w   #10000, R12
-LCD_Delay:
-    dec.w   R12
-    jnz     LCD_Delay
-    
-    ; Initialize LCD in 8-bit mode
-    mov.b   #30h, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    mov.b   #30h, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    mov.b   #30h, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Function set: 8-bit, 2 lines, 5x8 font
-    mov.b   #38h, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Display on, cursor off
-    mov.b   #LCD_ON, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Clear display
-    mov.b   #LCD_CLEAR, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Entry mode set
-    mov.b   #LCD_ENTRY_MODE, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    pop     R12
-    ret
+            push    R12
+            
+            ; Wait for LCD power-up
+            mov.w   #20000, R12
+LCD_Wait:   dec.w   R12
+            jnz     LCD_Wait
+            
+            ; Initialize in 4-bit mode
+            mov.b   #030h, &LCD_DATA
+            call    #LCD_Pulse
+            
+            mov.w   #5000, R12
+Wait1:      dec.w   R12
+            jnz     Wait1
+            
+            mov.b   #030h, &LCD_DATA
+            call    #LCD_Pulse
+            
+            mov.b   #030h, &LCD_DATA
+            call    #LCD_Pulse
+            
+            ; Set 4-bit mode
+            mov.b   #020h, &LCD_DATA
+            call    #LCD_Pulse
+            
+            ; Function set: 4-bit, 2 lines, 5x8 font
+            mov.b   #028h, R12
+            call    #LCD_Command
+            
+            ; Display on, cursor off
+            mov.b   #00Ch, R12
+            call    #LCD_Command
+            
+            ; Clear display
+            mov.b   #001h, R12
+            call    #LCD_Command
+            
+            ; Entry mode: increment, no shift
+            mov.b   #006h, R12
+            call    #LCD_Command
+            
+            pop     R12
+            ret
 
-LCD_Command_Delay:
-    push    R12
-    mov.w   #1000, R12
-LCD_Cmd_Loop:
-    dec.w   R12
-    jnz     LCD_Cmd_Loop
-    pop     R12
-    ret
+;-----------------------------------------------------------------------------
+; LCD Command Send (4-bit mode)
+;-----------------------------------------------------------------------------
+LCD_Command:
+            push    R13
+            
+            bic.b   #LCD_RS, &LCD_CTRL      ; RS=0 for command
+            
+            ; Send high nibble
+            mov.b   R12, R13
+            rra.b   R13
+            rra.b   R13
+            rra.b   R13
+            rra.b   R13
+            and.b   #0Fh, R13
+            mov.b   R13, &LCD_DATA
+            call    #LCD_Pulse
+            
+            ; Send low nibble
+            mov.b   R12, R13
+            and.b   #0Fh, R13
+            mov.b   R13, &LCD_DATA
+            call    #LCD_Pulse
+            
+            pop     R13
+            ret
 
-LCD_Write_String:
-    ; R12 points to null-terminated string
-    push    R13
-LCD_String_Loop:
-    mov.b   @R12+, R13
-    tst.b   R13
-    jz      LCD_String_Done
-    mov.b   R13, &LCD_DATA_PORT
-    call    #LCD_Command_Delay
-    jmp     LCD_String_Loop
-LCD_String_Done:
-    pop     R13
-    ret
+;-----------------------------------------------------------------------------
+; LCD Data Send
+;-----------------------------------------------------------------------------
+LCD_Data:
+            push    R13
+            
+            bis.b   #LCD_RS, &LCD_CTRL      ; RS=1 for data
+            
+            ; Send high nibble
+            mov.b   R12, R13
+            rra.b   R13
+            rra.b   R13
+            rra.b   R13
+            rra.b   R13
+            and.b   #0Fh, R13
+            mov.b   R13, &LCD_DATA
+            call    #LCD_Pulse
+            
+            ; Send low nibble
+            mov.b   R12, R13
+            and.b   #0Fh, R13
+            mov.b   R13, &LCD_DATA
+            call    #LCD_Pulse
+            
+            pop     R13
+            ret
 
-; ============================================================================
-; KEYPAD AND THRESHOLD INPUT
-; ============================================================================
+;-----------------------------------------------------------------------------
+; LCD Enable Pulse
+;-----------------------------------------------------------------------------
+LCD_Pulse:
+            bis.b   #LCD_EN, &LCD_CTRL
+            nop
+            nop
+            bic.b   #LCD_EN, &LCD_CTRL
+            
+            ; Small delay
+            push    R15
+            mov.w   #100, R15
+Pulse_Delay:
+            dec.w   R15
+            jnz     Pulse_Delay
+            pop     R15
+            
+            ret
 
-Get_Threshold:
-    push    R12
-    push    R13
-    
-    ; Clear LCD and display prompt
-    mov.b   #LCD_CLEAR, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    mov.b   #LCD_LINE1, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Display "Enter threshold:"
-    mov.w   #Prompt_Msg, R12
-    call    #LCD_Write_String
-    
-    ; Get two digits from keypad
-    call    #Read_Keypad_Digit         ; Get tens digit
-    mov.b   R12, R13
-    call    #Display_Digit_LCD
-    
-    call    #Read_Keypad_Digit         ; Get units digit
-    push    R12
-    mov.b   R13, R12
-    call    #Multiply_By_10
-    pop     R13
-    add.b   R13, R12
-    mov.w   R12, &threshold_value
-    
-    ; Display confirmation
-    mov.b   #LCD_LINE2, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    mov.w   #Threshold_Set_Msg, R12
-    call    #LCD_Write_String
-    
-    pop     R13
-    pop     R12
-    ret
+;-----------------------------------------------------------------------------
+; Request Threshold Entry
+;-----------------------------------------------------------------------------
+Request_Threshold:
+            ; Clear LCD
+            mov.b   #001h, R12
+            call    #LCD_Command
+            
+            ; Display prompt
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'n', R12
+            call    #LCD_Data
+            mov.b   #'t', R12
+            call    #LCD_Data
+            mov.b   #'e', R12
+            call    #LCD_Data
+            mov.b   #'r', R12
+            call    #LCD_Data
+            mov.b   #' ', R12
+            call    #LCD_Data
+            mov.b   #'T', R12
+            call    #LCD_Data
+            mov.b   #'h', R12
+            call    #LCD_Data
+            mov.b   #'r', R12
+            call    #LCD_Data
+            mov.b   #'e', R12
+            call    #LCD_Data
+            mov.b   #'s', R12
+            call    #LCD_Data
+            mov.b   #'h', R12
+            call    #LCD_Data
+            mov.b   #':', R12
+            call    #LCD_Data
+            
+            mov.b   #STATE_THRESHOLD, &input_state
+            
+            ; TODO: Implement keypad reading routine
+            
+            ret
 
-Read_Keypad_Digit:
-    ; Simplified keypad reading - implement based on CLIC3 keypad interface
-    ; Returns digit in R12
-    ; This is a placeholder - actual implementation depends on keypad wiring
-    mov.b   #5, R12                    ; Return dummy value
-    ret
+;-----------------------------------------------------------------------------
+; Update Time Display on Seven Segment
+;-----------------------------------------------------------------------------
+Update_Time_Display:
+            push    R12
+            push    R13
+            
+            ; Get tens digit
+            mov.b   &elapsed_secs, R12
+            mov.b   #10, R13
+            call    #Divide
+            mov.b   R12, &display_buffer    ; Tens
+            mov.b   R13, &display_buffer+1  ; Units
+            
+            ; Display tens on DIS2
+            mov.b   &display_buffer, R12
+            call    #Get_7Seg_Pattern
+            mov.b   R12, &SEG_PORT
+            bis.b   #DIS2_EN, &P4OUT
+            
+            ; Small delay
+            mov.w   #100, R12
+Disp_Delay1:
+            dec.w   R12
+            jnz     Disp_Delay1
+            
+            bic.b   #DIS2_EN, &P4OUT
+            
+            ; Display units on DIS1
+            mov.b   &display_buffer+1, R12
+            call    #Get_7Seg_Pattern
+            mov.b   R12, &SEG_PORT
+            bis.b   #DIS1_EN, &P4OUT
+            
+            ; Small delay
+            mov.w   #100, R12
+Disp_Delay2:
+            dec.w   R12
+            jnz     Disp_Delay2
+            
+            bic.b   #DIS1_EN, &P4OUT
+            
+            pop     R13
+            pop     R12
+            ret
 
-Multiply_By_10:
-    ; R12 = R12 * 10
-    push    R13
-    mov.b   R12, R13
-    add.b   R12, R12                   ; x2
-    add.b   R12, R12                   ; x4
-    add.b   R13, R12                   ; x5
-    add.b   R12, R12                   ; x10
-    pop     R13
-    ret
-
-Display_Digit_LCD:
-    ; Display digit in R12 on LCD
-    add.b   #'0', R12                  ; Convert to ASCII
-    mov.b   R12, &LCD_DATA_PORT
-    call    #LCD_Command_Delay
-    ret
-
-; ============================================================================
-; DISPLAY UPDATE ROUTINES
-; ============================================================================
-
-Update_Display:
-    push    R12
-    push    R13
-    push    R14
-    
-    ; Get current seconds count
-    mov.w   &seconds_count, R12
-    
-    ; Limit to 99
-    cmp.w   #99, R12
-    jlo     Display_Value
-    mov.w   #99, R12
-    
-Display_Value:
-    ; Calculate tens and units
-    mov.b   R12, R13                   ; Save original value
-    mov.b   #10, R14
-    call    #Divide_By_10              ; R12 = tens, R14 = units
-    
-    ; Convert to 7-segment and display
-    call    #Get_7Seg_Pattern
-    mov.b   R12, &DIS2_PORT            ; Display tens
-    
-    mov.b   R14, R12
-    call    #Get_7Seg_Pattern
-    mov.b   R12, &DIS1_PORT            ; Display units
-    
-    ; Update LCD status
-    call    #Update_LCD_Status
-    
-    pop     R14
-    pop     R13
-    pop     R12
-    ret
-
-Divide_By_10:
-    ; Input: R12 = value
-    ; Output: R12 = quotient, R14 = remainder
-    push    R13
-    mov.b   #0, R13                    ; Quotient
-    mov.b   R12, R14                   ; Copy value
-Div_Loop:
-    cmp.b   #10, R14
-    jlo     Div_Done
-    sub.b   #10, R14
-    inc.b   R13
-    jmp     Div_Loop
-Div_Done:
-    mov.b   R13, R12
-    pop     R13
-    ret
-
+;-----------------------------------------------------------------------------
+; Get 7-Segment Pattern
+;-----------------------------------------------------------------------------
 Get_7Seg_Pattern:
-    ; Convert digit in R12 to 7-segment pattern
-    ; Returns pattern in R12
-    push    R13
-    mov.w   #Seven_Seg_Table, R13
-    add.w   R12, R13
-    mov.b   @R13, R12
-    pop     R13
-    ret
+            ; Input: R12 = digit (0-9)
+            ; Output: R12 = segment pattern
+            
+            cmp.b   #10, R12
+            jhs     Seg_Default
+            
+            add.w   R12, R12                ; Word offset
+            mov.w   Seg_Table(R12), R12
+            ret
+            
+Seg_Default:
+            mov.b   #0FFh, R12              ; All segments on for error
+            ret
+            
+Seg_Table:
+            DW      03Fh    ; 0
+            DW      006h    ; 1
+            DW      05Bh    ; 2
+            DW      04Fh    ; 3
+            DW      066h    ; 4
+            DW      06Dh    ; 5
+            DW      07Dh    ; 6
+            DW      007h    ; 7
+            DW      07Fh    ; 8
+            DW      06Fh    ; 9
 
-Update_LCD_Status:
-    push    R12
-    
-    ; Clear second line
-    mov.b   #LCD_LINE2, &LCD_CMD_PORT
-    call    #LCD_Command_Delay
-    
-    ; Check timer status
-    mov.b   &timer_active, R12
-    tst.b   R12
-    jz      Show_Idle
-    
-    ; Show "Timing: XX s"
-    mov.w   #Timing_Msg, R12
-    call    #LCD_Write_String
-    jmp     LCD_Status_Done
-    
-Show_Idle:
-    mov.w   #Idle_Msg, R12
-    call    #LCD_Write_String
-    
-LCD_Status_Done:
-    pop     R12
-    ret
+;-----------------------------------------------------------------------------
+; Simple Division Routine
+;-----------------------------------------------------------------------------
+Divide:
+            ; Input: R12 = dividend, R13 = divisor
+            ; Output: R12 = quotient, R13 = remainder
+            
+            push    R14
+            mov.b   #0, R14                 ; Quotient
+            
+Div_Loop:
+            cmp.b   R13, R12
+            jlo     Div_Done
+            sub.b   R13, R12
+            inc.b   R14
+            jmp     Div_Loop
+            
+Div_Done:
+            mov.b   R12, R13                ; Remainder
+            mov.b   R14, R12                ; Quotient
+            pop     R14
+            ret
 
-; ============================================================================
-; INTERRUPT SERVICE ROUTINES
-; ============================================================================
-
-; Port 1 ISR - S3 switch
-PORT1_ISR:
-    push    R12
-    
-    ; Check if S3 caused interrupt
-    bit.b   #S3_PIN, &P1IFG
-    jz      P1_ISR_Done
-    
-    ; Debounce check
-    mov.w   &debounce_counter, R12
-    tst.w   R12
-    jnz     P1_ISR_Done
-    
-    ; Set debounce counter
-    mov.w   #DEBOUNCE_TIME, &debounce_counter
-    
-    ; Check S3 state
-    bit.b   #S3_PIN, &P1IN
-    jz      S3_Pressed
-    
-S3_Released:
-    ; S3 released - stop timer
-    mov.b   #0, &timer_active
-    bic.b   #LED7, &P3OUT              ; Turn off D7
-    
-    ; Configure for high-to-low transition (next press)
-    bis.b   #S3_PIN, &P1IES
-    jmp     P1_ISR_Clear
-    
-S3_Pressed:
-    ; S3 pressed - start/reset timer
-    mov.w   #0, &seconds_count
-    mov.w   #0, &tick_counter
-    mov.b   #1, &timer_active
-    bis.b   #LED7, &P3OUT              ; Turn on D7
-    
-    ; Configure for low-to-high transition (release)
-    bic.b   #S3_PIN, &P1IES
-    
-P1_ISR_Clear:
-    bic.b   #S3_PIN, &P1IFG            ; Clear interrupt flag
-    
-P1_ISR_Done:
-    pop     R12
-    
-    ; Wake up from LPM
-    bic.w   #CPUOFF, 0(SP)
-    
-    reti
-
-; Timer A0 CCR0 ISR - 1 second timer
+;-----------------------------------------------------------------------------
+; Timer A0 CCR0 ISR - 100ms tick for elapsed time
+;-----------------------------------------------------------------------------
 TIMER0_A0_ISR:
-    push    R12
-    
-    ; Check if timer is active
-    mov.b   &timer_active, R12
-    tst.b   R12
-    jz      TA0_ISR_Debounce
-    
-    ; Increment seconds counter
-    inc.w   &seconds_count
-    
-    ; Wake up main loop to update display
-    bic.w   #CPUOFF, 0(SP)
-    
-TA0_ISR_Debounce:
-    ; Handle debounce counter
-    mov.w   &debounce_counter, R12
-    tst.w   R12
-    jz      TA0_ISR_Done
-    dec.w   &debounce_counter
-    
-TA0_ISR_Done:
-    pop     R12
-    reti
+            push    R12
+            
+            ; Check if timing is active
+            cmp.b   #STATE_TIMING, &input_state
+            jne     Timer0_Exit
+            
+            ; Increment tick counter
+            inc.w   &timer_ticks
+            
+            ; Check if 10 ticks (1 second)
+            cmp.w   #10, &timer_ticks
+            jne     Timer0_Exit
+            
+            ; Reset tick counter
+            mov.w   #0, &timer_ticks
+            
+            ; Increment seconds
+            inc.b   &elapsed_secs
+            
+            ; Cap at 99 seconds
+            cmp.b   #100, &elapsed_secs
+            jlo     Timer0_Exit
+            mov.b   #99, &elapsed_secs
+            
+Timer0_Exit:
+            pop     R12
+            bic.w   #LPM0, 0(SP)            ; Wake up from LPM0
+            reti
 
-; Timer A1 CCR0 ISR - LED blink timer
+;-----------------------------------------------------------------------------
+; Timer A1 CCR0 ISR - LED blinking
+;-----------------------------------------------------------------------------
 TIMER1_A0_ISR:
-    push    R12
-    
-    ; Check if alarm is active
-    mov.b   &alarm_active, R12
-    tst.b   R12
-    jz      TA1_ISR_Done
-    
-    ; Toggle blink state and LED
-    xor.b   #1, &blink_state
-    mov.b   &blink_state, R12
-    tst.b   R12
-    jz      LED_Off
-    
-    bis.b   #LED0, &PJOUT              ; Turn on LED0
-    jmp     TA1_ISR_Done
-    
-LED_Off:
-    bic.b   #LED0, &PJOUT              ; Turn off LED0
-    
-TA1_ISR_Done:
-    pop     R12
-    reti
+            ; Check if blinking is enabled
+            cmp.b   #0, &blink_state
+            jeq     Timer1_Exit
+            
+            ; Toggle D0 LED
+            xor.b   #LED_D0, &PJOUT
+            
+Timer1_Exit:
+            reti
 
-; ============================================================================
-; DATA TABLES
-; ============================================================================
+;-----------------------------------------------------------------------------
+; Port 1 ISR - S3 switch handler
+;-----------------------------------------------------------------------------
+PORT1_ISR:
+            push    R12
+            
+            ; Check if S3 caused interrupt
+            bit.b   #S3_PIN, &S3_IFG
+            jz      P1_Exit
+            
+            ; Clear interrupt flag
+            bic.b   #S3_PIN, &S3_IFG
+            
+            ; Simple debounce check
+            mov.w   #DEBOUNCE_TIME, R12
+Debounce:
+            dec.w   R12
+            jnz     Debounce
+            
+            ; Read current S3 state
+            bit.b   #S3_PIN, &S3_PORT
+            jnz     S3_Released
+            
+S3_Pressed:
+            ; S3 is pressed (active low)
+            mov.b   #1, &s3_state
+            
+            ; Turn on D7
+            bis.b   #LED_D7, &P3OUT
+            
+            ; Start timing
+            mov.b   #STATE_TIMING, &input_state
+            mov.w   #0, &timer_ticks
+            mov.b   #0, &elapsed_secs
+            
+            ; Start Timer A0
+            bis.w   #MC_1+TACLR, &TA0CTL    ; Up mode, clear
+            
+            ; Configure for rising edge (release)
+            bic.b   #S3_PIN, &S3_IES
+            
+            jmp     P1_Exit
+            
+S3_Released:
+            ; S3 is released
+            mov.b   #0, &s3_state
+            
+            ; Turn off D7
+            bic.b   #LED_D7, &P3OUT
+            
+            ; Stop timing
+            mov.b   #STATE_STOPPED, &input_state
+            
+            ; Stop Timer A0
+            bic.w   #MC_1+MC_2, &TA0CTL
+            
+            ; Configure for falling edge (press)
+            bis.b   #S3_PIN, &S3_IES
+            
+            ; Update LCD with final time
+            call    #Display_Elapsed_Time
+            
+P1_Exit:
+            pop     R12
+            bic.w   #LPM0, 0(SP)            ; Wake up
+            reti
 
-RSEG DATA16_C
+;-----------------------------------------------------------------------------
+; Display Elapsed Time on LCD
+;-----------------------------------------------------------------------------
+Display_Elapsed_Time:
+            push    R12
+            push    R13
+            
+            ; Move to second line of LCD
+            mov.b   #0C0h, R12              ; Line 2, position 0
+            call    #LCD_Command
+            
+            ; Display "Elapsed: "
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'l', R12
+            call    #LCD_Data
+            mov.b   #'a', R12
+            call    #LCD_Data
+            mov.b   #'p', R12
+            call    #LCD_Data
+            mov.b   #'s', R12
+            call    #LCD_Data
+            mov.b   #'e', R12
+            call    #LCD_Data
+            mov.b   #'d', R12
+            call    #LCD_Data
+            mov.b   #':', R12
+            call    #LCD_Data
+            mov.b   #' ', R12
+            call    #LCD_Data
+            
+            ; Display time value
+            mov.b   &elapsed_secs, R12
+            mov.b   #10, R13
+            call    #Divide
+            
+            ; Display tens digit
+            add.b   #'0', R12
+            call    #LCD_Data
+            
+            ; Display units digit
+            mov.b   R13, R12
+            add.b   #'0', R12
+            call    #LCD_Data
+            
+            mov.b   #' ', R12
+            call    #LCD_Data
+            mov.b   #'s', R12
+            call    #LCD_Data
+            
+            ; Check if threshold exceeded
+            mov.b   &elapsed_secs, R12
+            cmp.b   &threshold, R12
+            jlo     Display_Exit
+            
+            ; Display "EXCEEDED!"
+            mov.b   #' ', R12
+            call    #LCD_Data
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'X', R12
+            call    #LCD_Data
+            mov.b   #'C', R12
+            call    #LCD_Data
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'D', R12
+            call    #LCD_Data
+            mov.b   #'E', R12
+            call    #LCD_Data
+            mov.b   #'D', R12
+            call    #LCD_Data
+            
+Display_Exit:
+            pop     R13
+            pop     R12
+            ret
 
-Seven_Seg_Table:
-    DB      3Fh     ; 0
-    DB      06h     ; 1
-    DB      5Bh     ; 2
-    DB      4Fh     ; 3
-    DB      66h     ; 4
-    DB      6Dh     ; 5
-    DB      7Dh     ; 6
-    DB      07h     ; 7
-    DB      7Fh     ; 8
-    DB      6Fh     ; 9
-
-Prompt_Msg:
-    DB      "Enter threshold:", 0
-
-Threshold_Set_Msg:
-    DB      "Threshold: ", 0
-
-Timing_Msg:
-    DB      "Timing... ", 0
-
-Idle_Msg:
-    DB      "Ready ", 0
-
-Exceeded_Msg:
-    DB      "EXCEEDED! ", 0
-
-; ============================================================================
-; INTERRUPT VECTORS
-; ============================================================================
-
-RSEG INTVEC
-
-    ORG     PORT1_VECTOR
-    DW      PORT1_ISR
-
-    ORG     TIMER0_A0_VECTOR
-    DW      TIMER0_A0_ISR
-
-    ORG     TIMER1_A0_VECTOR
-    DW      TIMER1_A0_ISR
-
-    ORG     RESET_VECTOR
-    DW      RESET
-
-END
+;-----------------------------------------------------------------------------
+; Interrupt Vectors
+;-----------------------------------------------------------------------------
+            RSEG    RESET_VECTOR
+            DW      RESET
+            
+            RSEG    PORT1_VECTOR
+            DW      PORT1_ISR
+            
+            RSEG    TIMER0_A0_VECTOR
+            DW      TIMER0_A0_ISR
+            
+            RSEG    TIMER1_A0_VECTOR
+            DW      TIMER1_A0_ISR
+            
+            END
