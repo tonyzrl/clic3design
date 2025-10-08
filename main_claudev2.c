@@ -15,7 +15,7 @@ void BusWrite(void);
 #define KEYPAD_ADDR     0x4008
 
 /* ========================= Configuration ========================= */
-#define SWITCH_S3_BIT   0x01        // S3 is bit 0
+#define SWITCH_S3_BIT   0x80        // S3 is bit 7 (not bit 0!)
 #define LED_D0          0x01        // Alarm LED (ACTIVE-LOW: 0=ON, 1=OFF)
 #define LED_D7          0x80        // S3 status LED (ACTIVE-LOW: 0=ON, 1=OFF)
 #define DEBOUNCE_MS     20          // 20ms debounce time
