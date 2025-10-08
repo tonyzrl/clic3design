@@ -44,7 +44,7 @@ static volatile unsigned char s3_raw = 0;           // Raw sample
 static volatile unsigned int  debounce_counter = 0;
 
 // Alarm state
-static volatile unsigned char threshold = 10;       // Default 10 seconds (for testing)
+static volatile unsigned char threshold = 99;       // Default 10 seconds (for testing)
 static volatile unsigned char alarm_on = 0;         // Alarm active flag
 static volatile unsigned int  blink_count = 0;      // Blink timer
 
