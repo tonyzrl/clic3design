@@ -44,7 +44,7 @@ static volatile unsigned char s3_raw = 0;           // Raw sample
 static volatile unsigned int  debounce_counter = 0;
 
 // Alarm state
-static volatile unsigned char threshold = 99;       // Default 99 seconds
+static volatile unsigned char threshold = 10;       // Default 10 seconds (for testing)
 static volatile unsigned char alarm_on = 0;         // Alarm active flag
 static volatile unsigned int  blink_count = 0;      // Blink timer
 
@@ -245,12 +245,16 @@ __interrupt void Timer_ISR(void) {
         blink_count++;
         if(blink_count >= BLINK_MS) {
             blink_count = 0;
+            leds ^= LED_D0;  // Toggle D0 in the ISR itself
             flag_blink = 1;
             __bic_SR_register_on_exit(LPM0_bits);
         }
+    } else {
+        // Ensure D0 is OFF when alarm is not active
+        leds |= LED_D0;
     }
     
-    // Always update LEDs to keep D7 in sync
+    // Always update LEDs to keep D7 in sync (and now D0 blink)
     UpdateLEDs();
 }
 
@@ -346,26 +350,36 @@ void main(void) {
             flag_second = 0;
             UpdateDisplay(seconds);
             
-            // Check threshold
-            if(seconds > threshold && !alarm_on) {
-                alarm_on = 1;
-                blink_count = 0;
-                leds &= ~LED_D0;  // Start with D0 ON (ACTIVE-LOW: clear bit = 0)
-                UpdateLCD_Timing();  // Show "EXCEEDED! xx s"
-            } else if(seconds <= threshold && alarm_on) {
-                alarm_on = 0;
-                leds |= LED_D0;  // D0 OFF (ACTIVE-LOW: set bit = 1)
-                UpdateLCD_Timing();  // Back to "Timing: xx s"
-            } else if(timing) {
+            // Check threshold (only while actively timing)
+            if(timing && seconds > threshold) {
+                if(!alarm_on) {
+                    // Threshold just exceeded - start alarm
+                    alarm_on = 1;
+                    blink_count = 0;
+                    leds &= ~LED_D0;  // D0 ON (ACTIVE-LOW: clear bit = 0)
+                    UpdateLEDs();     // Apply immediately
+                    UpdateLCD_Timing();  // Show "EXCEEDED! xx s"
+                }
+            } else {
+                // Below threshold or not timing - ensure alarm is off
+                if(alarm_on) {
+                    alarm_on = 0;
+                    leds |= LED_D0;   // D0 OFF (ACTIVE-LOW: set bit = 1)
+                    UpdateLEDs();     // Apply immediately
+                }
+            }
+            
+            // Update LCD if timing but not showing exceeded message
+            if(timing && !alarm_on) {
                 UpdateLCD_Timing();  // Update elapsed time display
             }
         }
         
-        // Handle blink toggle (XOR works for both active-high and active-low)
+        // Handle blink event flag (for LCD update or other actions if needed)
         if(flag_blink) {
             flag_blink = 0;
-            leds ^= LED_D0;  // Toggle D0
-            UpdateLEDs();    // Explicitly update LEDs for blink
+            // LED toggle already handled in ISR
+            // Could add additional actions here if needed
         }
         
         // Handle LCD update
