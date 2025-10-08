@@ -154,7 +154,7 @@ static void LCD_Init(void) {
     for(Wait = 0; Wait < 10000; Wait++);
 
     LCD_SendLine1("  CLIC3 Timer   ");
-    LCD_SendLine2("Enter Threshold:");
+    LCD_SendLine2("Enter threshold:");
 }
 
 /* ========================= Helper Functions ========================= */
@@ -192,7 +192,7 @@ static void UpdateLCD_Status(void) {
     
     if(digit_count == 0) {
         // Waiting for threshold entry
-        template = "Enter Threshold:";
+        template = "Enter threshold:";
         for(i = 0; i < 16; i++) line2[i] = template[i];
         template = "  Press 0-9     ";
         for(i = 0; i < 16; i++) line1[i] = template[i];
@@ -215,7 +215,7 @@ static void UpdateLCD_Status(void) {
         line1[12] = '0' + (threshold % 10);
         line1[13] = 's';
         
-        template = "Press S3 to Start ";
+        template = "Press S3 to run ";
         for(i = 0; i < 16; i++) line2[i] = template[i];
     }
     
@@ -235,14 +235,14 @@ static void UpdateLCD_Timing(void) {
     
     if(alarm_on) {
         // Line 1: "EXCEEDED! xx s  "
-        template = "THLD EXCEEDED! ";
+        template = "EXCEEDED! ";
         for(i = 0; i < 10; i++) line1[i] = template[i];
         line1[10] = '0' + (seconds / 10);
         line1[11] = '0' + (seconds % 10);
         line1[12] = 's';
         
         // Line 2: "Limit: xx s     "
-        template = "Treshold: ";
+        template = "Limit: ";
         for(i = 0; i < 7; i++) line2[i] = template[i];
         line2[7] = '0' + (threshold / 10);
         line2[8] = '0' + (threshold % 10);
@@ -256,7 +256,7 @@ static void UpdateLCD_Timing(void) {
         line1[10] = 's';
         
         // Line 2: "Limit: xx s     "
-        template = "Treshold: ";
+        template = "Limit: ";
         for(i = 0; i < 7; i++) line2[i] = template[i];
         line2[7] = '0' + (threshold / 10);
         line2[8] = '0' + (threshold % 10);
@@ -270,7 +270,7 @@ static void UpdateLCD_Timing(void) {
         line1[11] = 's';
         
         // Line 2: "Enter threshold:"
-        template = "Enter Threshold:";
+        template = "Enter threshold:";
         for(i = 0; i < 16; i++) line2[i] = template[i];
     }
     
