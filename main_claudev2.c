@@ -3,13 +3,9 @@
 
 /* ========================= Bus Interface (provided) ========================= */
 volatile unsigned int BusAddress, BusData;
-void Initial(void);      // Initial.asm
-void BusRead(void);      // BusRead.asm
-void BusWrite(void);     // BusWrite.asm
-
-/* ========================= Assembly Functions (our implementation) ========================= */
-void UpdateDisplay(unsigned char value);    // UpdateDisplay.asm
-void UpdateLEDs(void);                      // UpdateLEDs.asm
+void Initial(void);
+void BusRead(void);
+void BusWrite(void);
 
 /* ========================= Hardware Addresses ========================= */
 #define SWITCHES_ADDR   0x4000
@@ -20,12 +16,10 @@ void UpdateLEDs(void);                      // UpdateLEDs.asm
 
 /* ========================= Configuration ========================= */
 #define SWITCH_S3_BIT   0x01        // S3 is bit 0
-#define LED_D0          0x01        // Alarm LED (active-low)
-#define LED_D7          0x80        // S3 status LED (active-low)
+#define LED_D0          0x01        // Alarm LED (ACTIVE-LOW: 0=ON, 1=OFF)
+#define LED_D7          0x80        // S3 status LED (ACTIVE-LOW: 0=ON, 1=OFF)
 #define DEBOUNCE_MS     20          // 20ms debounce time
 #define BLINK_MS        250         // 250ms toggle = 2Hz blink
-
-// NOTE: LEDs on CLIC3 are ACTIVE-LOW (0 = ON, 1 = OFF)
 
 /* ========================= Seven-Segment Lookup (0-9) ========================= */
 static const unsigned char SegmentLookup[10] = {
@@ -64,9 +58,8 @@ static volatile unsigned char digit_count = 0;      // 0, 1, or 2 digits entered
 static volatile unsigned char digit_buffer[2];      // Store entered digits
 static volatile unsigned char lcd_refresh = 0;      // LCD update needed
 
-// LED shadow register (accessible from Assembly)
-// LEDs are ACTIVE-LOW: 0=ON, 1=OFF
-volatile unsigned char leds = 0xFF;  // Start with all LEDs OFF
+// LED shadow register (ACTIVE-LOW: 0=ON, 1=OFF)
+static volatile unsigned char leds = 0xFF;          // Start with all LEDs OFF
 
 /* ========================= LCD Setup (I2C) ========================= */
 static void LCD_SendCommand(unsigned char cmd) {
@@ -118,8 +111,26 @@ static void LCD_Init(void) {
 }
 
 /* ========================= Helper Functions ========================= */
-// Note: UpdateLEDs() and UpdateDisplay() are now implemented in Assembly
-// UpdateLEDs.asm and UpdateDisplay.asm
+static void UpdateLEDs(void) {
+    BusAddress = LED_ADDR;
+    BusData = leds;
+    BusWrite();
+}
+
+static void UpdateDisplay(unsigned char value) {
+    if(value > 99) value = 99;
+    
+    unsigned char tens = value / 10;
+    unsigned char ones = value % 10;
+    
+    BusAddress = SEG_LOW;
+    BusData = SegmentLookup[ones];
+    BusWrite();
+    
+    BusAddress = SEG_HIGH;
+    BusData = SegmentLookup[tens];
+    BusWrite();
+}
 
 static void UpdateLCD_Status(void) {
     char msg[16];
@@ -211,7 +222,7 @@ __interrupt void Timer_ISR(void) {
         }
     }
     
-    // Update D7 to match S3 state immediately (active-low: 0=ON, 1=OFF)
+    // Update D7 to match S3 state (ACTIVE-LOW: clear bit to turn ON)
     if(s3_debounced) {
         leds &= ~LED_D7;  // S3 ON -> D7 ON (clear bit = 0)
     } else {
@@ -315,7 +326,7 @@ void main(void) {
                 seconds = 0;
                 timing = 1;
                 alarm_on = 0;
-                leds |= LED_D0;  // D0 OFF (active-low: set bit = OFF)
+                leds |= LED_D0;  // D0 OFF (ACTIVE-LOW: set bit = 1)
                 UpdateDisplay(0);
                 UpdateLCD_Timing();  // Show "Timing: 00 s"
             }
@@ -323,7 +334,7 @@ void main(void) {
             else if(!s3_debounced && s3_last) {
                 timing = 0;
                 alarm_on = 0;
-                leds |= LED_D0;  // D0 OFF (active-low: set bit = OFF)
+                leds |= LED_D0;  // D0 OFF (ACTIVE-LOW: set bit = 1)
                 UpdateLCD_Timing();  // Show "Elapsed: xx s"
             }
             
@@ -342,17 +353,17 @@ void main(void) {
                 UpdateLCD_Timing();  // Show "EXCEEDED! xx s"
             } else if(seconds <= threshold && alarm_on) {
                 alarm_on = 0;
-                leds |= LED_D0;  // D0 OFF (active-low: set bit = OFF)
+                leds |= LED_D0;  // D0 OFF (ACTIVE-LOW: set bit = 1)
                 UpdateLCD_Timing();  // Back to "Timing: xx s"
             } else if(timing) {
                 UpdateLCD_Timing();  // Update elapsed time display
             }
         }
         
-        // Handle blink toggle
+        // Handle blink toggle (XOR works for both active-high and active-low)
         if(flag_blink) {
             flag_blink = 0;
-            leds ^= LED_D0;
+            leds ^= LED_D0;  // Toggle D0
         }
         
         // Handle LCD update
