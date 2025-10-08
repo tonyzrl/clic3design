@@ -74,18 +74,32 @@ static void LCD_SendCommand(unsigned char cmd) {
 
 static void LCD_SendText(const char *text) {
     unsigned char i;
+    
+    // Send command to position cursor at start of first line
     UCB1CTL1 |= UCTR | UCTXSTT;
     while(!(UCB1IFG & UCTXIFG));
-    UCB1TXBUF = 0x40; while(!(UCB1IFG & UCTXIFG));
+    UCB1TXBUF = 0x80;  // Control byte (Co=1, RS=0) for command
+    while(!(UCB1IFG & UCTXIFG));
+    UCB1TXBUF = 0x80;  // Command: Set DDRAM address to 0x00 (first line)
+    while(!(UCB1IFG & UCTXIFG));
+    
+    // Now send data
+    UCB1TXBUF = 0x40;  // Control byte (Co=0, RS=1) for data
+    while(!(UCB1IFG & UCTXIFG));
+    
     for(i = 0; i < 16; i++) {
         UCB1TXBUF = text[i];
         while(!(UCB1IFG & UCTXIFG));
     }
-    UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);
+    
+    UCB1CTL1 |= UCTXSTP;
+    while(UCB1CTL1 & UCTXSTP);
     UCB1IFG &= ~UCTXIFG;
 }
 
 static void LCD_Init(void) {
+    unsigned int Wait;
+    
     // I2C configuration
     UCB1CTL1 |= UCSWRST;
     UCB1CTL0 = UCMST | UCMODE_3 | UCSYNC;
@@ -109,7 +123,7 @@ static void LCD_Init(void) {
     UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);
     UCB1IFG &= ~UCTXIFG;
 
-    for(volatile unsigned int i = 0; i < 10000; i++);
+    for(Wait = 0; Wait < 10000; Wait++);
 
     LCD_SendText("Enter threshold:");
 }
@@ -141,7 +155,7 @@ static void UpdateLCD_Status(void) {
     unsigned char i;
     const char *template;
     
-    // Clear message
+    // Clear message buffer with spaces
     for(i = 0; i < 16; i++) msg[i] = ' ';
     
     if(digit_count == 0) {
@@ -155,6 +169,7 @@ static void UpdateLCD_Status(void) {
         for(i = 0; i < 8; i++) msg[i] = template[i];
         msg[8] = '0' + digit_buffer[0];
         msg[9] = '_';
+        // Rest is spaces (already set)
     }
     else if(digit_count == 2) {
         // Show complete threshold
@@ -163,9 +178,10 @@ static void UpdateLCD_Status(void) {
         msg[8] = '0' + (threshold / 10);
         msg[9] = '0' + (threshold % 10);
         msg[10] = 's';
+        // Rest is spaces (already set)
     }
     
-    // Don't clear LCD - just update text directly
+    // Send the complete 16-character message
     LCD_SendText(msg);
 }
 
@@ -174,7 +190,7 @@ static void UpdateLCD_Timing(void) {
     unsigned char i;
     const char *template;
     
-    // Clear message
+    // Clear message buffer with spaces
     for(i = 0; i < 16; i++) msg[i] = ' ';
     
     if(alarm_on) {
@@ -184,6 +200,7 @@ static void UpdateLCD_Timing(void) {
         msg[10] = '0' + (seconds / 10);
         msg[11] = '0' + (seconds % 10);
         msg[12] = 's';
+        // Rest is spaces (already set)
     } else if(timing) {
         // "Timing: xx s    "
         template = "Timing: ";
@@ -191,6 +208,7 @@ static void UpdateLCD_Timing(void) {
         msg[8] = '0' + (seconds / 10);
         msg[9] = '0' + (seconds % 10);
         msg[10] = 's';
+        // Rest is spaces (already set)
     } else {
         // "Elapsed: xx s   "
         template = "Elapsed: ";
@@ -198,9 +216,10 @@ static void UpdateLCD_Timing(void) {
         msg[9] = '0' + (seconds / 10);
         msg[10] = '0' + (seconds % 10);
         msg[11] = 's';
+        // Rest is spaces (already set)
     }
     
-    LCD_SendCommand(0x01);  // Clear
+    // Send the complete 16-character message (spaces will overwrite old text)
     LCD_SendText(msg);
 }
 
@@ -374,6 +393,11 @@ void main(void) {
             flag_second = 0;
             UpdateDisplay(seconds);
             
+            // Always update LCD with current time while timing
+            if(timing) {
+                UpdateLCD_Timing();  // This will update every second
+            }
+            
             // Check threshold (only while actively timing)
             if(timing && seconds >= threshold) {  // Changed from > to >=
                 if(!alarm_on) {
@@ -391,11 +415,6 @@ void main(void) {
                     leds |= LED_D0;   // D0 OFF (ACTIVE-LOW: set bit = 1)
                     UpdateLEDs();     // Apply immediately
                 }
-            }
-            
-            // Update LCD if timing but not showing exceeded message
-            if(timing && !alarm_on) {
-                UpdateLCD_Timing();  // Update elapsed time display
             }
         }
         
