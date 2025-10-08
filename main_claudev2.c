@@ -350,6 +350,7 @@ void main(void) {
             if(seconds > threshold && !alarm_on) {
                 alarm_on = 1;
                 blink_count = 0;
+                leds &= ~LED_D0;  // Start with D0 ON (ACTIVE-LOW: clear bit = 0)
                 UpdateLCD_Timing();  // Show "EXCEEDED! xx s"
             } else if(seconds <= threshold && alarm_on) {
                 alarm_on = 0;
@@ -364,6 +365,7 @@ void main(void) {
         if(flag_blink) {
             flag_blink = 0;
             leds ^= LED_D0;  // Toggle D0
+            UpdateLEDs();    // Explicitly update LEDs for blink
         }
         
         // Handle LCD update
