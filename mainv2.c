@@ -165,7 +165,9 @@ static void UpdateLCD_Status(void) {
         msg[10] = 's';
     }
     
-    // Don't clear LCD - just update text directly
+    // Clear LCD then update
+    LCD_SendCommand(0x01);
+    for(volatile unsigned int j = 0; j < 1000; j++);  // Small delay after clear
     LCD_SendText(msg);
 }
 
