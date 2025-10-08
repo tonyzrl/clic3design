@@ -44,7 +44,7 @@ static volatile unsigned char s3_raw = 0;           // Raw sample
 static volatile unsigned int  debounce_counter = 0;
 
 // Alarm state
-static volatile unsigned char threshold = 99;       // Default 99 seconds
+static volatile unsigned char threshold = 10;       // Default 10 seconds (for testing)
 static volatile unsigned char alarm_on = 0;         // Alarm active flag
 static volatile unsigned int  blink_count = 0;      // Blink timer
 
@@ -68,6 +68,7 @@ static void LCD_SendCommand(unsigned char cmd) {
     UCB1TXBUF = 0x00; while(!(UCB1IFG & UCTXIFG));
     UCB1TXBUF = cmd;  while(!(UCB1IFG & UCTXIFG));
     UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);
+    UCB1IFG &= ~UCTXIFG;
 }
 
 static void LCD_SendText(const char *text) {
@@ -80,6 +81,7 @@ static void LCD_SendText(const char *text) {
         while(!(UCB1IFG & UCTXIFG));
     }
     UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);
+    UCB1IFG &= ~UCTXIFG;
 }
 
 static void LCD_Init(void) {
@@ -104,6 +106,7 @@ static void LCD_Init(void) {
     UCB1TXBUF = 0x0E; while(!(UCB1IFG & UCTXIFG));
     UCB1TXBUF = 0x01; while(!(UCB1IFG & UCTXIFG));
     UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);
+    UCB1IFG &= ~UCTXIFG;
 
     for(volatile unsigned int i = 0; i < 10000; i++);
 
@@ -261,6 +264,9 @@ __interrupt void Timer_ISR(void) {
 /* ========================= Keypad ISR ========================= */
 #pragma vector = PORT2_VECTOR
 __interrupt void Keypad_ISR(void) {
+    // Small delay for debouncing
+    for(volatile unsigned int i = 0; i < 1000; i++);
+    
     BusAddress = KEYPAD_ADDR;
     BusRead();
     unsigned char scan = (unsigned char)BusData;
@@ -280,34 +286,44 @@ __interrupt void Keypad_ISR(void) {
             digit_buffer[0] = digit;
             digit_count = 1;
             lcd_refresh = 1;
+            __bic_SR_register_on_exit(LPM0_bits);
         }
         else if(digit_count == 1) {
             digit_buffer[1] = digit;
             threshold = digit_buffer[0] * 10 + digit_buffer[1];
             if(threshold > 99) threshold = 99;
+            if(threshold == 0) threshold = 1;  // Minimum 1 second
             digit_count = 2;
             lcd_refresh = 1;
+            __bic_SR_register_on_exit(LPM0_bits);
         }
         // Ignore additional presses after 2 digits
     }
     
     P2IFG &= ~0x01;
-    __bic_SR_register_on_exit(LPM0_bits);
 }
 
 /* ========================= Main ========================= */
 void main(void) {
     Initial();  // Board initialization
     
-    // Initialize peripherals
+    // Initialize LCD and show startup message
     LCD_Init();
+    
+    // Small delay to see startup message
+    for(volatile unsigned int i = 0; i < 30000; i++);
+    
+    // Initialize displays
     UpdateDisplay(0);
     UpdateLEDs();
     
-    // Configure keypad interrupt
-    P2IES &= ~0x01;  // Rising edge
-    P2IE |= 0x01;
-    P2IFG &= ~0x01;
+    // Configure keypad interrupt (P2.0)
+    P2DIR &= ~0x01;  // Ensure P2.0 is input
+    P2REN |= 0x01;   // Enable pull-up/down
+    P2OUT &= ~0x01;  // Pull-down
+    P2IES &= ~0x01;  // Rising edge (key press)
+    P2IE |= 0x01;    // Enable interrupt
+    P2IFG &= ~0x01;  // Clear any pending interrupts
     
     // Configure Timer A0 for 1ms tick (assuming 25MHz SMCLK)
     TA0CCR0 = 25000 - 1;
@@ -382,7 +398,7 @@ void main(void) {
             // Could add additional actions here if needed
         }
         
-        // Handle LCD update
+        // Handle LCD update for threshold entry
         if(lcd_refresh) {
             lcd_refresh = 0;
             UpdateLCD_Status();
