@@ -383,8 +383,8 @@ SecondDigit:
             ADD.B       digit_buffer+1, R12
             
             ; Validate threshold (1-99)
-            CMP.B       #99, R12
-            JLE         ThreshOK
+            CMP.B       #100, R12          ; Compare with 100 (not 99)
+            JLO         ThreshOK           ; Jump if lower (unsigned)
             MOV.B       #99, R12
 ThreshOK:
             CMP.B       #0, R12
@@ -429,8 +429,8 @@ UpdateDisplay:
             PUSH.W      R14
             
             ; Limit to 99
-            CMP.B       #99, R12
-            JLE         DispOK
+            CMP.B       #100, R12          ; Compare with 100
+            JLO         DispOK             ; Jump if lower (unsigned)
             MOV.B       #99, R12
 DispOK:
             ; Calculate tens and ones
