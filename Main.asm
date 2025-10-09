@@ -1,21 +1,20 @@
 #include "msp430f5308.h"
-
 ; =====================================================================
-; CLIC3 Timer System - Full Assembly Implementation
+; CLIC3 Timer System - Full Assembly Implementation (FIXED)
 ; =====================================================================
 
             PUBLIC      main
-            PUBLIC      BusAddress      ; Make these PUBLIC for BusRead/BusWrite
-            PUBLIC      BusData         ; Make these PUBLIC for BusRead/BusWrite
+            PUBLIC      BusAddress
+            PUBLIC      BusData
             EXTERN      Initial
-            EXTERN      BusRead  
+            EXTERN      BusRead
             EXTERN      BusWrite
 
 ; =====================================================================
 ; Hardware Addresses
 ; =====================================================================
 SWITCHES_ADDR   EQU     4000h       ; Switch input address
-LED_ADDR        EQU     4002h       ; LED output address  
+LED_ADDR        EQU     4002h       ; LED output address
 SEG_LOW         EQU     4004h       ; Units digit display
 SEG_HIGH        EQU     4006h       ; Tens digit display
 KEYPAD_ADDR     EQU     4008h       ; Keypad input address
@@ -24,62 +23,65 @@ KEYPAD_ADDR     EQU     4008h       ; Keypad input address
 ; Configuration Constants
 ; =====================================================================
 SWITCH_S3_BIT   EQU     80h         ; S3 is bit 7
-LED_D0          EQU     01h         ; Alarm LED (bit 0)
-LED_D7          EQU     80h         ; S3 status LED (bit 7)
+LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
+LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
-BLINK_MS        EQU     250         ; 250ms for 2Hz blink rate
+BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
 
 ; =====================================================================
 ; Data Segment - Application State Variables
 ; =====================================================================
             RSEG        DATA16_I
 
-; Bus communication variables (MUST be defined here for BusRead/BusWrite)
-BusAddress      DW      0           ; Bus address for read/write operations
-BusData         DW      0           ; Bus data for read/write operations
+; ---- Bus comms (used by BusRead/BusWrite) ----
+BusAddress      DW      0
+BusData         DW      0
 
-; Timing variables
-seconds         DW      0           ; Current elapsed seconds (0-99)
-ms_count        DW      0           ; Millisecond counter
-timing          DB      0           ; 1 = actively timing
+; ---- Timing state ----
+seconds         DW      0           ; elapsed seconds (0..99)
+ms_count        DW      0           ; ms within current second
+timing          DB      0           ; 1 = timing
 
-; Switch state
-s3_debounced    DB      0           ; Stable S3 state after debounce
-s3_last         DB      0           ; Previous state for edge detection
-s3_raw          DB      0           ; Raw sample from hardware
-debounce_cnt    DW      0           ; Debounce counter
+; ---- S3 debounce ----
+s3_debounced    DB      0
+s3_last         DB      0
+s3_raw          DB      0
+debounce_cnt    DW      0
 
-; Alarm state
-threshold       DB      10          ; Default threshold (10 seconds)
-alarm_on        DB      0           ; Alarm active flag
-blink_count     DW      0           ; Blink timer counter
+; ---- Alarm / blink ----
+threshold       DB      10          ; default threshold (10 s)
+alarm_on        DB      0
+blink_count     DW      0
 
-; Event flags
-flag_switch     DB      0           ; Switch change detected
-flag_second     DB      0           ; Second elapsed
-flag_blink      DB      0           ; Blink toggle needed
+; ---- Flags for main loop ----
+flag_switch     DB      0
+flag_second     DB      0
+flag_blink      DB      0
+lcd_refresh     DB      0
 
-; Threshold entry
-digit_count     DB      0           ; Number of digits entered (0-2)
-digit_buffer    DB      0, 0        ; Buffer for entered digits
-lcd_refresh     DB      0           ; LCD needs updating
+; ---- Threshold entry (keypad) ----
+digit_count     DB      0           ; 0=no input, 1=first digit, 2=done
+digit_buffer    DB      0, 0        ; two digits
 
-; LED shadow register (ACTIVE-LOW: 0=ON, 1=OFF)
-leds            DB      0FFh        ; All LEDs initially OFF
+; ---- LED shadow (ACTIVE-LOW: 0=ON, 1=OFF) ----
+leds            DB      0FFh
 
-; Seven-segment lookup table for digits 0-9
+; ---- Keypad helpers ----
+g_key_last      DB      0           ; last raw code (edge suppress)
+key_poll_ms     DW      0           ; 20 ms poll divider
+
+; ---- Seven-segment glyphs for 0..9 ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
                 DB      12h, 02h, 78h, 00h, 18h
 
-; Keypad scan code lookup (0-9 positions)
+; ---- Keypad scan code lookup (0..9) ----
 KeypadLookup    DB      82h, 11h, 12h, 14h, 21h
                 DB      22h, 24h, 41h, 42h, 44h
 
-; LCD string buffers (16 chars each)
+; ---- LCD buffers and constant strings (16 chars each line) ----
 lcd_line1       DB      '                '
 lcd_line2       DB      '                '
 
-; LCD constant strings
 str_enter_thr   DB      'Enter threshold:'
 str_press_09    DB      '  Press 0-9     '
 str_thresh      DB      'Thresh: '
@@ -100,90 +102,92 @@ str_exceeded    DB      'EXCEEDED! '
 ; Main Entry Point
 ; ---------------------------------------------------------------------
 main:
-            ; Initialize system
-            CALLA       #Initial            ; Board initialization
-            CALL        #LCD_Init           ; Initialize LCD
-            
-            ; Initialize displays
+            ; Board / LCD init
+            CALLA       #Initial
+            CALL        #LCD_Init
+
+            ; Clear state
+            MOV.W       #0,      ms_count
+            MOV.W       #0,      seconds
+            MOV.B       #0,      timing
+            MOV.B       #0,      alarm_on
+            MOV.W       #0,      blink_count
+            MOV.B       #0,      s3_debounced
+            MOV.B       #0,      s3_last
+            MOV.B       #0,      s3_raw
+            MOV.W       #0,      debounce_cnt
+            MOV.B       #0,      flag_switch
+            MOV.B       #0,      flag_second
+            MOV.B       #0,      flag_blink
+            MOV.B       #0,      lcd_refresh
+            MOV.B       #0FFh,   leds
+            MOV.B       #0,      g_key_last
+            MOV.W       #0,      key_poll_ms
+
+            ; Initial displays
             MOV.B       #0, R12
-            CALL        #UpdateDisplay      ; Show "00" on 7-segment
-            CALL        #UpdateLEDs         ; All LEDs OFF initially
-            
-            ; Configure keypad interrupt (P2.0)
-            BIC.B       #01h, &P2DIR        ; P2.0 as input
-            BIC.B       #01h, &P2REN        ; No internal pull resistor
-            BIC.B       #01h, &P2IES        ; Rising edge trigger
-            BIS.B       #01h, &P2IE         ; Enable interrupt
-            BIC.B       #01h, &P2IFG        ; Clear pending flag
-            
-            ; Configure Timer A0 for 1ms tick (25MHz SMCLK)
-            MOV.W       #24999, &TA0CCR0    ; 25000 counts = 1ms
-            MOV.W       #CCIE, &TA0CCTL0    ; Enable CCR0 interrupt
-            MOV.W       #TASSEL_2|MC_1|TACLR, &TA0CTL  ; SMCLK, up mode
-            
-            BIS.W       #GIE, SR            ; Enable global interrupts
-            
-            ; Show initial prompt
+            CALL        #UpdateDisplay
+            CALL        #UpdateLEDs
+
+            ; ---- Optional: keypad GPIO IRQ on P2.0 (only if hardware wired) ----
+            BIC.B       #01h, &P2DIR        ; P2.0 input
+            BIC.B       #01h, &P2REN        ; no pull
+            BIS.B       #01h, &P2IES        ; falling edge
+            BIC.B       #01h, &P2IFG        ; clear flag
+            BIS.B       #01h, &P2IE         ; enable IRQ
+
+            ; ---- Timer A0: 1ms tick (SMCLK = 25 MHz) ----
+            MOV.W       #24999, &TA0CCR0
+            MOV.W       #CCIE,  &TA0CCTL0
+            MOV.W       #TASSEL_2|MC_1|TACLR, &TA0CTL
+
+            BIS.W       #GIE, SR
+
+            ; Prompt for threshold
             CALL        #ShowThresholdPrompt
 
 ; ---------------------------------------------------------------------
 ; Main Loop
 ; ---------------------------------------------------------------------
 MainLoop:
-            BIS.W       #LPM0|GIE, SR       ; Enter LPM0 with interrupts
-            
-            ; Check event flags
-            CMP.B       #0, flag_switch
-            JNZ         HandleSwitch
-            
-            CMP.B       #0, flag_second  
-            JNZ         HandleSecond
-            
-            CMP.B       #0, flag_blink
-            JNZ         HandleBlink
-            
-            CMP.B       #0, lcd_refresh
-            JNZ         HandleLCDRefresh
-            
-            JMP         MainLoop
+            BIS.W       #LPM0|GIE, SR       ; sleep until an event wakes us
 
-; ---------------------------------------------------------------------
-; Event Handlers
-; ---------------------------------------------------------------------
-HandleSwitch:
+            ; switch edge event
+            CMP.B       #0, flag_switch
+            JZ          CheckSecond
             MOV.B       #0, flag_switch
-            
-            ; Check for rising edge (OFF to ON)
+
+            ; Rising edge? (last==0 && debounced==1)
             CMP.B       #0, s3_last
-            JNZ         CheckFalling
+            JNZ         CheckFall
             CMP.B       #0, s3_debounced
             JZ          UpdateS3Last
-            
-            ; Rising edge detected - start timing
-            MOV.W       #0, ms_count
-            MOV.W       #0, seconds
-            MOV.B       #1, timing
-            MOV.B       #0, alarm_on
-            BIS.B       #LED_D0, leds       ; D0 OFF
+
+            ; ---- Rising: start timing ----
+            MOV.W       #0,  ms_count
+            MOV.W       #0,  seconds
+            MOV.B       #1,  timing
+            MOV.B       #0,  alarm_on
+            BIS.B       #LED_D0, leds       ; D0 OFF (active-low)
             CALL        #UpdateLEDs
-            MOV.B       #0, R12
+            MOV.B       #0,  R12
             CALL        #UpdateDisplay
             CALL        #ShowTimingStatus
             JMP         UpdateS3Last
 
-CheckFalling:
-            ; Check for falling edge (ON to OFF)
+CheckFall:
+            ; Falling edge? (debounced==0)
             CMP.B       #0, s3_debounced
             JNZ         UpdateS3Last
-            
-            ; Falling edge - stop timing
-            MOV.B       #0, timing
-            MOV.B       #0, alarm_on
+
+            ; ---- Falling: stop timing ----
+            MOV.B       #0,  timing
+            MOV.B       #0,  alarm_on
             BIS.B       #LED_D0, leds       ; D0 OFF
             CALL        #UpdateLEDs
             CALL        #ShowElapsedStatus
-            
-            ; Reset for new threshold entry
+
+            ; reset keypad entry state
             MOV.B       #0, digit_count
             MOV.B       #0, digit_buffer
             MOV.B       #0, digit_buffer+1
@@ -192,231 +196,301 @@ UpdateS3Last:
             MOV.B       s3_debounced, s3_last
             JMP         MainLoop
 
-HandleSecond:
+CheckSecond:
+            CMP.B       #0, flag_second
+            JZ          CheckBlinkFlag
             MOV.B       #0, flag_second
-            
-            ; Update display with current seconds
+
+            ; Update SSD with seconds
             MOV.W       seconds, R12
             CALL        #UpdateDisplay
-            
-            ; Update LCD if timing
+
+            ; Update LCD while timing
             CMP.B       #0, timing
             JZ          CheckAlarmSecond
             CALL        #ShowTimingStatus
-            
-            ; Check if threshold exceeded
-            MOV.B       threshold, R13
-            CMP.W       R13, seconds
-            JL          CheckAlarmSecond
-            
-            ; Threshold exceeded - activate alarm
-            CMP.B       #0, alarm_on
-            JNZ         CheckAlarmSecond
-            MOV.B       #1, alarm_on
-            MOV.W       #0, blink_count
-            BIC.B       #LED_D0, leds       ; D0 ON
-            CALL        #UpdateLEDs
-            CALL        #ShowExceededStatus
 
 CheckAlarmSecond:
+            ; threshold check (byte compare is fine, seconds<=99)
+            MOV.B       threshold, R13
+            MOV.B       seconds,   R12
+            CMP.B       R13, R12
+            JL          CheckBlinkFlag
+
+            ; threshold exceeded
+            CMP.B       #0, alarm_on
+            JNZ         CheckBlinkFlag
+            MOV.B       #1, alarm_on
+            MOV.W       #0, blink_count
+            BIC.B       #LED_D0, leds       ; D0 ON (active-low)
+            CALL        #UpdateLEDs
+            CALL        #ShowExceededStatus
             JMP         MainLoop
 
-HandleBlink:
+CheckBlinkFlag:
+            CMP.B       #0, flag_blink
+            JZ          CheckLCDRefresh
             MOV.B       #0, flag_blink
-            ; LED toggle handled in ISR
+            ; LED already toggled in ISR; nothing else to do
             JMP         MainLoop
 
-HandleLCDRefresh:
+CheckLCDRefresh:
+            CMP.B       #0, lcd_refresh
+            JZ          MainLoop
             MOV.B       #0, lcd_refresh
             CALL        #UpdateLCDStatus
             JMP         MainLoop
 
+
 ; ---------------------------------------------------------------------
-; Timer A0 ISR - 1ms tick
+; TIMER0_A0 ISR - 1ms tick
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 TIMER0_A0_ISR:
+            ; NOTE: We wake main **selectively** by clearing LPM in the
+            ; saved SR at the right times. Because we push 3 regs (6 bytes),
+            ; the saved SR sits at 6(SP) after pushes.
             PUSH.W      R12
             PUSH.W      R13
             PUSH.W      R14
-            
-            ; Read S3 switch
+
+            ; ---- Read S3 ----
             MOV.W       #SWITCHES_ADDR, BusAddress
             CALLA       #BusRead
             MOV.W       BusData, R12
             AND.B       #SWITCH_S3_BIT, R12
-            JZ          S3IsOff
+            JZ          S3_Off
             MOV.B       #1, R13
-            JMP         S3Debounce
-S3IsOff:
+            JMP         S3_Debounce
+S3_Off:
             MOV.B       #0, R13
 
-S3Debounce:
-            ; Debounce logic
+S3_Debounce:
+            ; Debounce
             CMP.B       R13, s3_raw
-            JZ          SameSample
+            JZ          S3_Same
             MOV.B       R13, s3_raw
             MOV.W       #0, debounce_cnt
             JMP         UpdateD7
 
-SameSample:
+S3_Same:
             CMP.W       #DEBOUNCE_MS, debounce_cnt
-            JGE         CheckStable
+            JGE         S3_CheckStable
             INC.W       debounce_cnt
             JMP         UpdateD7
 
-CheckStable:
+S3_CheckStable:
             CMP.B       s3_raw, s3_debounced
             JZ          UpdateD7
             MOV.B       s3_raw, s3_debounced
             MOV.B       #1, flag_switch
-            BIC.W       #LPM0, 0(SP)        ; Wake up main
+            BIC.W       #LPM0, 6(SP)       ; wake main
 
 UpdateD7:
-            ; Update D7 LED to match S3
+            ; Mirror S3 onto D7 (active-low shadow)
             CMP.B       #0, s3_debounced
-            JZ          D7Off
-            BIC.B       #LED_D7, leds       ; D7 ON
-            JMP         CheckTiming
-D7Off:
-            BIS.B       #LED_D7, leds       ; D7 OFF
+            JZ          D7_Off
+            BIC.B       #LED_D7, leds       ; ON
+            JMP         TimeKeep
+D7_Off:
+            BIS.B       #LED_D7, leds       ; OFF
 
-CheckTiming:
-            ; Timing logic
+TimeKeep:
+            ; ---- Timing ----
             CMP.B       #0, timing
-            JZ          CheckBlink
+            JZ          BlinkCheck
+
             INC.W       ms_count
             CMP.W       #1000, ms_count
-            JL          CheckBlink
+            JL          AfterSecond
+
+            ; one second elapsed
             MOV.W       #0, ms_count
             CMP.W       #99, seconds
-            JGE         CheckBlink
+            JGE         AfterSecond
             INC.W       seconds
             MOV.B       #1, flag_second
-            BIC.W       #LPM0, 0(SP)        ; Wake up main
+            BIC.W       #LPM0, 6(SP)       ; wake main
 
-CheckBlink:
-            ; Blink logic for alarm
+AfterSecond:
+
+BlinkCheck:
+            ; ---- Alarm blink at ~2 Hz (toggle every 250 ms) ----
             CMP.B       #0, alarm_on
-            JZ          NoAlarm
+            JZ          EnsureD0Off
             INC.W       blink_count
             CMP.W       #BLINK_MS, blink_count
-            JL          UpdateLEDsISR
+            JL          PostBlinkLEDs
             MOV.W       #0, blink_count
-            XOR.B       #LED_D0, leds       ; Toggle D0
+            XOR.B       #LED_D0, leds       ; toggle D0 (active-low)
             MOV.B       #1, flag_blink
-            BIC.W       #LPM0, 0(SP)        ; Wake up main
-            JMP         UpdateLEDsISR
+            BIC.W       #LPM0, 6(SP)       ; wake main
+            JMP         PostBlinkLEDs
 
-NoAlarm:
-            BIS.B       #LED_D0, leds       ; Ensure D0 OFF
+EnsureD0Off:
+            BIS.B       #LED_D0, leds       ; force OFF when no alarm
 
-UpdateLEDsISR:
+PostBlinkLEDs:
+            ; ---- Optional: keypad 20 ms poll ----
+            INC.W       key_poll_ms
+            CMP.W       #20, key_poll_ms
+            JL          WriteLEDs
+            MOV.W       #0, key_poll_ms
+
+            ; Read keypad
+            MOV.W       #KEYPAD_ADDR, BusAddress
+            CALLA       #BusRead
+            MOV.B       BusData, R12        ; only LSB used
+            ; edge-suppress repeats
+            CMP.B       R12, g_key_last
+            JEQ         WriteLEDs
+            MOV.B       R12, g_key_last
+            ; handle (0 => no key)
+            CMP.B       #0, R12
+            JZ          WriteLEDs
+
+            ; decode and update threshold / state
+            CALL        #Keypad_HandleRaw
+            ; if anything changed that needs UI refresh, request wake
+            ; Keypad_HandleRaw sets lcd_refresh when appropriate
+            BIC.W       #LPM0, 6(SP)
+
+WriteLEDs:
             CALL        #UpdateLEDs
-            
+
             POP.W       R14
             POP.W       R13
             POP.W       R12
             RETI
 
+
 ; ---------------------------------------------------------------------
-; Keypad ISR - Port 2
+; PORT2 ISR (keypad IRQ) — only effective if hardware asserts P2.0
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 PORT2_ISR:
-            PUSH.W      R12
-            PUSH.W      R13
-            PUSH.W      R14
-            
-            ; Clear interrupt flag
+            ; Clear IFG early
             BIC.B       #01h, &P2IFG
-            
-            ; Debounce delay
-            MOV.W       #5000, R12
-KeyDebounce:
-            DEC.W       R12
-            JNZ         KeyDebounce
-            
+
+            ; Debounce tiny delay (very short)
+            PUSH.W      R12
+            MOV.W       #2000, R12
+P2_Delay:   DEC.W       R12
+            JNZ         P2_Delay
+
             ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
             MOV.B       BusData, R12
-            
-            ; Check if key pressed
+
+            ; Edge-suppress / ignore zero
+            CMP.B       R12, g_key_last
+            JEQ         P2_Done
+            MOV.B       R12, g_key_last
             CMP.B       #0, R12
-            JZ          KeypadDone
-            
-            ; Find matching digit
-            MOV.B       #0, R13             ; digit counter
-            MOV.W       #KeypadLookup, R14  ; table pointer
-            
-KeyScanLoop:
-            CMP.B       @R14, R12
-            JZ          KeyFound
+            JZ          P2_Done
+
+            ; Decode & update
+            CALL        #Keypad_HandleRaw
+            ; wake main for LCD update
+            BIC.W       #LPM0, 0(SP)       ; saved SR is at 0(SP) (no extra pushes yet)
+
+P2_Done:
+            POP.W       R12
+            RETI
+
+
+; ---------------------------------------------------------------------
+; Keypad decode helper (shared by poll + P2 ISR)
+;  In : R12 = raw keypad code (byte)
+;  Out: updates digit_count/digit_buffer/threshold, sets lcd_refresh as needed
+; ---------------------------------------------------------------------
+Keypad_HandleRaw:
+            PUSH.W      R13
+            PUSH.W      R14
+            PUSH.W      R15
+
+            ; Try table match for 0..9
+            MOV.B       #0,  R13            ; digit index
+            MOV.W       #KeypadLookup, R14
+KP_Scan:
+            CMP.B       #10, R13
+            JGE         KP_Cmd              ; not a digit -> maybe command
+            MOV.B       @R14, R15
+            CMP.B       R15, R12
+            JEQ         KP_DigitFound
             INC.W       R14
             INC.B       R13
-            CMP.B       #10, R13
-            JL          KeyScanLoop
-            JMP         KeypadDone          ; Invalid key
+            JMP         KP_Scan
 
-KeyFound:
-            ; R13 contains digit (0-9)
+KP_Cmd:
+            ; Optional: treat '*' as clear, '#' as enter if board emits ASCII
+            CMP.B       #'*', R12
+            JNE         KP_EnterChk
+            ; clear threshold entry
+            MOV.B       #0, digit_count
+            MOV.B       #0, digit_buffer
+            MOV.B       #0, digit_buffer+1
+            MOV.B       #1, lcd_refresh
+            JMP         KP_Exit
+
+KP_EnterChk:
+            CMP.B       #'#', R12
+            JNE         KP_Exit
+            ; finalize (do nothing—threshold already computed on second digit)
+            MOV.B       #1, lcd_refresh
+            JMP         KP_Exit
+
+KP_DigitFound:
+            ; R13 = digit 0..9
             CMP.B       #0, digit_count
-            JNZ         SecondDigit
-            
+            JNZ         KP_Second
+
             ; First digit
             MOV.B       R13, digit_buffer
             MOV.B       #1, digit_count
             MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 0(SP)
-            JMP         KeypadDone
+            JMP         KP_Exit
 
-SecondDigit:
+KP_Second:
             CMP.B       #1, digit_count
-            JNZ         KeypadDone
-            
+            JNZ         KP_Exit
+
             ; Second digit
             MOV.B       R13, digit_buffer+1
-            
-            ; Calculate threshold
-            MOV.B       digit_buffer, R12
-            MOV.B       #10, R13
-            CALL        #Multiply8
+
+            ; threshold = min(max( (d0*10 + d1), 1 ), 99)
+            MOV.B       digit_buffer, R14   ; d0
+            MOV.B       #10, R15
+            CALL        #Multiply8          ; R12 = R14 * 10
             ADD.B       digit_buffer+1, R12
-            
-            ; Validate threshold (1-99)
-            CMP.B       #100, R12          ; Compare with 100 (not 99)
-            JLO         ThreshOK           ; Jump if lower (unsigned)
+            ; clamp to 1..99
+            CMP.B       #100, R12
+            JL          KP_ClampLo
             MOV.B       #99, R12
-ThreshOK:
+KP_ClampLo:
             CMP.B       #0, R12
-            JNZ         ThreshStore
+            JNZ         KP_Store
             MOV.B       #1, R12
-ThreshStore:
+KP_Store:
             MOV.B       R12, threshold
             MOV.B       #2, digit_count
             MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 0(SP)
 
-KeypadDone:
-            ; Wait for key release
-            MOV.W       #10000, R12
-KeyRelease:
-            DEC.W       R12
-            JNZ         KeyRelease
-            
+KP_Exit:
+            POP.W       R15
             POP.W       R14
             POP.W       R13
-            POP.W       R12
-            RETI
+            RET
+
 
 ; ---------------------------------------------------------------------
 ; Helper Functions
 ; ---------------------------------------------------------------------
 
-; Update LEDs (uses leds shadow register)
+; Update LEDs from shadow (active-low)
 UpdateLEDs:
             PUSH.W      R12
             MOV.W       #LED_ADDR, BusAddress
@@ -426,215 +500,205 @@ UpdateLEDs:
             POP.W       R12
             RET
 
-; Update 7-segment display (R12 = value 0-99)
+; Update 7-seg display with R12 (0..99)
 UpdateDisplay:
             PUSH.W      R12
             PUSH.W      R13
             PUSH.W      R14
-            
-            ; Limit to 99
-            CMP.B       #100, R12          ; Compare with 100
-            JLO         DispOK             ; Jump if lower (unsigned)
+
+            AND.W       #00FFh, R12
+            CMP.B       #100, R12
+            JL          Disp_OK
             MOV.B       #99, R12
-DispOK:
-            ; Calculate tens and ones
-            MOV.B       R12, R13
-            MOV.B       #10, R14
-            CALL        #Divide8
-            ; R12 = tens, R13 = ones
-            
-            ; Display ones digit
+Disp_OK:
+            ; tens = R12/10, ones = R12%10
+            MOV.B       #10, R13
+            CALL        #Divide8            ; R12=quot, R13=rem
+
+            ; ones -> SEG_LOW
             MOV.W       #SEG_LOW, BusAddress
-            MOV.B       R13, R14
-            MOV.W       #SegmentLookup, R13
-            ADD.W       R14, R13
-            MOV.B       @R13, R14
-            MOV.W       R14, BusData
+            AND.W       #000Fh, R13
+            MOV.W       #SegmentLookup, R14
+            ADD.W       R13, R14
+            MOV.B       @R14, R13
+            MOV.W       R13, BusData
             CALLA       #BusWrite
-            
-            ; Display tens digit
+
+            ; tens -> SEG_HIGH
             MOV.W       #SEG_HIGH, BusAddress
-            MOV.W       #SegmentLookup, R13
-            ADD.W       R12, R13
-            MOV.B       @R13, R14
-            MOV.W       R14, BusData
+            AND.W       #000Fh, R12
+            MOV.W       #SegmentLookup, R14
+            ADD.W       R12, R14
+            MOV.B       @R14, R13
+            MOV.W       R13, BusData
             CALLA       #BusWrite
-            
+
             POP.W       R14
             POP.W       R13
             POP.W       R12
             RET
 
-; 8-bit multiply: R12 = R12 * R13
+; 8-bit multiply: R12 = R14 * R15  (caller loads)
 Multiply8:
-            PUSH.W      R14
-            MOV.B       R12, R14
-            MOV.B       #0, R12
-MultLoop:
-            CMP.B       #0, R13
-            JZ          MultDone
-            ADD.B       R14, R12
-            DEC.B       R13
-            JMP         MultLoop
-MultDone:
-            POP.W       R14
+            PUSH.W      R13
+            MOV.B       R14, R12
+            MOV.B       #0,  R13
+MulClr:     CMP.B       #0, R15
+            JEQ         MulDone
+            ADD.B       R12, R13
+            DEC.B       R15
+            JMP         MulClr
+MulDone:    MOV.B       R13, R12
+            POP.W       R13
             RET
 
-; 8-bit divide: R12 = R13 / R14, R13 = remainder
+; 8-bit divide: Input R12=dividend, R13=divisor
+; Output: R12=quotient, R13=remainder
 Divide8:
             PUSH.W      R14
-            MOV.B       R13, R12        ; Copy dividend
-            MOV.B       #0, R13         ; Quotient counter
+            PUSH.W      R15
+            MOV.B       R12, R14        ; dividend
+            MOV.B       R13, R15        ; divisor
+            MOV.B       #0,  R12        ; quotient
 DivLoop:
-            CMP.B       R14, R12
-            JL          DivDone
-            SUB.B       R14, R12
-            INC.B       R13
+            CMP.B       R15, R14
+            JLO         DivDone
+            SUB.B       R15, R14
+            INC.B       R12
             JMP         DivLoop
 DivDone:
-            PUSH.W      R12             ; Save remainder
-            MOV.B       R13, R12        ; Quotient to R12
-            POP.W       R13             ; Remainder to R13
+            MOV.B       R14, R13        ; remainder
+            POP.W       R15
             POP.W       R14
             RET
 
+
 ; ---------------------------------------------------------------------
-; LCD Functions
+; LCD Functions (unchanged except for being grouped)
 ; ---------------------------------------------------------------------
 
 LCD_Init:
             PUSH.W      R12
             PUSH.W      R13
-            
-            ; Configure I2C for LCD
+
             BIS.B       #UCSWRST, &UCB1CTL1
             MOV.B       #UCMST|UCMODE_3|UCSYNC, &UCB1CTL0
-            MOV.B       #UCSSEL_1|UCSWRST, &UCB1CTL1
-            MOV.B       #63, &UCB1BR0
-            MOV.W       #003Eh, &UCB1I2CSA
-            BIS.B       #06h, &P4SEL        ; P4.1=SDA, P4.2=SCL
-            BIC.B       #UCSWRST, &UCB1CTL1
-            
-            ; LCD initialization sequence
-            BIS.B       #UCTR|UCTXSTT, &UCB1CTL1
-WaitTX1:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #UCSSEL_1|UCSWRST,  &UCB1CTL1
+            MOV.B       #63,               &UCB1BR0
+            MOV.W       #003Eh,            &UCB1I2CSA
+            BIS.B       #06h,              &P4SEL    ; P4.1 SDA, P4.2 SCL
+            BIC.B       #UCSWRST,          &UCB1CTL1
+
+            BIS.B       #UCTR|UCTXSTT,     &UCB1CTL1
+WaitTX1:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX1
-            MOV.B       #00h, &UCB1TXBUF
-WaitTX2:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #00h,              &UCB1TXBUF
+WaitTX2:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX2
-            MOV.B       #39h, &UCB1TXBUF
-WaitTX3:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #39h,              &UCB1TXBUF
+WaitTX3:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX3
-            MOV.B       #14h, &UCB1TXBUF
-WaitTX4:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #14h,              &UCB1TXBUF
+WaitTX4:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX4
-            MOV.B       #74h, &UCB1TXBUF
-WaitTX5:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #74h,              &UCB1TXBUF
+WaitTX5:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX5
-            MOV.B       #54h, &UCB1TXBUF
-WaitTX6:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #54h,              &UCB1TXBUF
+WaitTX6:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX6
-            MOV.B       #6Fh, &UCB1TXBUF
-WaitTX7:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #6Fh,              &UCB1TXBUF
+WaitTX7:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX7
-            MOV.B       #0Eh, &UCB1TXBUF
-WaitTX8:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #0Eh,              &UCB1TXBUF
+WaitTX8:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX8
-            MOV.B       #01h, &UCB1TXBUF
-WaitTX9:    BIT.B       #UCTXIFG, &UCB1IFG
+            MOV.B       #01h,              &UCB1TXBUF
+WaitTX9:    BIT.B       #UCTXIFG,          &UCB1IFG
             JZ          WaitTX9
-            BIS.B       #UCTXSTP, &UCB1CTL1
-WaitSTP1:   BIT.B       #UCTXSTP, &UCB1CTL1
+            BIS.B       #UCTXSTP,          &UCB1CTL1
+WaitSTP1:   BIT.B       #UCTXSTP,          &UCB1CTL1
             JNZ         WaitSTP1
-            BIC.B       #UCTXIFG, &UCB1IFG
-            
-            ; Delay
+            BIC.B       #UCTXIFG,          &UCB1IFG
+
+            ; small delay
             MOV.W       #10000, R12
 InitDelay:  DEC.W       R12
             JNZ         InitDelay
-            
+
             POP.W       R13
             POP.W       R12
             RET
 
-; Send both LCD lines
 LCD_SendBoth:
             CALL        #LCD_SendLine1
             CALL        #LCD_SendLine2
             RET
 
-; Send Line 1 (lcd_line1 buffer)
 LCD_SendLine1:
             PUSH.W      R12
             PUSH.W      R13
-            
-            ; Set cursor to line 1
+
             BIS.B       #UCTR|UCTXSTT, &UCB1CTL1
-WaitL1_1:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL1_1
-            MOV.B       #80h, &UCB1TXBUF    ; Command byte
-WaitL1_2:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL1_2
-            MOV.B       #80h, &UCB1TXBUF    ; Line 1 address
-WaitL1_3:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL1_3
-            MOV.B       #40h, &UCB1TXBUF    ; Data byte indicator
-WaitL1_4:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL1_4
-            
-            ; Send 16 characters
+W1_1:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W1_1
+            MOV.B       #80h,  &UCB1TXBUF
+W1_2:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W1_2
+            MOV.B       #80h,  &UCB1TXBUF
+W1_3:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W1_3
+            MOV.B       #40h,  &UCB1TXBUF
+W1_4:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W1_4
+
             MOV.W       #lcd_line1, R13
             MOV.B       #16, R12
-SendL1Loop:
-            MOV.B       @R13+, &UCB1TXBUF
-WaitL1_D:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL1_D
+W1_Loop:    MOV.B       @R13+, &UCB1TXBUF
+W1_D:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W1_D
             DEC.B       R12
-            JNZ         SendL1Loop
-            
+            JNZ         W1_Loop
+
             BIS.B       #UCTXSTP, &UCB1CTL1
-WaitL1_S:   BIT.B       #UCTXSTP, &UCB1CTL1
-            JNZ         WaitL1_S
+W1_S:       BIT.B       #UCTXSTP, &UCB1CTL1
+            JNZ         W1_S
             BIC.B       #UCTXIFG, &UCB1IFG
-            
+
             POP.W       R13
             POP.W       R12
             RET
 
-; Send Line 2 (lcd_line2 buffer)
 LCD_SendLine2:
             PUSH.W      R12
             PUSH.W      R13
-            
-            ; Set cursor to line 2
+
             BIS.B       #UCTR|UCTXSTT, &UCB1CTL1
-WaitL2_1:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL2_1
-            MOV.B       #80h, &UCB1TXBUF    ; Command byte
-WaitL2_2:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL2_2
-            MOV.B       #0C0h, &UCB1TXBUF   ; Line 2 address
-WaitL2_3:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL2_3
-            MOV.B       #40h, &UCB1TXBUF    ; Data byte indicator
-WaitL2_4:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL2_4
-            
-            ; Send 16 characters
+W2_1:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W2_1
+            MOV.B       #80h,  &UCB1TXBUF
+W2_2:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W2_2
+            MOV.B       #0C0h, &UCB1TXBUF
+W2_3:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W2_3
+            MOV.B       #40h,  &UCB1TXBUF
+W2_4:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W2_4
+
             MOV.W       #lcd_line2, R13
             MOV.B       #16, R12
-SendL2Loop:
-            MOV.B       @R13+, &UCB1TXBUF
-WaitL2_D:   BIT.B       #UCTXIFG, &UCB1IFG
-            JZ          WaitL2_D
+W2_Loop:    MOV.B       @R13+, &UCB1TXBUF
+W2_D:       BIT.B       #UCTXIFG, &UCB1IFG
+            JZ          W2_D
             DEC.B       R12
-            JNZ         SendL2Loop
-            
+            JNZ         W2_Loop
+
             BIS.B       #UCTXSTP, &UCB1CTL1
-WaitL2_S:   BIT.B       #UCTXSTP, &UCB1CTL1
-            JNZ         WaitL2_S
+W2_S:       BIT.B       #UCTXSTP, &UCB1CTL1
+            JNZ         W2_S
             BIC.B       #UCTXIFG, &UCB1IFG
-            
+
             POP.W       R13
             POP.W       R12
             RET
@@ -645,63 +709,55 @@ WaitL2_S:   BIT.B       #UCTXSTP, &UCB1CTL1
 
 ShowThresholdPrompt:
             CALL        #ClearLCDBuffers
-            
-            ; Line 1: "  Press 0-9     "
+            ; line1
             MOV.W       #lcd_line1, R12
             MOV.W       #str_press_09, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            
-            ; Line 2: "Enter threshold:"
+            ; line2
             MOV.W       #lcd_line2, R12
             MOV.W       #str_enter_thr, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            
             CALL        #LCD_SendBoth
             RET
 
 UpdateLCDStatus:
             CALL        #ClearLCDBuffers
-            
             CMP.B       #0, digit_count
-            JNZ         CheckDigit1
+            JNZ         UL_1st
             CALL        #ShowThresholdPrompt
             RET
 
-CheckDigit1:
+UL_1st:
             CMP.B       #1, digit_count
-            JNZ         CheckDigit2
-            
-            ; Show first digit entered
+            JNZ         UL_Done
+
+            ; "Thresh: d_"
             MOV.W       #lcd_line1, R12
             MOV.W       #str_thresh, R13
             MOV.B       #8, R14
             CALL        #CopyString
-            
-            ; Add digit and underscore
+
             MOV.B       digit_buffer, R13
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line1+8
             MOV.B       #'_', lcd_line1+9
-            
-            ; Line 2: "Enter 2nd digit:"
+
             MOV.W       #lcd_line2, R12
             MOV.W       #str_2nd_digit, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            
             CALL        #LCD_SendBoth
             RET
 
-CheckDigit2:
-            ; Show complete threshold
+UL_Done:
+            ; Completed threshold: "Threshold: tt s" / "Press S3 to run "
             MOV.W       #lcd_line1, R12
             MOV.W       #str_threshold, R13
             MOV.B       #11, R14
             CALL        #CopyString
-            
-            ; Add threshold value
+
             MOV.B       threshold, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -710,26 +766,23 @@ CheckDigit2:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line1+12
             MOV.B       #'s', lcd_line1+13
-            
-            ; Line 2: "Press S3 to run "
+
             MOV.W       #lcd_line2, R12
             MOV.W       #str_press_s3, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            
             CALL        #LCD_SendBoth
             RET
 
 ShowTimingStatus:
             CALL        #ClearLCDBuffers
-            
-            ; Line 1: "Timing: XX s    "
+
+            ; "Timing: ss s"
             MOV.W       #lcd_line1, R12
             MOV.W       #str_timing, R13
             MOV.B       #8, R14
             CALL        #CopyString
-            
-            ; Add seconds
+
             MOV.W       seconds, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -738,14 +791,13 @@ ShowTimingStatus:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line1+9
             MOV.B       #'s', lcd_line1+10
-            
-            ; Line 2: "Limit: XX s     "
+
+            ; "Limit: tt s"
             MOV.W       #lcd_line2, R12
             MOV.W       #str_limit, R13
             MOV.B       #7, R14
             CALL        #CopyString
-            
-            ; Add threshold
+
             MOV.B       threshold, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -754,20 +806,18 @@ ShowTimingStatus:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line2+8
             MOV.B       #'s', lcd_line2+9
-            
+
             CALL        #LCD_SendBoth
             RET
 
 ShowElapsedStatus:
             CALL        #ClearLCDBuffers
-            
-            ; Line 1: "Elapsed: XX s   "
+
             MOV.W       #lcd_line1, R12
             MOV.W       #str_elapsed, R13
             MOV.B       #9, R14
             CALL        #CopyString
-            
-            ; Add seconds
+
             MOV.W       seconds, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -776,26 +826,23 @@ ShowElapsedStatus:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line1+10
             MOV.B       #'s', lcd_line1+11
-            
-            ; Line 2: "Enter threshold:"
+
             MOV.W       #lcd_line2, R12
             MOV.W       #str_enter_thr, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            
+
             CALL        #LCD_SendBoth
             RET
 
 ShowExceededStatus:
             CALL        #ClearLCDBuffers
-            
-            ; Line 1: "EXCEEDED! XX s  "
+
             MOV.W       #lcd_line1, R12
             MOV.W       #str_exceeded, R13
             MOV.B       #10, R14
             CALL        #CopyString
-            
-            ; Add seconds
+
             MOV.W       seconds, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -804,14 +851,12 @@ ShowExceededStatus:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line1+11
             MOV.B       #'s', lcd_line1+12
-            
-            ; Line 2: "Limit: XX s     "
+
             MOV.W       #lcd_line2, R12
             MOV.W       #str_limit, R13
             MOV.B       #7, R14
             CALL        #CopyString
-            
-            ; Add threshold
+
             MOV.B       threshold, R12
             MOV.B       #10, R13
             CALL        #Divide8
@@ -820,49 +865,45 @@ ShowExceededStatus:
             ADD.B       #'0', R13
             MOV.B       R13, lcd_line2+8
             MOV.B       #'s', lcd_line2+9
-            
+
             CALL        #LCD_SendBoth
             RET
 
-; Clear LCD buffers with spaces
 ClearLCDBuffers:
             PUSH.W      R12
             PUSH.W      R13
-            
+
             MOV.W       #lcd_line1, R12
             MOV.B       #16, R13
-ClearL1:
-            MOV.B       #' ', 0(R12)
+CL1:        MOV.B       #' ', 0(R12)
             INC.W       R12
             DEC.B       R13
-            JNZ         ClearL1
-            
+            JNZ         CL1
+
             MOV.W       #lcd_line2, R12
             MOV.B       #16, R13
-ClearL2:
-            MOV.B       #' ', 0(R12)
+CL2:        MOV.B       #' ', 0(R12)
             INC.W       R12
             DEC.B       R13
-            JNZ         ClearL2
-            
+            JNZ         CL2
+
             POP.W       R13
             POP.W       R12
             RET
 
-; Copy string: R12=dest, R13=source, R14=length
+; Copy string: R12=dest, R13=source, R14=len
 CopyString:
             PUSH.W      R12
             PUSH.W      R13
             PUSH.W      R14
-            
-CopyLoop:
+CS_Loop:
             CMP.B       #0, R14
-            JZ          CopyDone
+            JZ          CS_Done
             MOV.B       @R13+, 0(R12)
             INC.W       R12
             DEC.B       R14
-            JMP         CopyLoop
-CopyDone:
+            JMP         CS_Loop
+CS_Done:
             POP.W       R14
             POP.W       R13
             POP.W       R12
@@ -872,14 +913,14 @@ CopyDone:
 ; Interrupt Vectors
 ; =====================================================================
             RSEG        INTVEC
-            
+
             ORG         TIMER0_A0_VECTOR
             DW          TIMER0_A0_ISR
-            
+
             ORG         PORT2_VECTOR
             DW          PORT2_ISR
-            
+
             ORG         RESET_VECTOR
             DW          main
-            
+
             END
