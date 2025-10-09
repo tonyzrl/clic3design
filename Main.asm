@@ -5,11 +5,11 @@
 ; =====================================================================
 
             PUBLIC      main
+            PUBLIC      BusAddress      ; Make these PUBLIC for BusRead/BusWrite
+            PUBLIC      BusData         ; Make these PUBLIC for BusRead/BusWrite
             EXTERN      Initial
             EXTERN      BusRead  
             EXTERN      BusWrite
-            EXTERN      BusAddress
-            EXTERN      BusData
 
 ; =====================================================================
 ; Hardware Addresses
@@ -33,6 +33,10 @@ BLINK_MS        EQU     250         ; 250ms for 2Hz blink rate
 ; Data Segment - Application State Variables
 ; =====================================================================
             RSEG        DATA16_I
+
+; Bus communication variables (MUST be defined here for BusRead/BusWrite)
+BusAddress      DW      0           ; Bus address for read/write operations
+BusData         DW      0           ; Bus data for read/write operations
 
 ; Timing variables
 seconds         DW      0           ; Current elapsed seconds (0-99)
