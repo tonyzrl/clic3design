@@ -112,9 +112,9 @@ main:
             ; Configure keypad interrupt (P2.0)
             BIC.B       #01h, &P2DIR        ; P2.0 as input
             BIC.B       #01h, &P2REN        ; No internal pull resistor
-            BIC.B       #01h, &P2IES        ; Rising edge trigger
-            BIS.B       #01h, &P2IE         ; Enable interrupt
+            BIS.B       #01h, &P2IES        ; Falling edge trigger (HIGH to LOW)
             BIC.B       #01h, &P2IFG        ; Clear pending flag
+            BIS.B       #01h, &P2IE         ; Enable interrupt
             
             ; Configure Timer A0 for 1ms tick (25MHz SMCLK)
             MOV.W       #24999, &TA0CCR0    ; 25000 counts = 1ms
@@ -206,7 +206,8 @@ HandleSecond:
             
             ; Check if threshold exceeded
             MOV.B       threshold, R13
-            CMP.W       R13, seconds
+            MOV.W       seconds, R12
+            CMP.B       R13, R12
             JL          CheckAlarmSecond
             
             ; Threshold exceeded - activate alarm
@@ -290,9 +291,10 @@ CheckTiming:
             CMP.W       #1000, ms_count
             JL          CheckBlink
             MOV.W       #0, ms_count
-            CMP.W       #99, seconds
-            JGE         CheckBlink
-            INC.W       seconds
+            MOV.W       seconds, R14        ; Get current seconds
+            CMP.W       #99, R14           
+            JGE         CheckBlink          ; Don't increment if >= 99
+            INC.W       seconds             ; Increment seconds
             MOV.B       #1, flag_second
             BIC.W       #LPM0, 0(SP)        ; Wake up main
 
@@ -330,11 +332,11 @@ PORT2_ISR:
             PUSH.W      R13
             PUSH.W      R14
             
-            ; Clear interrupt flag
+            ; Clear interrupt flag FIRST
             BIC.B       #01h, &P2IFG
             
-            ; Debounce delay
-            MOV.W       #5000, R12
+            ; Small debounce delay
+            MOV.W       #2000, R12
 KeyDebounce:
             DEC.W       R12
             JNZ         KeyDebounce
@@ -342,7 +344,8 @@ KeyDebounce:
             ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
-            MOV.B       BusData, R12
+            MOV.W       BusData, R12
+            AND.W       #00FFh, R12         ; Ensure byte value
             
             ; Check if key pressed
             CMP.B       #0, R12
@@ -353,7 +356,8 @@ KeyDebounce:
             MOV.W       #KeypadLookup, R14  ; table pointer
             
 KeyScanLoop:
-            CMP.B       @R14, R12
+            MOV.B       @R14, R15           ; Get lookup value
+            CMP.B       R15, R12            ; Compare with scan code
             JZ          KeyFound
             INC.W       R14
             INC.B       R13
@@ -370,7 +374,7 @@ KeyFound:
             MOV.B       R13, digit_buffer
             MOV.B       #1, digit_count
             MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 0(SP)
+            BIC.W       #LPM0, 2(SP)        ; Wake up main (adjusted stack offset)
             JMP         KeypadDone
 
 SecondDigit:
@@ -398,11 +402,11 @@ ThreshStore:
             MOV.B       R12, threshold
             MOV.B       #2, digit_count
             MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 0(SP)
+            BIC.W       #LPM0, 2(SP)        ; Wake up main (adjusted stack offset)
 
 KeypadDone:
             ; Wait for key release
-            MOV.W       #10000, R12
+            MOV.W       #5000, R12
 KeyRelease:
             DEC.W       R12
             JNZ         KeyRelease
@@ -433,31 +437,33 @@ UpdateDisplay:
             PUSH.W      R14
             
             ; Limit to 99
+            AND.W       #00FFh, R12         ; Ensure byte value
             CMP.B       #100, R12          ; Compare with 100
             JLO         DispOK             ; Jump if lower (unsigned)
             MOV.B       #99, R12
 DispOK:
             ; Calculate tens and ones
-            MOV.B       R12, R13
-            MOV.B       #10, R14
+            MOV.B       R12, R14            ; Save original value
+            MOV.B       #10, R13
             CALL        #Divide8
-            ; R12 = tens, R13 = ones
+            ; R12 = quotient (tens), R13 = remainder (ones)
             
             ; Display ones digit
             MOV.W       #SEG_LOW, BusAddress
-            MOV.B       R13, R14
-            MOV.W       #SegmentLookup, R13
-            ADD.W       R14, R13
-            MOV.B       @R13, R14
-            MOV.W       R14, BusData
+            AND.W       #000Fh, R13         ; Ensure valid index
+            MOV.W       #SegmentLookup, R14
+            ADD.W       R13, R14
+            MOV.B       @R14, R13
+            MOV.W       R13, BusData
             CALLA       #BusWrite
             
-            ; Display tens digit
+            ; Display tens digit  
             MOV.W       #SEG_HIGH, BusAddress
-            MOV.W       #SegmentLookup, R13
-            ADD.W       R12, R13
-            MOV.B       @R13, R14
-            MOV.W       R14, BusData
+            AND.W       #000Fh, R12         ; Ensure valid index
+            MOV.W       #SegmentLookup, R14
+            ADD.W       R12, R14
+            MOV.B       @R14, R13
+            MOV.W       R13, BusData
             CALLA       #BusWrite
             
             POP.W       R14
@@ -480,21 +486,24 @@ MultDone:
             POP.W       R14
             RET
 
-; 8-bit divide: R12 = R13 / R14, R13 = remainder
+; 8-bit divide: Input R12=dividend, R13=divisor
+; Output: R12=quotient, R13=remainder
 Divide8:
             PUSH.W      R14
-            MOV.B       R13, R12        ; Copy dividend
-            MOV.B       #0, R13         ; Quotient counter
+            PUSH.W      R15
+            MOV.B       R12, R14        ; Save dividend
+            MOV.B       R13, R15        ; Save divisor
+            MOV.B       #0, R12         ; Initialize quotient
 DivLoop:
-            CMP.B       R14, R12
-            JL          DivDone
-            SUB.B       R14, R12
-            INC.B       R13
+            CMP.B       R15, R14        ; Compare dividend with divisor
+            JLO         DivDone         ; If dividend < divisor, done
+            SUB.B       R15, R14        ; Subtract divisor from dividend
+            INC.B       R12             ; Increment quotient
             JMP         DivLoop
 DivDone:
-            PUSH.W      R12             ; Save remainder
-            MOV.B       R13, R12        ; Quotient to R12
-            POP.W       R13             ; Remainder to R13
+            MOV.B       R14, R13        ; Remainder in R13
+            ; R12 already has quotient
+            POP.W       R15
             POP.W       R14
             RET
 
