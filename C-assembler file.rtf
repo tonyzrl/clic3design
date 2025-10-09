@@ -1,0 +1,1978 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red27\green27\blue27;\red255\green255\blue255;\red0\green0\blue0;
+}
+{\*\expandedcolortbl;;\cssrgb\c14118\c14118\c14118;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c0\c0;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec4 ///////////////////////////////////////////////////////////////////////////////\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 // IAR C/C++ Compiler V8.10.3.1087/W32 for MSP430 \'a0 \'a0 \'a0 \'a0 09/Oct/2025 \'a011:29:33\cf0 \cb1 \
+\cf2 \cb3 // Copyright 1996-2023 IAR Systems AB.\cf0 \cb1 \
+\cf2 \cb3 // Network license: iar02.moe.curtin.edu.au (STD)\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__rt_version \'a0= \'a03\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__double_size = \'a032\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__reg_r4 \'a0 \'a0 \'a0= \'a0free\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__reg_r5 \'a0 \'a0 \'a0= \'a0free\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__pic \'a0 \'a0 \'a0 \'a0 = \'a0no\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__core \'a0 \'a0 \'a0 \'a0= \'a0430X\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__data_model \'a0= \'a0small\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0__code_model \'a0= \'a0large\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0Source file \'a0 = \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\main_all.c\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0Command line \'a0= \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0-f\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\Debug\\Obj\\main_all.r43.rsp\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0(C:\\Users\\21487273\\Desktop\\clic3design-main\\main_all.c -lA\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\Debug\\List\\ -o\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\Debug\\Obj\\ --no_cse\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0--no_unroll --no_inline --no_code_motion --no_tbaa --debug\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0-D__MSP430F5308__ -e --double=32 --clib --core=430X\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0--data_model=small -Ol --multiplier=32 --hw_workaround=CPU40\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0--hw_workaround=nop_after_lpm --code_model=large) --dependencies=n\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\Debug\\Obj\\main_all.r43.iar_deps\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0Locale \'a0 \'a0 \'a0 \'a0= \'a0English_AUS.1252\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0List file \'a0 \'a0 = \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 \'a0 \'a0C:\\Users\\21487273\\Desktop\\clic3design-main\\Debug\\List\\main_all.s43\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 ///////////////////////////////////////////////////////////////////////////////\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NAME main_all\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__SystemLibrary", "CLib"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__code_model", "large"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__core", "430X"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__data_model", "small"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__double_size", "32"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__pic", "no"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__reg_r4", "free"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__reg_r5", "free"\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RTMODEL "__rt_version", "3"\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG CSTACK:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN __iar_HWMUL\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?cstart_init_copy\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?longjmp_r4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?longjmp_r5\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?setjmp_r4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN ?setjmp_r5\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK `??Keypad_ISR::??INTVEC 84`\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK `??Timer_ISR::??INTVEC 106`\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK ?setjmp_save_r4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK ?setjmp_save_r5\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBLIC BusAddress\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBLIC BusData\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBLIC Keypad_ISR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK TA0CCR0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK TA0CCTL0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK TA0CTL\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBLIC Timer_ISR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK UCB1TXBUF\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PADIR_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PAIES_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PAIE_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PAIFG_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PAREN_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_PBSEL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_UCB1BRW_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_UCB1CTLW0_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_UCB1I2CSA_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBWEAK _A_UCB1ICTL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUBLIC main\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Names cfiNames0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI StackFrame CFA SP DATA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource PC:20, SP:20, SR:16, R4L:16, R4H:4, R4:20, R5L:16, R5H:4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource R5:20, R6L:16, R6H:4, R6:20, R7L:16, R7H:4, R7:20, R8L:16\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource R8H:4, R8:20, R9L:16, R9H:4, R9:20, R10L:16, R10H:4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource R10:20, R11L:16, R11H:4, R11:20, R12L:16, R12H:4, R12:20\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource R13L:16, R13H:4, R13:20, R14L:16, R14H:4, R14:20, R15L:16\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Resource R15H:4, R15:20\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R4 R4H, R4L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R5 R5H, R5L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R6 R6H, R6L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R7 R7H, R7L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R8 R8H, R8L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R9 R9H, R9L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R10 R10H, R10L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R11 R11H, R11L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R12 R12H, R12L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R13 R13H, R13L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R14 R14H, R14L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ResourceParts R15 R15H, R15L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndNames cfiNames0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Common cfiCommon0 Using cfiNames0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CodeAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI DataAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ReturnAddress PC CODE\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI PC Frame(CFA, -4)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI SR Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndCommon cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Common cfiCommon1 Using cfiNames0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CodeAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI DataAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ReturnAddress PC CODE\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI PC or(load(2, DATA, add(CFA, literal(-2))), lshift(and(load(2, DATA, add(CFA, literal(-4))), 61440), 4))\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI SR Frame(CFA, -4)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15H 0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15 Concat\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndCommon cfiCommon1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Common cfiCommon2 Using cfiNames0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CodeAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI DataAlign 2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI ReturnAddress PC CODE\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI PC Frame(CFA, -4)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI SR Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R4 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R5 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R6 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R7 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15H Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15 Undefined\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndCommon cfiCommon2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 Keypad_ISR \'a0 \'a0 \'a0 \'a0 \'a0SYMBOL "Keypad_ISR"\cf0 \cb1 \
+\cf2 \cb3 `??Keypad_ISR::??INTVEC 84` SYMBOL "??INTVEC 84", Keypad_ISR\cf0 \cb1 \
+\cf2 \cb3 Timer_ISR \'a0 \'a0 \'a0 \'a0 \'a0 SYMBOL "Timer_ISR"\cf0 \cb1 \
+\cf2 \cb3 `??Timer_ISR::??INTVEC 106` SYMBOL "??INTVEC 106", Timer_ISR\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN BusWrite\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN BusRead\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 EXTERN Initial\cf0 \cb1 \
+\
+\cf2 \cb3 // C:\\Users\\21487273\\Desktop\\clic3design-main\\main_all.c\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a01 #include "msp430f5308.h"\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0204H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PADIR_L\cf0 \cb1 \
+\cf2 \cb3 _A_PADIR_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0206H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PAREN_L\cf0 \cb1 \
+\cf2 \cb3 _A_PAREN_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0218H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PAIES_L\cf0 \cb1 \
+\cf2 \cb3 _A_PAIES_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,021aH\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PAIE_L\cf0 \cb1 \
+\cf2 \cb3 _A_PAIE_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,021cH\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PAIFG_L\cf0 \cb1 \
+\cf2 \cb3 _A_PAIFG_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,022aH\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_PBSEL_L\cf0 \cb1 \
+\cf2 \cb3 _A_PBSEL_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0340H\cf0 \cb1 \
+\cf2 \cb3 // unsigned short volatile TA0CTL\cf0 \cb1 \
+\cf2 \cb3 TA0CTL:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0342H\cf0 \cb1 \
+\cf2 \cb3 // unsigned short volatile TA0CCTL0\cf0 \cb1 \
+\cf2 \cb3 TA0CCTL0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0352H\cf0 \cb1 \
+\cf2 \cb3 // unsigned short volatile TA0CCR0\cf0 \cb1 \
+\cf2 \cb3 TA0CCR0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0620H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_UCB1CTLW0_L\cf0 \cb1 \
+\cf2 \cb3 _A_UCB1CTLW0_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0626H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_UCB1BRW_L\cf0 \cb1 \
+\cf2 \cb3 _A_UCB1BRW_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,062eH\cf0 \cb1 \
+\cf2 \cb3 // unsigned char volatile UCB1TXBUF\cf0 \cb1 \
+\cf2 \cb3 UCB1TXBUF:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,0632H\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_UCB1I2CSA_L\cf0 \cb1 \
+\cf2 \cb3 _A_UCB1I2CSA_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ASEGN DATA16_AN:DATA:NOROOT,063cH\cf0 \cb1 \
+\cf2 \cb3 // union <unnamed> _A_UCB1ICTL_L\cf0 \cb1 \
+\cf2 \cb3 _A_UCB1ICTL_L:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a02 #include "intrinsics.h"\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a03\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a04 /* ========================= Bus Interface (provided) ========================= */\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a05 volatile unsigned int BusAddress, BusData;\cf0 \cb1 \
+\cf2 \cb3 BusAddress:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 BusData:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant " \'a0CLIC3 Timer \'a0 ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 " \'a0CLIC3 Timer \'a0 "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Enter threshold:">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Enter threshold:"\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant " \'a0Press 0-9 \'a0 \'a0 ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 " \'a0Press 0-9 \'a0 \'a0 "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Thresh: ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Thresh: "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Enter 2nd digit:">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Enter 2nd digit:"\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Threshold: ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Threshold: "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Press S3 to run ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Press S3 to run "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "EXCEEDED! ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "EXCEEDED! "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Limit: ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Limit: "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Timing: ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Timing: "\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Constant "Elapsed: ">`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 "Elapsed: "\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a06 void Initial(void);\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a07 void BusRead(void);\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a08 void BusWrite(void);\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a09\cf0 \cb1 \
+\cf2 \cb3 // \'a0 10 /* ========================= Hardware Addresses ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0 11 #define SWITCHES_ADDR \'a0 0x4000\cf0 \cb1 \
+\cf2 \cb3 // \'a0 12 #define LED_ADDR \'a0 \'a0 \'a0 \'a00x4002\cf0 \cb1 \
+\cf2 \cb3 // \'a0 13 #define SEG_LOW \'a0 \'a0 \'a0 \'a0 0x4004\cf0 \cb1 \
+\cf2 \cb3 // \'a0 14 #define SEG_HIGH \'a0 \'a0 \'a0 \'a00x4006\cf0 \cb1 \
+\cf2 \cb3 // \'a0 15 #define KEYPAD_ADDR \'a0 \'a0 0x4008\cf0 \cb1 \
+\cf2 \cb3 // \'a0 16\cf0 \cb1 \
+\cf2 \cb3 // \'a0 17 /* ========================= Configuration ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0 18 #define SWITCH_S3_BIT \'a0 0x80 \'a0 \'a0 \'a0 \'a0// S3 is bit 7 (not bit 0!)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 19 #define LED_D0 \'a0 \'a0 \'a0 \'a0 \'a00x01 \'a0 \'a0 \'a0 \'a0// Alarm LED (ACTIVE-LOW: 0=ON, 1=OFF)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 20 #define LED_D7 \'a0 \'a0 \'a0 \'a0 \'a00x80 \'a0 \'a0 \'a0 \'a0// S3 status LED (ACTIVE-LOW: 0=ON, 1=OFF)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 21 #define DEBOUNCE_MS \'a0 \'a0 20 \'a0 \'a0 \'a0 \'a0 \'a0// 20ms debounce time\cf0 \cb1 \
+\cf2 \cb3 // \'a0 22 #define BLINK_MS \'a0 \'a0 \'a0 \'a0250 \'a0 \'a0 \'a0 \'a0 // 250ms toggle = 2Hz blink\cf0 \cb1 \
+\cf2 \cb3 // \'a0 23\cf0 \cb1 \
+\cf2 \cb3 // \'a0 24 /* ========================= Seven-Segment Lookup (0-9) ========================= */\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 25 static const unsigned char SegmentLookup[10] = \{\cf0 \cb1 \
+\cf2 \cb3 SegmentLookup:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DATA8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 64, 121, 36, 48, 25, 18, 2, 120, 0, 24\cf0 \cb1 \
+\cf2 \cb3 // \'a0 26 \'a0 \'a0 0x40, 0x79, 0x24, 0x30, 0x19, 0x12, 0x02, 0x78, 0x00, 0x18\cf0 \cb1 \
+\cf2 \cb3 // \'a0 27 \};\cf0 \cb1 \
+\cf2 \cb3 // \'a0 28\cf0 \cb1 \
+\cf2 \cb3 // \'a0 29 /* ========================= Keypad Scan Code Lookup (0-9) ========================= */\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_C:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 30 static const unsigned char KeypadLookup[16] = \{\cf0 \cb1 \
+\cf2 \cb3 KeypadLookup:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DATA8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 130, 17, 18, 20, 33, 34, 36, 65, 66, 68, 129, 132, 136, 72, 40, 24\cf0 \cb1 \
+\cf2 \cb3 // \'a0 31 \'a0 \'a0 0x82, 0x11, 0x12, 0x14, 0x21, 0x22, 0x24, 0x41,\cf0 \cb1 \
+\cf2 \cb3 // \'a0 32 \'a0 \'a0 0x42, 0x44, 0x81, 0x84, 0x88, 0x48, 0x28, 0x18\cf0 \cb1 \
+\cf2 \cb3 // \'a0 33 \};\cf0 \cb1 \
+\cf2 \cb3 // \'a0 34\cf0 \cb1 \
+\cf2 \cb3 // \'a0 35 /* ========================= Application State ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0 36 // Timing variables\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 37 static volatile unsigned char seconds = 0; \'a0 \'a0 \'a0 \'a0 \'a0// Elapsed time (0-99)\cf0 \cb1 \
+\cf2 \cb3 seconds:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 38 static volatile unsigned int \'a0ms_count = 0; \'a0 \'a0 \'a0 \'a0 // Millisecond counter\cf0 \cb1 \
+\cf2 \cb3 ms_count:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 39 static volatile unsigned char timing = 0; \'a0 \'a0 \'a0 \'a0 \'a0 // 1 = actively timing\cf0 \cb1 \
+\cf2 \cb3 timing:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\cf2 \cb3 // \'a0 40\cf0 \cb1 \
+\cf2 \cb3 // \'a0 41 // S3 switch state\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 42 static volatile unsigned char s3_debounced = 0; \'a0 \'a0 // Stable S3 state\cf0 \cb1 \
+\cf2 \cb3 s3_debounced:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 43 static volatile unsigned char s3_last = 0; \'a0 \'a0 \'a0 \'a0 \'a0// Previous state for edge detection\cf0 \cb1 \
+\cf2 \cb3 s3_last:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 44 static volatile unsigned char s3_raw = 0; \'a0 \'a0 \'a0 \'a0 \'a0 // Raw sample\cf0 \cb1 \
+\cf2 \cb3 s3_raw:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 45 static volatile unsigned int \'a0debounce_counter = 0;\cf0 \cb1 \
+\cf2 \cb3 debounce_counter:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\cf2 \cb3 // \'a0 46\cf0 \cb1 \
+\cf2 \cb3 // \'a0 47 // Alarm state\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_I:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_copy\cf0 \cb1 \
+\cf2 \cb3 // \'a0 48 static volatile unsigned char threshold = 10; \'a0 \'a0 \'a0 // Default 10 seconds (for testing)\cf0 \cb1 \
+\cf2 \cb3 threshold:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE `?<Initializer for threshold>`\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 49 static volatile unsigned char alarm_on = 0; \'a0 \'a0 \'a0 \'a0 // Alarm active flag\cf0 \cb1 \
+\cf2 \cb3 alarm_on:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 50 static volatile unsigned int \'a0blink_count = 0; \'a0 \'a0 \'a0// Blink timer\cf0 \cb1 \
+\cf2 \cb3 blink_count:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\cf2 \cb3 // \'a0 51\cf0 \cb1 \
+\cf2 \cb3 // \'a0 52 // Event flags\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 53 static volatile unsigned char flag_switch = 0;\cf0 \cb1 \
+\cf2 \cb3 flag_switch:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 54 static volatile unsigned char flag_second = 0;\cf0 \cb1 \
+\cf2 \cb3 flag_second:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 55 static volatile unsigned char flag_blink = 0;\cf0 \cb1 \
+\cf2 \cb3 flag_blink:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\cf2 \cb3 // \'a0 56\cf0 \cb1 \
+\cf2 \cb3 // \'a0 57 // Threshold entry state\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 58 static volatile unsigned char digit_count = 0; \'a0 \'a0 \'a0// 0, 1, or 2 digits entered\cf0 \cb1 \
+\cf2 \cb3 digit_count:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 59 static volatile unsigned char digit_buffer[2]; \'a0 \'a0 \'a0// Store entered digits\cf0 \cb1 \
+\cf2 \cb3 digit_buffer:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 2\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_Z:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_zero\cf0 \cb1 \
+\cf2 \cb3 // \'a0 60 static volatile unsigned char lcd_refresh = 0; \'a0 \'a0 \'a0// LCD update needed\cf0 \cb1 \
+\cf2 \cb3 lcd_refresh:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\cf2 \cb3 // \'a0 61\cf0 \cb1 \
+\cf2 \cb3 // \'a0 62 // LED shadow register (ACTIVE-LOW: 0=ON, 1=OFF)\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_I:DATA:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?cstart_init_copy\cf0 \cb1 \
+\cf2 \cb3 // \'a0 63 static volatile unsigned char leds = 0xFF; \'a0 \'a0 \'a0 \'a0 \'a0// Start with all LEDs OFF\cf0 \cb1 \
+\cf2 \cb3 leds:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DS8 1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE `?<Initializer for leds>`\cf0 \cb1 \
+\cf2 \cb3 // \'a0 64\cf0 \cb1 \
+\cf2 \cb3 // \'a0 65 /* ========================= LCD Setup (I2C) ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0 66 static void LCD_SendCommand(unsigned char cmd) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0 67 \'a0 \'a0 UCB1CTL1 |= UCTR | UCTXSTT;\cf0 \cb1 \
+\cf2 \cb3 // \'a0 68 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 // \'a0 69 \'a0 \'a0 UCB1TXBUF = 0x00; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 // \'a0 70 \'a0 \'a0 UCB1TXBUF = cmd; \'a0while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 // \'a0 71 \'a0 \'a0 UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);\cf0 \cb1 \
+\cf2 \cb3 // \'a0 72 \'a0 \'a0 UCB1IFG &= ~UCTXIFG;\cf0 \cb1 \
+\cf2 \cb3 // \'a0 73 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0 74\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 75 static void LCD_SendLine1(const char *text) \{\cf0 \cb1 \
+\cf2 \cb3 LCD_SendLine1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock0 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function LCD_SendLine1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI NoCalls\cf0 \cb1 \
+\cf2 \cb3 // \'a0 76 \'a0 \'a0 unsigned char i;\cf0 \cb1 \
+\cf2 \cb3 // \'a0 77 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 78 \'a0 \'a0 // Position cursor at start of first line (0x80)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 79 \'a0 \'a0 UCB1CTL1 |= UCTR | UCTXSTT;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x12, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0 80 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 81 \'a0 \'a0 UCB1TXBUF = 0x80; \'a0// Control byte for command\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x80, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0 82 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0 83 \'a0 \'a0 UCB1TXBUF = 0x80; \'a0// DDRAM address 0x00 (line 1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x80, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0 84 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0 85 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 86 \'a0 \'a0 UCB1TXBUF = 0x40; \'a0// Control byte for data\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x40, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0 87 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0 88 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 89 \'a0 \'a0 for(i = 0; i < 16; i++) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??LCD_SendLine1_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0 90 \'a0 \'a0 \'a0 \'a0 UCB1TXBUF = text[i];\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R12, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R15, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R14, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0 91 \'a0 \'a0 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0 92 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R15\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine1_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0 93 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0 94 \'a0 \'a0 UCB1CTL1 |= UCTXSTP;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0 95 \'a0 \'a0 while(UCB1CTL1 & UCTXSTP);\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine1_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??LCD_SendLine1_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0 96 \'a0 \'a0 UCB1IFG &= ~UCTXIFG;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 // \'a0 97 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1CTLW0_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1ICTL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE UCB1TXBUF\cf0 \cb1 \
+\cf2 \cb3 // \'a0 98\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 99 static void LCD_SendLine2(const char *text) \{\cf0 \cb1 \
+\cf2 \cb3 LCD_SendLine2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock1 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function LCD_SendLine2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI NoCalls\cf0 \cb1 \
+\cf2 \cb3 // \'a0100 \'a0 \'a0 unsigned char i;\cf0 \cb1 \
+\cf2 \cb3 // \'a0101 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0102 \'a0 \'a0 // Position cursor at start of second line (0xC0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0103 \'a0 \'a0 UCB1CTL1 |= UCTR | UCTXSTT;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x12, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0104 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0105 \'a0 \'a0 UCB1TXBUF = 0x80; \'a0// Control byte for command\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x80, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0106 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0107 \'a0 \'a0 UCB1TXBUF = 0xC0; \'a0// DDRAM address 0x40 (line 2)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xc0, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0108 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0109 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0110 \'a0 \'a0 UCB1TXBUF = 0x40; \'a0// Control byte for data\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x40, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0111 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0112 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0113 \'a0 \'a0 for(i = 0; i < 16; i++) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??LCD_SendLine2_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0114 \'a0 \'a0 \'a0 \'a0 UCB1TXBUF = text[i];\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R12, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R15, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R14, &0x62e\cf0 \cb1 \
+\cf2 \cb3 // \'a0115 \'a0 \'a0 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0116 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R15\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_SendLine2_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0117 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0118 \'a0 \'a0 UCB1CTL1 |= UCTXSTP;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0119 \'a0 \'a0 while(UCB1CTL1 & UCTXSTP);\cf0 \cb1 \
+\cf2 \cb3 ??LCD_SendLine2_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??LCD_SendLine2_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0120 \'a0 \'a0 UCB1IFG &= ~UCTXIFG;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 // \'a0121 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1CTLW0_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1ICTL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE UCB1TXBUF\cf0 \cb1 \
+\cf2 \cb3 // \'a0122\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0123 static void LCD_SendBothLines(const char *line1, const char *line2) \{\cf0 \cb1 \
+\cf2 \cb3 LCD_SendBothLines:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock2 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function LCD_SendBothLines\cf0 \cb1 \
+\cf2 \cb3 // \'a0124 \'a0 \'a0 LCD_SendLine1(line1);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendLine1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendLine1\cf0 \cb1 \
+\cf2 \cb3 // \'a0125 \'a0 \'a0 LCD_SendLine2(line2);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R13, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendLine2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendLine2\cf0 \cb1 \
+\cf2 \cb3 // \'a0126 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock2\cf0 \cb1 \
+\cf2 \cb3 // \'a0127\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0128 static void LCD_Init(void) \{\cf0 \cb1 \
+\cf2 \cb3 LCD_Init:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock3 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function LCD_Init\cf0 \cb1 \
+\cf2 \cb3 // \'a0129 \'a0 \'a0 unsigned int Wait;\cf0 \cb1 \
+\cf2 \cb3 // \'a0130 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0131 \'a0 \'a0 // I2C configuration\cf0 \cb1 \
+\cf2 \cb3 // \'a0132 \'a0 \'a0 UCB1CTL1 |= UCSWRST;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0133 \'a0 \'a0 UCB1CTL0 = UCMST | UCMODE_3 | UCSYNC;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xf, &0x621\cf0 \cb1 \
+\cf2 \cb3 // \'a0134 \'a0 \'a0 UCB1CTL1 = UCSSEL_1 | UCSWRST;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x41, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0135 \'a0 \'a0 UCB1BR0 = 63;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x3f, &0x626\cf0 \cb1 \
+\cf2 \cb3 // \'a0136 \'a0 \'a0 UCB1I2CSA = 0x3E;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x3e, &0x632\cf0 \cb1 \
+\cf2 \cb3 // \'a0137 \'a0 \'a0 P4SEL |= 0x06; \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// P4.1=SDA, P4.2=SCL\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x6, &0x22b\cf0 \cb1 \
+\cf2 \cb3 // \'a0138 \'a0 \'a0 UCB1CTL1 &= ~UCSWRST;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0139\cf0 \cb1 \
+\cf2 \cb3 // \'a0140 \'a0 \'a0 // LCD initialization sequence\cf0 \cb1 \
+\cf2 \cb3 // \'a0141 \'a0 \'a0 UCB1CTL1 |= UCTR | UCTXSTT;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x12, &0x620\cf0 \cb1 \
+\cf2 \cb3 // \'a0142 \'a0 \'a0 while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0143 \'a0 \'a0 UCB1TXBUF = 0x00; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0144 \'a0 \'a0 UCB1TXBUF = 0x39; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x39, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0145 \'a0 \'a0 UCB1TXBUF = 0x14; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x14, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0146 \'a0 \'a0 UCB1TXBUF = 0x74; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x74, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0147 \'a0 \'a0 UCB1TXBUF = 0x54; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x54, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0148 \'a0 \'a0 UCB1TXBUF = 0x6F; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x6f, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0149 \'a0 \'a0 UCB1TXBUF = 0x0E; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xe, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0150 \'a0 \'a0 UCB1TXBUF = 0x01; while(!(UCB1IFG & UCTXIFG));\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &0x62e\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_8\cf0 \cb1 \
+\cf2 \cb3 // \'a0151 \'a0 \'a0 UCB1CTL1 |= UCTXSTP; while(UCB1CTL1 & UCTXSTP);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_9:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.B \'a0 #0x4, &0x620\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??LCD_Init_9\cf0 \cb1 \
+\cf2 \cb3 // \'a0152 \'a0 \'a0 UCB1IFG &= ~UCTXIFG;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x2, &0x63d\cf0 \cb1 \
+\cf2 \cb3 // \'a0153\cf0 \cb1 \
+\cf2 \cb3 // \'a0154 \'a0 \'a0 for(Wait = 0; Wait < 10000; Wait++);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??LCD_Init_11\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_10:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, R15\cf0 \cb1 \
+\cf2 \cb3 ??LCD_Init_11:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x2710, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??LCD_Init_10\cf0 \cb1 \
+\cf2 \cb3 // \'a0155\cf0 \cb1 \
+\cf2 \cb3 // \'a0156 \'a0 \'a0 LCD_SendLine1(" \'a0CLIC3 Timer \'a0 ");\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant " \'a0CLIC3 Timer \'a0 ">`, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendLine1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendLine1\cf0 \cb1 \
+\cf2 \cb3 // \'a0157 \'a0 \'a0 LCD_SendLine2("Enter threshold:");\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Enter threshold:">`, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendLine2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendLine2\cf0 \cb1 \
+\cf2 \cb3 // \'a0158 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock3\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1CTLW0_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1BRW_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1I2CSA_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PBSEL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_UCB1ICTL_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE UCB1TXBUF\cf0 \cb1 \
+\cf2 \cb3 // \'a0159\cf0 \cb1 \
+\cf2 \cb3 // \'a0160 /* ========================= Helper Functions ========================= */\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0161 static void UpdateLEDs(void) \{\cf0 \cb1 \
+\cf2 \cb3 UpdateLEDs:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock4 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 // \'a0162 \'a0 \'a0 BusAddress = LED_ADDR;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x4002, &BusAddress\cf0 \cb1 \
+\cf2 \cb3 // \'a0163 \'a0 \'a0 BusData = leds;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &leds, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R15, &BusData\cf0 \cb1 \
+\cf2 \cb3 // \'a0164 \'a0 \'a0 BusWrite();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall BusWrite\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #BusWrite\cf0 \cb1 \
+\cf2 \cb3 // \'a0165 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock4\cf0 \cb1 \
+\cf2 \cb3 // \'a0166\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0167 static void UpdateDisplay(unsigned char value) \{\cf0 \cb1 \
+\cf2 \cb3 UpdateDisplay:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock5 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSHM.W #0x4, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8L Frame(CFA, -12)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9L Frame(CFA, -10)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L Frame(CFA, -8)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L Frame(CFA, -6)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, R10\cf0 \cb1 \
+\cf2 \cb3 // \'a0168 \'a0 \'a0 if(value > 99) value = 99;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x64, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateDisplay_0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x63, R10\cf0 \cb1 \
+\cf2 \cb3 // \'a0169 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0170 \'a0 \'a0 unsigned char tens = value / 10;\cf0 \cb1 \
+\cf2 \cb3 ??UpdateDisplay_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0171 \'a0 \'a0 unsigned char ones = value % 10;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R8, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R8, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0 // OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+12\cf0 \cb1 \
+\cf2 \cb3 // \'a0172 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0173 \'a0 \'a0 BusAddress = SEG_LOW;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x4004, &BusAddress\cf0 \cb1 \
+\cf2 \cb3 // \'a0174 \'a0 \'a0 BusData = SegmentLookup[ones];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 SegmentLookup(R10), R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R15, &BusData\cf0 \cb1 \
+\cf2 \cb3 // \'a0175 \'a0 \'a0 BusWrite();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall BusWrite\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #BusWrite\cf0 \cb1 \
+\cf2 \cb3 // \'a0176 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0177 \'a0 \'a0 BusAddress = SEG_HIGH;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x4006, &BusAddress\cf0 \cb1 \
+\cf2 \cb3 // \'a0178 \'a0 \'a0 BusData = SegmentLookup[tens];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 SegmentLookup(R11), R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R15, &BusData\cf0 \cb1 \
+\cf2 \cb3 // \'a0179 \'a0 \'a0 BusWrite();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall BusWrite\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #BusWrite\cf0 \cb1 \
+\cf2 \cb3 // \'a0180 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POPM.W \'a0#0x4, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R8L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R9L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock5\cf0 \cb1 \
+\cf2 \cb3 // \'a0181\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0182 static void UpdateLCD_Status(void) \{\cf0 \cb1 \
+\cf2 \cb3 UpdateLCD_Status:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock6 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function UpdateLCD_Status\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSHM.W #0x2, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L Frame(CFA, -8)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L Frame(CFA, -6)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUBA \'a0 \'a0#0x20, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 // \'a0183 \'a0 \'a0 char line1[16], line2[16];\cf0 \cb1 \
+\cf2 \cb3 // \'a0184 \'a0 \'a0 unsigned char i;\cf0 \cb1 \
+\cf2 \cb3 // \'a0185 \'a0 \'a0 const char *template;\cf0 \cb1 \
+\cf2 \cb3 // \'a0186 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0187 \'a0 \'a0 // Clear both line buffers with spaces\cf0 \cb1 \
+\cf2 \cb3 // \'a0188 \'a0 \'a0 for(i = 0; i < 16; i++) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0189 \'a0 \'a0 \'a0 \'a0 line1[i] = ' ';\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x20, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 // \'a0190 \'a0 \'a0 \'a0 \'a0 line2[i] = ' ';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x20, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 // \'a0191 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Status_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0192 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0193 \'a0 \'a0 if(digit_count == 0) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??UpdateLCD_Status_12\cf0 \cb1 \
+\cf2 \cb3 // \'a0194 \'a0 \'a0 \'a0 \'a0 // Waiting for threshold entry\cf0 \cb1 \
+\cf2 \cb3 // \'a0195 \'a0 \'a0 \'a0 \'a0 template = "Enter threshold:";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Enter threshold:">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0196 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 16; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_8\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Status_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0197 \'a0 \'a0 \'a0 \'a0 template = " \'a0Press 0-9 \'a0 \'a0 ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant " \'a0Press 0-9 \'a0 \'a0 ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0198 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 16; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??UpdateLCD_Status_13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0199 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0200 \'a0 \'a0 else if(digit_count == 1) \{\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_12:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x1, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??UpdateLCD_Status_14\cf0 \cb1 \
+\cf2 \cb3 // \'a0201 \'a0 \'a0 \'a0 \'a0 // Show first digit\cf0 \cb1 \
+\cf2 \cb3 // \'a0202 \'a0 \'a0 \'a0 \'a0 template = "Thresh: ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Thresh: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0203 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 8; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_9\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_9:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x8, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Status_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0204 \'a0 \'a0 \'a0 \'a0 line1[8] = '0' + digit_buffer[0];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &digit_buffer, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, 0x8(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0205 \'a0 \'a0 \'a0 \'a0 line1[9] = '_';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x5f, 0x9(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0206 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0207 \'a0 \'a0 \'a0 \'a0 template = "Enter 2nd digit:";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Enter 2nd digit:">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0208 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 16; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??UpdateLCD_Status_13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0209 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0210 \'a0 \'a0 else if(digit_count == 2) \{\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_14:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x2, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??UpdateLCD_Status_13\cf0 \cb1 \
+\cf2 \cb3 // \'a0211 \'a0 \'a0 \'a0 \'a0 // Show complete threshold\cf0 \cb1 \
+\cf2 \cb3 // \'a0212 \'a0 \'a0 \'a0 \'a0 template = "Threshold: ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Threshold: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0213 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 11; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_10\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_10:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0xb, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Status_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0214 \'a0 \'a0 \'a0 \'a0 line1[11] = '0' + (threshold / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0xb(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0215 \'a0 \'a0 \'a0 \'a0 line1[12] = '0' + (threshold % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0xc(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0216 \'a0 \'a0 \'a0 \'a0 line1[13] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0xd(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0217 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0218 \'a0 \'a0 \'a0 \'a0 template = "Press S3 to run ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Press S3 to run ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0219 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 16; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Status_11\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_11:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Status_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0220 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0221 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0222 \'a0 \'a0 LCD_SendBothLines(line1, line2);\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Status_13:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 SP, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x10, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 SP, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendBothLines\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendBothLines\cf0 \cb1 \
+\cf2 \cb3 // \'a0223 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADDA \'a0 \'a0#0x20, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POPM.W \'a0#0x2, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock6\cf0 \cb1 \
+\cf2 \cb3 // \'a0224\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0225 static void UpdateLCD_Timing(void) \{\cf0 \cb1 \
+\cf2 \cb3 UpdateLCD_Timing:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock7 Using cfiCommon0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSHM.W #0x2, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L Frame(CFA, -8)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L Frame(CFA, -6)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUBA \'a0 \'a0#0x20, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 // \'a0226 \'a0 \'a0 char line1[16], line2[16];\cf0 \cb1 \
+\cf2 \cb3 // \'a0227 \'a0 \'a0 unsigned char i;\cf0 \cb1 \
+\cf2 \cb3 // \'a0228 \'a0 \'a0 const char *template;\cf0 \cb1 \
+\cf2 \cb3 // \'a0229 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0230 \'a0 \'a0 // Clear both line buffers with spaces\cf0 \cb1 \
+\cf2 \cb3 // \'a0231 \'a0 \'a0 for(i = 0; i < 16; i++) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0232 \'a0 \'a0 \'a0 \'a0 line1[i] = ' ';\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x20, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 // \'a0233 \'a0 \'a0 \'a0 \'a0 line2[i] = ' ';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x20, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 // \'a0234 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0235 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0236 \'a0 \'a0 if(alarm_on) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??UpdateLCD_Timing_15\cf0 \cb1 \
+\cf2 \cb3 // \'a0237 \'a0 \'a0 \'a0 \'a0 // Line 1: "EXCEEDED! xx s \'a0"\cf0 \cb1 \
+\cf2 \cb3 // \'a0238 \'a0 \'a0 \'a0 \'a0 template = "EXCEEDED! ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "EXCEEDED! ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0239 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 10; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_8\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0240 \'a0 \'a0 \'a0 \'a0 line1[10] = '0' + (seconds / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0xa(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0241 \'a0 \'a0 \'a0 \'a0 line1[11] = '0' + (seconds % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0xb(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0242 \'a0 \'a0 \'a0 \'a0 line1[12] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0xc(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0243 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0244 \'a0 \'a0 \'a0 \'a0 // Line 2: "Limit: xx s \'a0 \'a0 "\cf0 \cb1 \
+\cf2 \cb3 // \'a0245 \'a0 \'a0 \'a0 \'a0 template = "Limit: ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Limit: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0246 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 7; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_9\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_9:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x7, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0247 \'a0 \'a0 \'a0 \'a0 line2[7] = '0' + (threshold / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0x17(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0248 \'a0 \'a0 \'a0 \'a0 line2[8] = '0' + (threshold % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0x18(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0249 \'a0 \'a0 \'a0 \'a0 line2[9] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0x19(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_10\cf0 \cb1 \
+\cf2 \cb3 // \'a0250 \'a0 \'a0 \} else if(timing) \{\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_15:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??UpdateLCD_Timing_16\cf0 \cb1 \
+\cf2 \cb3 // \'a0251 \'a0 \'a0 \'a0 \'a0 // Line 1: "Timing: xx s \'a0 \'a0"\cf0 \cb1 \
+\cf2 \cb3 // \'a0252 \'a0 \'a0 \'a0 \'a0 template = "Timing: ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Timing: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0253 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 8; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_11\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_11:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x8, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0254 \'a0 \'a0 \'a0 \'a0 line1[8] = '0' + (seconds / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0x8(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0255 \'a0 \'a0 \'a0 \'a0 line1[9] = '0' + (seconds % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0x9(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0256 \'a0 \'a0 \'a0 \'a0 line1[10] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0xa(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0257 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0258 \'a0 \'a0 \'a0 \'a0 // Line 2: "Limit: xx s \'a0 \'a0 "\cf0 \cb1 \
+\cf2 \cb3 // \'a0259 \'a0 \'a0 \'a0 \'a0 template = "Limit: ";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Limit: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0260 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 7; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_12\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_12:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x7, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0261 \'a0 \'a0 \'a0 \'a0 line2[7] = '0' + (threshold / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0x17(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0262 \'a0 \'a0 \'a0 \'a0 line2[8] = '0' + (threshold % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &threshold, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0x18(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0263 \'a0 \'a0 \'a0 \'a0 line2[9] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0x19(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_10\cf0 \cb1 \
+\cf2 \cb3 // \'a0264 \'a0 \'a0 \} else \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0265 \'a0 \'a0 \'a0 \'a0 // Line 1: "Elapsed: xx s \'a0 "\cf0 \cb1 \
+\cf2 \cb3 // \'a0266 \'a0 \'a0 \'a0 \'a0 template = "Elapsed: ";\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_16:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Elapsed: ">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0267 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 9; i++) line1[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_13\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_13:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x9, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0268 \'a0 \'a0 \'a0 \'a0 line1[9] = '0' + (seconds / 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0xa, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod8u\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, 0x9(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0269 \'a0 \'a0 \'a0 \'a0 line1[10] = '0' + (seconds % 10);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0xa, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall ?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #?DivMod16s\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSH.W \'a0SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+42\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DINT\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R12, &__iar_HWMUL \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0// MPY\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R11, &__iar_HWMUL + 8 \'a0 \'a0 \'a0 \'a0 \'a0// OP2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUB.B \'a0 &__iar_HWMUL + 10, R10 \'a0 \'a0 \'a0 \'a0 // RESLO\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POP.W \'a0 SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+40\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x30, R10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R10, 0xa(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0270 \'a0 \'a0 \'a0 \'a0 line1[11] = 's';\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x73, 0xb(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0271 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0272 \'a0 \'a0 \'a0 \'a0 // Line 2: "Enter threshold:"\cf0 \cb1 \
+\cf2 \cb3 // \'a0273 \'a0 \'a0 \'a0 \'a0 template = "Enter threshold:";\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #`?<Constant "Enter threshold:">`, R11\cf0 \cb1 \
+\cf2 \cb3 // \'a0274 \'a0 \'a0 \'a0 \'a0 for(i = 0; i < 16; i++) line2[i] = template[i];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??UpdateLCD_Timing_14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 R11, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 R14, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 SP, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 @R13, 0x10(R15)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_14:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x10, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??UpdateLCD_Timing_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0275 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0276 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0277 \'a0 \'a0 LCD_SendBothLines(line1, line2);\cf0 \cb1 \
+\cf2 \cb3 ??UpdateLCD_Timing_10:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 SP, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x10, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 SP, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_SendBothLines\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_SendBothLines\cf0 \cb1 \
+\cf2 \cb3 // \'a0278 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADDA \'a0 \'a0#0x20, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POPM.W \'a0#0x2, R11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R10L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R11L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETA\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock7\cf0 \cb1 \
+\cf2 \cb3 // \'a0279\cf0 \cb1 \
+\cf2 \cb3 // \'a0280 /* ========================= Timer A0 ISR (1ms tick) ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0281 #pragma vector = TIMER0_A0_VECTOR\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG ISR_CODE:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALL_GRAPH_ROOT Timer_ISR, "interrupt"\cf0 \cb1 \
+\cf2 \cb3 // \'a0282 __interrupt void Timer_ISR(void) \{\cf0 \cb1 \
+\cf2 \cb3 Timer_ISR:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock8 Using cfiCommon1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function Timer_ISR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSHM.W #0x4, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L Frame(CFA, -12)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L Frame(CFA, -10)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L Frame(CFA, -8)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L Frame(CFA, -6)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+12\cf0 \cb1 \
+\cf2 \cb3 // \'a0283 \'a0 \'a0 // Read S3 switch state\cf0 \cb1 \
+\cf2 \cb3 // \'a0284 \'a0 \'a0 BusAddress = SWITCHES_ADDR;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x4000, &BusAddress\cf0 \cb1 \
+\cf2 \cb3 // \'a0285 \'a0 \'a0 BusRead();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall BusRead\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #BusRead\cf0 \cb1 \
+\cf2 \cb3 // \'a0286 \'a0 \'a0 unsigned char s3_now = (BusData & SWITCH_S3_BIT) ? 1 : 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIT.W \'a0 #0x80, &BusData\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUBC.B \'a0R14, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R14\cf0 \cb1 \
+\cf2 \cb3 // \'a0287 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0288 \'a0 \'a0 // Debounce logic\cf0 \cb1 \
+\cf2 \cb3 // \'a0289 \'a0 \'a0 if(s3_now != s3_raw) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 &s3_raw, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Timer_ISR_3\cf0 \cb1 \
+\cf2 \cb3 // \'a0290 \'a0 \'a0 \'a0 \'a0 s3_raw = s3_now;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R14, &s3_raw\cf0 \cb1 \
+\cf2 \cb3 // \'a0291 \'a0 \'a0 \'a0 \'a0 debounce_counter = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, &debounce_counter\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Timer_ISR_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0292 \'a0 \'a0 \} else \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0293 \'a0 \'a0 \'a0 \'a0 if(debounce_counter < DEBOUNCE_MS) \{\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x14, &debounce_counter\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??Timer_ISR_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0294 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 debounce_counter++;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, &debounce_counter\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Timer_ISR_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0295 \'a0 \'a0 \'a0 \'a0 \} else if(s3_debounced != s3_raw) \{\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &s3_debounced, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 &s3_raw, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Timer_ISR_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0296 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 s3_debounced = s3_raw;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &s3_raw, &s3_debounced\cf0 \cb1 \
+\cf2 \cb3 // \'a0297 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_switch = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &flag_switch\cf0 \cb1 \
+\cf2 \cb3 // \'a0298 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 __bic_SR_register_on_exit(LPM0_bits);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.W \'a0 #0x10, 0x8(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0299 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0300 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0301 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0302 \'a0 \'a0 // Update D7 to match S3 state (ACTIVE-LOW: clear bit to turn ON)\cf0 \cb1 \
+\cf2 \cb3 // \'a0303 \'a0 \'a0 if(s3_debounced) \{\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &s3_debounced\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Timer_ISR_5\cf0 \cb1 \
+\cf2 \cb3 // \'a0304 \'a0 \'a0 \'a0 \'a0 leds &= ~LED_D7; \'a0// S3 ON -> D7 ON (clear bit = 0)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x80, &leds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Timer_ISR_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0305 \'a0 \'a0 \} else \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0306 \'a0 \'a0 \'a0 \'a0 leds |= LED_D7; \'a0 // S3 OFF -> D7 OFF (set bit = 1)\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x80, &leds\cf0 \cb1 \
+\cf2 \cb3 // \'a0307 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0308 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0309 \'a0 \'a0 // Timing logic\cf0 \cb1 \
+\cf2 \cb3 // \'a0310 \'a0 \'a0 if(timing) \{\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Timer_ISR_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0311 \'a0 \'a0 \'a0 \'a0 ms_count++;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, &ms_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0312 \'a0 \'a0 \'a0 \'a0 if(ms_count >= 1000) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x3e8, &ms_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??Timer_ISR_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0313 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ms_count = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, &ms_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0314 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(seconds < 99) seconds++;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x63, &seconds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??Timer_ISR_7\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, &seconds\cf0 \cb1 \
+\cf2 \cb3 // \'a0315 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_second = 1;\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &flag_second\cf0 \cb1 \
+\cf2 \cb3 // \'a0316 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 __bic_SR_register_on_exit(LPM0_bits);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.W \'a0 #0x10, 0x8(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0317 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0318 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0319 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0320 \'a0 \'a0 // Blink logic\cf0 \cb1 \
+\cf2 \cb3 // \'a0321 \'a0 \'a0 if(alarm_on) \{\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Timer_ISR_8\cf0 \cb1 \
+\cf2 \cb3 // \'a0322 \'a0 \'a0 \'a0 \'a0 blink_count++;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, &blink_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0323 \'a0 \'a0 \'a0 \'a0 if(blink_count >= BLINK_MS) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0xfa, &blink_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??Timer_ISR_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0324 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 blink_count = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, &blink_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0325 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 leds ^= LED_D0; \'a0// Toggle D0 in the ISR itself\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 XOR.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 // \'a0326 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_blink = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &flag_blink\cf0 \cb1 \
+\cf2 \cb3 // \'a0327 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 __bic_SR_register_on_exit(LPM0_bits);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.W \'a0 #0x10, 0x8(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Timer_ISR_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0328 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0329 \'a0 \'a0 \} else \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0330 \'a0 \'a0 \'a0 \'a0 // Ensure D0 is OFF when alarm is not active\cf0 \cb1 \
+\cf2 \cb3 // \'a0331 \'a0 \'a0 \'a0 \'a0 leds |= LED_D0;\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 // \'a0332 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0333 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0334 \'a0 \'a0 // Always update LEDs to keep D7 in sync (and now D0 blink)\cf0 \cb1 \
+\cf2 \cb3 // \'a0335 \'a0 \'a0 UpdateLEDs();\cf0 \cb1 \
+\cf2 \cb3 ??Timer_ISR_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 // \'a0336 \}\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POPM.W \'a0#0x4, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETI\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock8\cf0 \cb1 \
+\cf2 \cb3 // \'a0337\cf0 \cb1 \
+\cf2 \cb3 // \'a0338 /* ========================= Keypad ISR ========================= */\cf0 \cb1 \
+\cf2 \cb3 // \'a0339 #pragma vector = PORT2_VECTOR\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG ISR_CODE:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALL_GRAPH_ROOT Keypad_ISR, "interrupt"\cf0 \cb1 \
+\cf2 \cb3 // \'a0340 __interrupt void Keypad_ISR(void) \{\cf0 \cb1 \
+\cf2 \cb3 Keypad_ISR:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock9 Using cfiCommon1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function Keypad_ISR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 PUSHM.W #0x4, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L Frame(CFA, -12)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L Frame(CFA, -10)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L Frame(CFA, -8)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L Frame(CFA, -6)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUBA \'a0 \'a0#0x2, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+14\cf0 \cb1 \
+\cf2 \cb3 // \'a0341 \'a0 \'a0 // Clear interrupt flag first\cf0 \cb1 \
+\cf2 \cb3 // \'a0342 \'a0 \'a0 P2IFG &= ~0x01;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x21d\cf0 \cb1 \
+\cf2 \cb3 // \'a0343 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0344 \'a0 \'a0 // Debounce delay\cf0 \cb1 \
+\cf2 \cb3 // \'a0345 \'a0 \'a0 for(volatile unsigned int i = 0; i < 5000; i++);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Keypad_ISR_5\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x1388, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??Keypad_ISR_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0346 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0347 \'a0 \'a0 // Read keypad\cf0 \cb1 \
+\cf2 \cb3 // \'a0348 \'a0 \'a0 BusAddress = KEYPAD_ADDR;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x4008, &BusAddress\cf0 \cb1 \
+\cf2 \cb3 // \'a0349 \'a0 \'a0 BusRead();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall BusRead\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #BusRead\cf0 \cb1 \
+\cf2 \cb3 // \'a0350 \'a0 \'a0 unsigned char scan = (unsigned char)BusData;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 &BusData, R14\cf0 \cb1 \
+\cf2 \cb3 // \'a0351 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0352 \'a0 \'a0 // Ignore if no key pressed (scan = 0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0353 \'a0 \'a0 if(scan == 0) return;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Keypad_ISR_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0354 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0355 \'a0 \'a0 // Find matching digit (0-9 only, ignore other keys)\cf0 \cb1 \
+\cf2 \cb3 // \'a0356 \'a0 \'a0 unsigned char digit;\cf0 \cb1 \
+\cf2 \cb3 // \'a0357 \'a0 \'a0 unsigned char valid = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R13\cf0 \cb1 \
+\cf2 \cb3 // \'a0358 \'a0 \'a0 for(digit = 0; digit < 10; digit++) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Keypad_ISR_6\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.B \'a0 #0x1, R15\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0xa, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JC \'a0 \'a0 \'a0??Keypad_ISR_9\cf0 \cb1 \
+\cf2 \cb3 // \'a0359 \'a0 \'a0 \'a0 \'a0 if(scan == KeypadLookup[digit]) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 KeypadLookup(R15), R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??Keypad_ISR_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0360 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 valid = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, R13\cf0 \cb1 \
+\cf2 \cb3 // \'a0361 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 break;\cf0 \cb1 \
+\cf2 \cb3 // \'a0362 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0363 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0364 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0365 \'a0 \'a0 if(valid) \{\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_9:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, R13\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??Keypad_ISR_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0366 \'a0 \'a0 \'a0 \'a0 if(digit_count == 0) \{\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??Keypad_ISR_10\cf0 \cb1 \
+\cf2 \cb3 // \'a0367 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_buffer[0] = digit;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, &digit_buffer\cf0 \cb1 \
+\cf2 \cb3 // \'a0368 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_count = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &digit_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0369 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 lcd_refresh = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &lcd_refresh\cf0 \cb1 \
+\cf2 \cb3 // \'a0370 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 __bic_SR_register_on_exit(LPM0_bits);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.W \'a0 #0x10, 0xa(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Keypad_ISR_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0371 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0372 \'a0 \'a0 \'a0 \'a0 else if(digit_count == 1) \{\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_10:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x1, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??Keypad_ISR_7\cf0 \cb1 \
+\cf2 \cb3 // \'a0373 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_buffer[1] = digit;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, &digit_buffer + 1\cf0 \cb1 \
+\cf2 \cb3 // \'a0374 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 threshold = digit_buffer[0] * 10 + digit_buffer[1];\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &digit_buffer, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &digit_buffer + 1, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RPT \'a0 \'a0 #0xa\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADDX.B \'a0R14, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 R15, &threshold\cf0 \cb1 \
+\cf2 \cb3 // \'a0375 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(threshold > 99) threshold = 99;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x64, &threshold\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??Keypad_ISR_11\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x63, &threshold\cf0 \cb1 \
+\cf2 \cb3 // \'a0376 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(threshold == 0) threshold = 1; \'a0// Minimum 1 second\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_11:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &threshold\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??Keypad_ISR_12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &threshold\cf0 \cb1 \
+\cf2 \cb3 // \'a0377 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_count = 2;\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_12:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x2, &digit_count\cf0 \cb1 \
+\cf2 \cb3 // \'a0378 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 lcd_refresh = 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &lcd_refresh\cf0 \cb1 \
+\cf2 \cb3 // \'a0379 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 __bic_SR_register_on_exit(LPM0_bits);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.W \'a0 #0x10, 0xa(SP)\cf0 \cb1 \
+\cf2 \cb3 // \'a0380 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0381 \'a0 \'a0 \'a0 \'a0 // After 2 digits entered, ignore additional presses until reset\cf0 \cb1 \
+\cf2 \cb3 // \'a0382 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0383 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0384 \'a0 \'a0 // Additional debounce - wait for key release\cf0 \cb1 \
+\cf2 \cb3 // \'a0385 \'a0 \'a0 for(volatile unsigned int i = 0; i < 10000; i++);\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??Keypad_ISR_8\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x2710, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??Keypad_ISR_2\cf0 \cb1 \
+\cf2 \cb3 // \'a0386 \}\cf0 \cb1 \
+\cf2 \cb3 ??Keypad_ISR_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADDA \'a0 \'a0#0x2, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 POPM.W \'a0#0x4, R15\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R12L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R13L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R14L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI R15L SameValue\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RETI\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock9\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PAIFG_L\cf0 \cb1 \
+\cf2 \cb3 // \'a0387\cf0 \cb1 \
+\cf2 \cb3 // \'a0388 /* ========================= Main ========================= */\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0389 void main(void) \{\cf0 \cb1 \
+\cf2 \cb3 main:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Block cfiBlock10 Using cfiCommon2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI Function main\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 SUBA \'a0 \'a0#0x2, SP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI CFA SP+6\cf0 \cb1 \
+\cf2 \cb3 // \'a0390 \'a0 \'a0 Initial(); \'a0// Board initialization\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall Initial\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #Initial\cf0 \cb1 \
+\cf2 \cb3 // \'a0391 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0392 \'a0 \'a0 // Initialize LCD and show startup message\cf0 \cb1 \
+\cf2 \cb3 // \'a0393 \'a0 \'a0 LCD_Init();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall LCD_Init\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #LCD_Init\cf0 \cb1 \
+\cf2 \cb3 // \'a0394 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0395 \'a0 \'a0 // Small delay to see startup message\cf0 \cb1 \
+\cf2 \cb3 // \'a0396 \'a0 \'a0 for(volatile unsigned int i = 0; i < 30000; i++);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??main_3\cf0 \cb1 \
+\cf2 \cb3 ??main_0:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ADD.W \'a0 #0x1, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 ??main_3:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.W \'a0 #0x7530, 0(SP)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??main_0\cf0 \cb1 \
+\cf2 \cb3 // \'a0397 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0398 \'a0 \'a0 // Initialize displays\cf0 \cb1 \
+\cf2 \cb3 // \'a0399 \'a0 \'a0 UpdateDisplay(0);\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 // \'a0400 \'a0 \'a0 UpdateLEDs();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 // \'a0401 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0402 \'a0 \'a0 // Configure keypad interrupt (P2.0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0403 \'a0 \'a0 P2DIR &= ~0x01; \'a0// Ensure P2.0 is input\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x205\cf0 \cb1 \
+\cf2 \cb3 // \'a0404 \'a0 \'a0 P2REN &= ~0x01; \'a0// Disable pull-up/down (external pull-up on keypad)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x207\cf0 \cb1 \
+\cf2 \cb3 // \'a0405 \'a0 \'a0 P2IES &= ~0x01; \'a0// Rising edge (key press)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x219\cf0 \cb1 \
+\cf2 \cb3 // \'a0406 \'a0 \'a0 P2IE \'a0|= 0x01; \'a0 // Enable interrupt\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &0x21b\cf0 \cb1 \
+\cf2 \cb3 // \'a0407 \'a0 \'a0 P2IFG &= ~0x01; \'a0// Clear any pending interrupts\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &0x21d\cf0 \cb1 \
+\cf2 \cb3 // \'a0408 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0409 \'a0 \'a0 // Configure Timer A0 for 1ms tick (assuming 25MHz SMCLK)\cf0 \cb1 \
+\cf2 \cb3 // \'a0410 \'a0 \'a0 TA0CCR0 = 25000 - 1;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x61a7, &0x352\cf0 \cb1 \
+\cf2 \cb3 // \'a0411 \'a0 \'a0 TA0CCTL0 = CCIE;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x10, &0x342\cf0 \cb1 \
+\cf2 \cb3 // \'a0412 \'a0 \'a0 TA0CTL = TASSEL_2 | MC_1 | TACLR;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x214, &0x340\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 // \'a0413 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0414 \'a0 \'a0 __bis_SR_register(GIE); \'a0// Enable interrupts\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.W \'a0 #0x8, SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??main_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0415 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0416 \'a0 \'a0 // Main loop\cf0 \cb1 \
+\cf2 \cb3 // \'a0417 \'a0 \'a0 while(1) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0418 \'a0 \'a0 \'a0 \'a0 __bis_SR_register(LPM0_bits | GIE); \'a0// Sleep until interrupt\cf0 \cb1 \
+\cf2 \cb3 // \'a0419 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0420 \'a0 \'a0 \'a0 \'a0 // Handle switch edge\cf0 \cb1 \
+\cf2 \cb3 // \'a0421 \'a0 \'a0 \'a0 \'a0 if(flag_switch) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0422 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_switch = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0423 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0424 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Rising edge - start timing\cf0 \cb1 \
+\cf2 \cb3 // \'a0425 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(s3_debounced && !s3_last) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0426 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ms_count = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0427 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 seconds = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0428 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 timing = 1;\cf0 \cb1 \
+\cf2 \cb3 // \'a0429 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 alarm_on = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0430 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 leds |= LED_D0; \'a0// D0 OFF (ACTIVE-LOW: set bit = 1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0431 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateDisplay(0);\cf0 \cb1 \
+\cf2 \cb3 // \'a0432 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLCD_Timing(); \'a0// Show "Timing: 00 s"\cf0 \cb1 \
+\cf2 \cb3 // \'a0433 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0434 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Falling edge - stop timing and reset for new threshold entry\cf0 \cb1 \
+\cf2 \cb3 // \'a0435 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 else if(!s3_debounced && s3_last) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0436 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 timing = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0437 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 alarm_on = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0438 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 leds |= LED_D0; \'a0// D0 OFF (ACTIVE-LOW: set bit = 1)\cf0 \cb1 \
+\cf2 \cb3 // \'a0439 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLCD_Timing(); \'a0// Show "Elapsed: xx s" + "Enter threshold:"\cf0 \cb1 \
+\cf2 \cb3 // \'a0440 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0441 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Reset threshold entry for new input\cf0 \cb1 \
+\cf2 \cb3 // \'a0442 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_count = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0443 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_buffer[0] = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0444 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 digit_buffer[1] = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0445 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // lcd_refresh will be set when user presses a key\cf0 \cb1 \
+\cf2 \cb3 // \'a0446 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0447 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0448 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 s3_last = s3_debounced;\cf0 \cb1 \
+\cf2 \cb3 // \'a0449 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0450 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0451 \'a0 \'a0 \'a0 \'a0 // Handle second tick\cf0 \cb1 \
+\cf2 \cb3 // \'a0452 \'a0 \'a0 \'a0 \'a0 if(flag_second) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0453 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_second = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0454 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateDisplay(seconds);\cf0 \cb1 \
+\cf2 \cb3 // \'a0455 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0456 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Always update LCD with current time while timing\cf0 \cb1 \
+\cf2 \cb3 // \'a0457 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(timing) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0458 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLCD_Timing(); \'a0// This will update every second\cf0 \cb1 \
+\cf2 \cb3 // \'a0459 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0460 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0461 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Check threshold (only while actively timing)\cf0 \cb1 \
+\cf2 \cb3 // \'a0462 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(timing && seconds >= threshold) \{ \'a0// Changed from > to >=\cf0 \cb1 \
+\cf2 \cb3 // \'a0463 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(!alarm_on) \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0464 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Threshold just reached or exceeded - start alarm\cf0 \cb1 \
+\cf2 \cb3 // \'a0465 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 alarm_on = 1;\cf0 \cb1 \
+\cf2 \cb3 // \'a0466 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 blink_count = 0;\cf0 \cb1 \
+\cf2 \cb3 // \'a0467 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 leds &= ~LED_D0; \'a0// D0 ON (ACTIVE-LOW: clear bit = 0)\cf0 \cb1 \
+\cf2 \cb3 // \'a0468 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLEDs(); \'a0 \'a0 // Apply immediately\cf0 \cb1 \
+\cf2 \cb3 // \'a0469 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLCD_Timing(); \'a0// Show "EXCEEDED! xx s"\cf0 \cb1 \
+\cf2 \cb3 // \'a0470 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0471 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \} else \{\cf0 \cb1 \
+\cf2 \cb3 // \'a0472 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Below threshold or not timing - ensure alarm is off\cf0 \cb1 \
+\cf2 \cb3 // \'a0473 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 if(alarm_on) \{\cf0 \cb1 \
+\cf2 \cb3 ??main_2:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_1\cf0 \cb1 \
+\cf2 \cb3 // \'a0474 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 alarm_on = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 // \'a0475 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 leds |= LED_D0; \'a0 // D0 OFF (ACTIVE-LOW: set bit = 1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 // \'a0476 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLEDs(); \'a0 \'a0 // Apply immediately\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 // \'a0477 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0478 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0479 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0480 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0481 \'a0 \'a0 \'a0 \'a0 // Handle blink event flag (for LCD update or other actions if needed)\cf0 \cb1 \
+\cf2 \cb3 // \'a0482 \'a0 \'a0 \'a0 \'a0 if(flag_blink) \{\cf0 \cb1 \
+\cf2 \cb3 ??main_1:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &flag_blink\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_6\cf0 \cb1 \
+\cf2 \cb3 // \'a0483 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 flag_blink = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &flag_blink\cf0 \cb1 \
+\cf2 \cb3 // \'a0484 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // LED toggle already handled in ISR\cf0 \cb1 \
+\cf2 \cb3 // \'a0485 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 // Could add additional actions here if needed\cf0 \cb1 \
+\cf2 \cb3 // \'a0486 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0487 \'a0 \'a0 \'a0 \'a0\cf0 \cb1 \
+\cf2 \cb3 // \'a0488 \'a0 \'a0 \'a0 \'a0 // Handle LCD update for threshold entry\cf0 \cb1 \
+\cf2 \cb3 // \'a0489 \'a0 \'a0 \'a0 \'a0 if(lcd_refresh) \{\cf0 \cb1 \
+\cf2 \cb3 ??main_6:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &lcd_refresh\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_4\cf0 \cb1 \
+\cf2 \cb3 // \'a0490 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 lcd_refresh = 0;\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &lcd_refresh\cf0 \cb1 \
+\cf2 \cb3 // \'a0491 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 UpdateLCD_Status();\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLCD_Status\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLCD_Status\cf0 \cb1 \
+\cf2 \cb3 // \'a0492 \'a0 \'a0 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 ??main_4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.W \'a0 #0x18, SR\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &flag_switch\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_7\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &flag_switch\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &s3_debounced\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &s3_last\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??main_8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, &ms_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &seconds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??main_5\cf0 \cb1 \
+\cf2 \cb3 ??main_8:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &s3_debounced\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??main_5\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &s3_last\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_5\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIS.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &digit_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &digit_buffer\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &digit_buffer + 1\cf0 \cb1 \
+\cf2 \cb3 ??main_5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &s3_debounced, &s3_last\cf0 \cb1 \
+\cf2 \cb3 ??main_7:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &flag_second\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x0, &flag_second\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R12\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateDisplay\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_9\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 ??main_9:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JEQ \'a0 \'a0 ??main_2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 &seconds, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 &threshold, R14\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNC \'a0 \'a0 ??main_2\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CMP.B \'a0 #0x0, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JNE \'a0 \'a0 ??main_1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.B \'a0 #0x1, &alarm_on\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 MOV.W \'a0 #0x0, &blink_count\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 BIC.B \'a0 #0x1, &leds\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLEDs\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI FunCall UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 CALLA \'a0 #UpdateLCD_Timing\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 JMP \'a0 \'a0 ??main_1\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 NOP\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 \'a0 CFI EndBlock cfiBlock10\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PADIR_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PAREN_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PAIES_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PAIE_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE _A_PAIFG_L\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE TA0CCR0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE TA0CCTL0\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE TA0CTL\cf0 \cb1 \
+\cf2 \cb3 // \'a0493 \'a0 \'a0 \}\cf0 \cb1 \
+\cf2 \cb3 // \'a0494 \}\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 COMMON INTVEC:CONST:ROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ORG 84\cf0 \cb1 \
+\cf2 \cb3 `??Keypad_ISR::??INTVEC 84`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC16 \'a0 \'a0Keypad_ISR\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 COMMON INTVEC:CONST:ROOT(1)\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 ORG 106\cf0 \cb1 \
+\cf2 \cb3 `??Timer_ISR::??INTVEC 106`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC16 \'a0 \'a0Timer_ISR\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_ID:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Initializer for threshold>`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DATA8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 10\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG DATA16_ID:CONST:SORT:NOROOT(0)\cf0 \cb1 \
+\cf2 \cb3 `?<Initializer for leds>`:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DATA8\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 DC8 255\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 ?setjmp_save_r4:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?setjmp_r4\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?longjmp_r4\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 RSEG `CODE`:CODE:REORDER:NOROOT(1)\cf0 \cb1 \
+\cf2 \cb3 ?setjmp_save_r5:\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?setjmp_r5\cf0 \cb1 \
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 REQUIRE ?longjmp_r5\cf0 \cb1 \
+\
+\cf2 \cb3 \'a0 \'a0 \'a0 \'a0 END\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 // 1 772 bytes in segment CODE\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a027 bytes in segment DATA16_AN\cf0 \cb1 \
+\cf2 \cb3 // \'a0 170 bytes in segment DATA16_C\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 2 bytes in segment DATA16_I\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 2 bytes in segment DATA16_ID\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a023 bytes in segment DATA16_Z\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a0 4 bytes in segment INTVEC\cf0 \cb1 \
+\cf2 \cb3 // \'a0 378 bytes in segment ISR_CODE\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 // 2 150 bytes of CODE \'a0memory\cf0 \cb1 \
+\cf2 \cb3 // \'a0 172 bytes of CONST memory (+ \'a04 bytes shared)\cf0 \cb1 \
+\cf2 \cb3 // \'a0 \'a025 bytes of DATA \'a0memory (+ 27 bytes shared)\cf0 \cb1 \
+\cf2 \cb3 //\cf0 \cb1 \
+\cf2 \cb3 //Errors: none\cf0 \cb1 \
+\cf2 \cb3 //Warnings: 4\cf0 \cb1 \
+}
