@@ -27,7 +27,7 @@ LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
-KEY_LOCKOUT_MS  EQU     150         ; 150ms keypress lockout (reduced from 200)
+KEY_LOCKOUT_MS  EQU     100         ; 100ms keypress lockout (reduced for responsiveness)
 KEY_STABLE_REQ  EQU     2           ; Require 2 consecutive identical reads (40ms)
 
 ; =====================================================================
@@ -137,12 +137,13 @@ main:
             CALL        #UpdateDisplay
             CALL        #UpdateLEDs
 
-            ; ---- Optional: keypad GPIO IRQ on P2.0 (only if hardware wired) ----
-            BIC.B       #01h, &P2DIR        ; P2.0 input
-            BIC.B       #01h, &P2REN        ; no pull
-            BIS.B       #01h, &P2IES        ; falling edge
-            BIC.B       #01h, &P2IFG        ; clear flag
-            BIS.B       #01h, &P2IE         ; enable IRQ
+            ; ---- Optional: keypad GPIO IRQ on P2.0 (DISABLED FOR TESTING) ----
+            ; Uncomment these lines if you want to enable hardware interrupt
+            ; BIC.B       #01h, &P2DIR        ; P2.0 input
+            ; BIC.B       #01h, &P2REN        ; no pull
+            ; BIS.B       #01h, &P2IES        ; falling edge
+            ; BIC.B       #01h, &P2IFG        ; clear flag
+            ; BIS.B       #01h, &P2IE         ; enable IRQ
 
             ; ---- Timer A0: 1ms tick (SMCLK = 25 MHz) ----
             MOV.W       #24999, &TA0CCR0
@@ -357,49 +358,49 @@ KeyDebounceTimerDone:
             CALLA       #BusRead
             MOV.B       BusData, R12        ; only LSB used
 
+            ; If key is zero (no key pressed)
+            CMP.B       #0, R12
+            JNZ         KeyNotZero
+            ; Reset everything when no key pressed
+            MOV.B       #0, key_pending
+            MOV.B       #0, key_stable_cnt
+            MOV.B       #0, g_key_last
+            JMP         WriteLEDs
+
+KeyNotZero:
+            ; Non-zero key detected
             ; Check if this is the same as pending key
             CMP.B       R12, key_pending
-            JEQ         KeySame
+            JEQ         KeySameAsPending
             
-            ; Different key - reset stability counter
+            ; Different key - start new stability check
             MOV.B       R12, key_pending
-            MOV.B       #0,  key_stable_cnt
+            MOV.B       #1,  key_stable_cnt
             JMP         WriteLEDs
 
-KeySame:
+KeySameAsPending:
             ; Same key as last poll - increment stability
-            CMP.B       #0, R12
-            JZ          KeyReleased         ; Zero = no key
-            
-            ; Non-zero key held stable
-            CMP.B       #KEY_STABLE_REQ, key_stable_cnt
-            JGE         KeyStable
             INC.B       key_stable_cnt
-            JMP         WriteLEDs
-
-KeyStable:
-            ; Key has been stable long enough
+            
+            ; Has it been stable long enough?
+            CMP.B       #KEY_STABLE_REQ, key_stable_cnt
+            JL          WriteLEDs           ; Not yet stable enough
+            
+            ; Key is stable - but have we already processed it?
+            CMP.B       R12, g_key_last
+            JEQ         WriteLEDs           ; Already processed this key
+            
             ; Check if still in lockout period
             CMP.W       #0, key_debounce_timer
-            JNZ         WriteLEDs
+            JNZ         WriteLEDs           ; Still in lockout
             
-            ; Check if this is a new key (different from last processed)
-            CMP.B       R12, g_key_last
-            JEQ         WriteLEDs
-            
-            ; Process the new key
+            ; Process the new stable key
             MOV.B       R12, g_key_last
             MOV.W       #KEY_LOCKOUT_MS, key_debounce_timer
             
             ; Handle the keypress
             CALL        #Keypad_HandleRaw
             BIC.W       #LPM0, 6(SP)        ; wake main
-            JMP         WriteLEDs
-
-KeyReleased:
-            ; Key released - reset g_key_last for next press
-            MOV.B       #0, g_key_last
-            MOV.B       #0, key_stable_cnt
 
 WriteLEDs:
             CALL        #UpdateLEDs
