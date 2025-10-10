@@ -1,6 +1,6 @@
 #include "msp430f5308.h"
 ; =====================================================================
-; CLIC3 Timer System - Full Assembly Implementation (FIXED)
+; CLIC3 Timer System - FIXED: Single Keypress Issue Resolved
 ; =====================================================================
 
             PUBLIC      main
@@ -66,10 +66,6 @@ digit_buffer    DB      0, 0        ; two digits
 ; ---- LED shadow (ACTIVE-LOW: 0=ON, 1=OFF) ----
 leds            DB      0FFh
 
-; ---- Keypad helpers ----
-g_key_last      DB      0           ; last raw code (edge suppress)
-key_poll_ms     DW      0           ; 20 ms poll divider
-
 ; ---- Seven-segment glyphs for 0..9 ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
                 DB      12h, 02h, 78h, 00h, 18h
@@ -121,18 +117,16 @@ main:
             MOV.B       #0,      flag_blink
             MOV.B       #0,      lcd_refresh
             MOV.B       #0FFh,   leds
-            MOV.B       #0,      g_key_last
-            MOV.W       #0,      key_poll_ms
 
             ; Initial displays
             MOV.B       #0, R12
             CALL        #UpdateDisplay
             CALL        #UpdateLEDs
 
-            ; ---- Optional: keypad GPIO IRQ on P2.0 (only if hardware wired) ----
+            ; ---- Keypad GPIO IRQ on P2.0 ----
             BIC.B       #01h, &P2DIR        ; P2.0 input
             BIC.B       #01h, &P2REN        ; no pull
-            BIS.B       #01h, &P2IES        ; falling edge
+            BIC.B       #01h, &P2IES        ; rising edge (key press)
             BIC.B       #01h, &P2IFG        ; clear flag
             BIS.B       #01h, &P2IE         ; enable IRQ
 
@@ -243,14 +237,11 @@ CheckLCDRefresh:
 
 
 ; ---------------------------------------------------------------------
-; TIMER0_A0 ISR - 1ms tick
+; TIMER0_A0 ISR - 1ms tick (NO KEYPAD POLLING - FIXED!)
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 TIMER0_A0_ISR:
-            ; NOTE: We wake main **selectively** by clearing LPM in the
-            ; saved SR at the right times. Because we push 3 regs (6 bytes),
-            ; the saved SR sits at 6(SP) after pushes.
             PUSH.W      R12
             PUSH.W      R13
             PUSH.W      R14
@@ -321,42 +312,18 @@ BlinkCheck:
             JZ          EnsureD0Off
             INC.W       blink_count
             CMP.W       #BLINK_MS, blink_count
-            JL          PostBlinkLEDs
+            JL          WriteLEDs
             MOV.W       #0, blink_count
             XOR.B       #LED_D0, leds       ; toggle D0 (active-low)
             MOV.B       #1, flag_blink
             BIC.W       #LPM0, 6(SP)       ; wake main
-            JMP         PostBlinkLEDs
+            JMP         WriteLEDs
 
 EnsureD0Off:
             BIS.B       #LED_D0, leds       ; force OFF when no alarm
 
-PostBlinkLEDs:
-            ; ---- Optional: keypad 20 ms poll ----
-            INC.W       key_poll_ms
-            CMP.W       #20, key_poll_ms
-            JL          WriteLEDs
-            MOV.W       #0, key_poll_ms
-
-            ; Read keypad
-            MOV.W       #KEYPAD_ADDR, BusAddress
-            CALLA       #BusRead
-            MOV.B       BusData, R12        ; only LSB used
-            ; edge-suppress repeats
-            CMP.B       R12, g_key_last
-            JEQ         WriteLEDs
-            MOV.B       R12, g_key_last
-            ; handle (0 => no key)
-            CMP.B       #0, R12
-            JZ          WriteLEDs
-
-            ; decode and update threshold / state
-            CALL        #Keypad_HandleRaw
-            ; if anything changed that needs UI refresh, request wake
-            ; Keypad_HandleRaw sets lcd_refresh when appropriate
-            BIC.W       #LPM0, 6(SP)
-
 WriteLEDs:
+            ; NO KEYPAD POLLING HERE - THIS WAS THE BUG!
             CALL        #UpdateLEDs
 
             POP.W       R14
@@ -366,17 +333,20 @@ WriteLEDs:
 
 
 ; ---------------------------------------------------------------------
-; PORT2 ISR (keypad IRQ) — only effective if hardware asserts P2.0
+; PORT2 ISR (keypad IRQ) - Enhanced debouncing
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 PORT2_ISR:
-            ; Clear IFG early
+            PUSH.W      R12
+            PUSH.W      R13
+            PUSH.W      R14
+            
+            ; Clear IFG immediately
             BIC.B       #01h, &P2IFG
 
-            ; Debounce tiny delay (very short)
-            PUSH.W      R12
-            MOV.W       #2000, R12
+            ; Longer debounce delay for more stability
+            MOV.W       #5000, R12
 P2_Delay:   DEC.W       R12
             JNZ         P2_Delay
 
@@ -385,27 +355,38 @@ P2_Delay:   DEC.W       R12
             CALLA       #BusRead
             MOV.B       BusData, R12
 
-            ; Edge-suppress / ignore zero
-            CMP.B       R12, g_key_last
-            JEQ         P2_Done
-            MOV.B       R12, g_key_last
+            ; Ignore zero (no key)
             CMP.B       #0, R12
             JZ          P2_Done
 
-            ; Decode & update
+            ; Decode & update threshold
             CALL        #Keypad_HandleRaw
-            ; wake main for LCD update
-            BIC.W       #LPM0, 0(SP)       ; saved SR is at 0(SP) (no extra pushes yet)
+
+            ; Wake main for LCD update if needed
+            CMP.B       #0, lcd_refresh
+            JZ          P2_WaitRelease
+            BIC.W       #LPM0, 6(SP)
+
+P2_WaitRelease:
+            ; Wait for key release (important!)
+            MOV.W       #10000, R12
+P2_RDelay:  DEC.W       R12
+            JNZ         P2_RDelay
+            
+            ; Clear flag again after release delay
+            BIC.B       #01h, &P2IFG
 
 P2_Done:
+            POP.W       R14
+            POP.W       R13
             POP.W       R12
             RETI
 
 
 ; ---------------------------------------------------------------------
-; Keypad decode helper (shared by poll + P2 ISR)
+; Keypad decode helper
 ;  In : R12 = raw keypad code (byte)
-;  Out: updates digit_count/digit_buffer/threshold, sets lcd_refresh as needed
+;  Out: updates digit_count/digit_buffer/threshold, sets lcd_refresh
 ; ---------------------------------------------------------------------
 Keypad_HandleRaw:
             PUSH.W      R13
@@ -417,31 +398,13 @@ Keypad_HandleRaw:
             MOV.W       #KeypadLookup, R14
 KP_Scan:
             CMP.B       #10, R13
-            JGE         KP_Cmd              ; not a digit -> maybe command
+            JGE         KP_Exit             ; not a digit 0-9
             MOV.B       @R14, R15
             CMP.B       R15, R12
             JEQ         KP_DigitFound
             INC.W       R14
             INC.B       R13
             JMP         KP_Scan
-
-KP_Cmd:
-            ; Optional: treat '*' as clear, '#' as enter if board emits ASCII
-            CMP.B       #'*', R12
-            JNE         KP_EnterChk
-            ; clear threshold entry
-            MOV.B       #0, digit_count
-            MOV.B       #0, digit_buffer
-            MOV.B       #0, digit_buffer+1
-            MOV.B       #1, lcd_refresh
-            JMP         KP_Exit
-
-KP_EnterChk:
-            CMP.B       #'#', R12
-            JNE         KP_Exit
-            ; finalize (do nothing—threshold already computed on second digit)
-            MOV.B       #1, lcd_refresh
-            JMP         KP_Exit
 
 KP_DigitFound:
             ; R13 = digit 0..9
@@ -461,11 +424,12 @@ KP_Second:
             ; Second digit
             MOV.B       R13, digit_buffer+1
 
-            ; threshold = min(max( (d0*10 + d1), 1 ), 99)
+            ; threshold = (d0*10 + d1), clamped to 1..99
             MOV.B       digit_buffer, R14   ; d0
             MOV.B       #10, R15
-            CALL        #Multiply8          ; R12 = R14 * 10
-            ADD.B       digit_buffer+1, R12
+            CALL        #Multiply8          ; R12 = d0 * 10
+            ADD.B       digit_buffer+1, R12 ; + d1
+            
             ; clamp to 1..99
             CMP.B       #100, R12
             JL          KP_ClampLo
@@ -538,7 +502,7 @@ Disp_OK:
             POP.W       R12
             RET
 
-; 8-bit multiply: R12 = R14 * R15  (caller loads)
+; 8-bit multiply: R12 = R14 * R15
 Multiply8:
             PUSH.W      R13
             MOV.B       R14, R12
@@ -574,7 +538,7 @@ DivDone:
 
 
 ; ---------------------------------------------------------------------
-; LCD Functions (unchanged except for being grouped)
+; LCD Functions
 ; ---------------------------------------------------------------------
 
 LCD_Init:
@@ -586,7 +550,7 @@ LCD_Init:
             MOV.B       #UCSSEL_1|UCSWRST,  &UCB1CTL1
             MOV.B       #63,               &UCB1BR0
             MOV.W       #003Eh,            &UCB1I2CSA
-            BIS.B       #06h,              &P4SEL    ; P4.1 SDA, P4.2 SCL
+            BIS.B       #06h,              &P4SEL
             BIC.B       #UCSWRST,          &UCB1CTL1
 
             BIS.B       #UCTR|UCTXSTT,     &UCB1CTL1
@@ -621,7 +585,6 @@ WaitSTP1:   BIT.B       #UCTXSTP,          &UCB1CTL1
             JNZ         WaitSTP1
             BIC.B       #UCTXIFG,          &UCB1IFG
 
-            ; small delay
             MOV.W       #10000, R12
 InitDelay:  DEC.W       R12
             JNZ         InitDelay
@@ -709,12 +672,10 @@ W2_S:       BIT.B       #UCTXSTP, &UCB1CTL1
 
 ShowThresholdPrompt:
             CALL        #ClearLCDBuffers
-            ; line1
             MOV.W       #lcd_line1, R12
             MOV.W       #str_press_09, R13
             MOV.B       #16, R14
             CALL        #CopyString
-            ; line2
             MOV.W       #lcd_line2, R12
             MOV.W       #str_enter_thr, R13
             MOV.B       #16, R14
@@ -733,7 +694,6 @@ UL_1st:
             CMP.B       #1, digit_count
             JNZ         UL_Done
 
-            ; "Thresh: d_"
             MOV.W       #lcd_line1, R12
             MOV.W       #str_thresh, R13
             MOV.B       #8, R14
@@ -752,7 +712,6 @@ UL_1st:
             RET
 
 UL_Done:
-            ; Completed threshold: "Threshold: tt s" / "Press S3 to run "
             MOV.W       #lcd_line1, R12
             MOV.W       #str_threshold, R13
             MOV.B       #11, R14
@@ -777,7 +736,6 @@ UL_Done:
 ShowTimingStatus:
             CALL        #ClearLCDBuffers
 
-            ; "Timing: ss s"
             MOV.W       #lcd_line1, R12
             MOV.W       #str_timing, R13
             MOV.B       #8, R14
@@ -792,7 +750,6 @@ ShowTimingStatus:
             MOV.B       R13, lcd_line1+9
             MOV.B       #'s', lcd_line1+10
 
-            ; "Limit: tt s"
             MOV.W       #lcd_line2, R12
             MOV.W       #str_limit, R13
             MOV.B       #7, R14
