@@ -1,7 +1,6 @@
 #include "msp430f5308.h"
-
 ; =====================================================================
-; CLIC3 Timer System - Full Assembly with Press–Release Key Latch
+; CLIC3 Timer System - Fixed Keypad Debouncing
 ; =====================================================================
 
             PUBLIC      main
@@ -26,9 +25,9 @@ KEYPAD_ADDR     EQU     4008h       ; Keypad input address
 SWITCH_S3_BIT   EQU     80h         ; S3 is bit 7
 LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
-DEBOUNCE_MS     EQU     20          ; 20 ms debounce
-BLINK_MS        EQU     250         ; 250 ms toggle -> ~2 Hz
-POLL_MS         EQU     20          ; keypad poll cadence
+DEBOUNCE_MS     EQU     20          ; 20ms debounce time
+BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
+KEY_DEBOUNCE_MS EQU     50          ; 50ms keypad debounce time
 
 ; =====================================================================
 ; Data Segment - Application State Variables
@@ -68,10 +67,12 @@ digit_buffer    DB      0, 0        ; two digits
 ; ---- LED shadow (ACTIVE-LOW: 0=ON, 1=OFF) ----
 leds            DB      0FFh
 
-; ---- Keypad helpers ----
-g_key_last      DB      0           ; last raw code (informational)
-key_poll_ms     DW      0           ; poll divider
-key_down        DB      0           ; PRESS–RELEASE LATCH: 0=released, 1=held
+; ---- Keypad helpers with improved debouncing ----
+g_key_last      DB      0           ; last raw code (edge suppress)
+g_key_stable    DB      0           ; confirmed stable key code
+key_poll_ms     DW      0           ; 20 ms poll divider
+key_debounce_cnt DW     0           ; debounce counter in ms
+key_processed   DB      0           ; flag: 1 = already processed this key
 
 ; ---- Seven-segment glyphs for 0..9 ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
@@ -125,24 +126,24 @@ main:
             MOV.B       #0,      lcd_refresh
             MOV.B       #0FFh,   leds
             MOV.B       #0,      g_key_last
+            MOV.B       #0,      g_key_stable
             MOV.W       #0,      key_poll_ms
-            MOV.B       #0,      key_down
+            MOV.W       #0,      key_debounce_cnt
+            MOV.B       #0,      key_processed
 
             ; Initial displays
             MOV.B       #0, R12
             CALL        #UpdateDisplay
             CALL        #UpdateLEDs
 
-            ; ---- Optional: keypad GPIO IRQ on P2.0 (only if hardware wired) ----
+            ; ---- Keypad GPIO IRQ on P2.0 (if hardware supports) ----
             BIC.B       #01h, &P2DIR        ; P2.0 input
             BIC.B       #01h, &P2REN        ; no pull
             BIS.B       #01h, &P2IES        ; falling edge
             BIC.B       #01h, &P2IFG        ; clear flag
             BIS.B       #01h, &P2IE         ; enable IRQ
-            ; If you prefer poll-only, comment the above 3 lines and:
-            ; BIC.B     #01h, &P2IE
 
-            ; ---- Timer A0: 1 ms tick (SMCLK = 25 MHz) ----
+            ; ---- Timer A0: 1ms tick (SMCLK = 25 MHz) ----
             MOV.W       #24999, &TA0CCR0
             MOV.W       #CCIE,  &TA0CCTL0
             MOV.W       #TASSEL_2|MC_1|TACLR, &TA0CTL
@@ -249,7 +250,7 @@ CheckLCDRefresh:
 
 
 ; ---------------------------------------------------------------------
-; TIMER0_A0 ISR - 1ms tick
+; TIMER0_A0 ISR - 1ms tick with improved keypad debouncing
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
@@ -270,7 +271,7 @@ S3_Off:
             MOV.B       #0, R13
 
 S3_Debounce:
-            ; Debounce
+            ; Debounce S3
             CMP.B       R13, s3_raw
             JZ          S3_Same
             MOV.B       R13, s3_raw
@@ -335,36 +336,63 @@ EnsureD0Off:
             BIS.B       #LED_D0, leds       ; force OFF when no alarm
 
 PostBlinkLEDs:
-            ; ---- 20 ms keypad poll with press–release latch ----
+            ; ---- Improved keypad polling with debouncing ----
             INC.W       key_poll_ms
-            CMP.W       #POLL_MS, key_poll_ms
+            CMP.W       #20, key_poll_ms
             JL          WriteLEDs
             MOV.W       #0, key_poll_ms
 
-            ; Read keypad (byte)
+            ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
-            MOV.B       BusData, R12        ; R12 = raw code (0 => no key)
+            MOV.B       BusData, R12        ; only LSB used
 
-            ; Release seen? -> clear latch and exit
-            CMP.B       #0, R12
-            JNZ         KP_Poll_HasCode
-            MOV.B       #0, key_down
+            ; Check if key changed
+            CMP.B       R12, g_key_last
+            JEQ         KP_Timer_Same
+            
+            ; Key changed - reset debounce
+            MOV.B       R12, g_key_last
+            MOV.W       #0, key_debounce_cnt
+            MOV.B       #0, key_processed    ; mark as not processed yet
             JMP         WriteLEDs
 
-KP_Poll_HasCode:
-            ; If already held, ignore (one digit per physical press)
-            CMP.B       #0, key_down
-            JNZ         WriteLEDs
-
-            ; First non-zero after release -> accept once and latch
-            MOV.B       #1, key_down
-            MOV.B       R12, g_key_last     ; informational
-
-            ; Decode and update threshold/LCD
+KP_Timer_Same:
+            ; Key hasn't changed - increment debounce counter
+            CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
+            JGE         KP_Check_Process     ; Already stable
+            INC.W       key_debounce_cnt
+            CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
+            JL          WriteLEDs            ; Not stable yet
+            
+            ; Just became stable - check if we should process
+KP_Check_Process:
+            ; Only process if:
+            ; 1. Key is not zero (actual key press)
+            ; 2. We haven't processed this key yet
+            ; 3. The stable key is different from last processed
+            CMP.B       #0, key_processed
+            JNZ         WriteLEDs            ; Already processed this key
+            
+            CMP.B       #0, g_key_last
+            JZ          KP_Released          ; Key released
+            
+            ; Stable key press detected
+            CMP.B       g_key_last, g_key_stable
+            JEQ         WriteLEDs            ; Same as last processed key
+            
+            ; New stable key - process it
+            MOV.B       g_key_last, g_key_stable
+            MOV.B       g_key_last, R12
+            MOV.B       #1, key_processed    ; Mark as processed
             CALL        #Keypad_HandleRaw
-            MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 6(SP)        ; wake main
+            BIC.W       #LPM0, 6(SP)         ; Wake main for LCD update
+            JMP         WriteLEDs
+
+KP_Released:
+            ; Key released - reset processed flag for next key
+            MOV.B       #0, g_key_stable
+            MOV.B       #0, key_processed
 
 WriteLEDs:
             CALL        #UpdateLEDs
@@ -376,19 +404,16 @@ WriteLEDs:
 
 
 ; ---------------------------------------------------------------------
-; PORT2 ISR (keypad IRQ) — gated by the same latch
+; PORT2 ISR (keypad IRQ) with debouncing
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 PORT2_ISR:
-            PUSH.W      R12
-            PUSH.W      R13
-            PUSH.W      R14
-
             ; Clear IFG early
             BIC.B       #01h, &P2IFG
 
-            ; Short debounce delay
+            ; Hardware debounce delay
+            PUSH.W      R12
             MOV.W       #2000, R12
 P2_Delay:   DEC.W       R12
             JNZ         P2_Delay
@@ -396,38 +421,28 @@ P2_Delay:   DEC.W       R12
             ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
-            MOV.B       BusData, R12        ; R12 = raw code (0 => no key)
+            MOV.B       BusData, R12
 
-            ; Release -> clear latch
-            CMP.B       #0, R12
-            JNZ         P2_HasCode
-            MOV.B       #0, key_down
-            JMP         P2_Done
-
-P2_HasCode:
-            ; If already held, ignore
-            CMP.B       #0, key_down
-            JNZ         P2_Done
-
-            ; First non-zero after release -> accept once and latch
-            MOV.B       #1, key_down
+            ; Check if key changed from stable key
+            CMP.B       R12, g_key_last
+            JEQ         P2_Done              ; Same as last reading
+            
+            ; Key changed - update last and reset debounce
             MOV.B       R12, g_key_last
-
-            ; Decode & update
-            CALL        #Keypad_HandleRaw
-            MOV.B       #1, lcd_refresh
-            BIC.W       #LPM0, 6(SP)        ; wake main (we pushed 3 regs)
+            MOV.W       #0, key_debounce_cnt
+            MOV.B       #0, key_processed
+            
+            ; Don't process immediately - let timer debounce logic handle it
+            ; This prevents double-processing between PORT2 and Timer ISRs
 
 P2_Done:
-            POP.W       R14
-            POP.W       R13
             POP.W       R12
             RETI
 
 
 ; ---------------------------------------------------------------------
 ; Keypad decode helper (shared by poll + P2 ISR)
-;  In : R12 = raw keypad code (byte, non-zero)
+;  In : R12 = raw keypad code (byte)
 ;  Out: updates digit_count/digit_buffer/threshold, sets lcd_refresh as needed
 ; ---------------------------------------------------------------------
 Keypad_HandleRaw:
@@ -449,19 +464,21 @@ KP_Scan:
             JMP         KP_Scan
 
 KP_Cmd:
-            ; Optional: '*' clear, '#' enter (only if board emits ASCII)
+            ; Optional: treat '*' as clear, '#' as enter if board emits ASCII
             CMP.B       #'*', R12
             JNE         KP_EnterChk
             ; clear threshold entry
             MOV.B       #0, digit_count
             MOV.B       #0, digit_buffer
             MOV.B       #0, digit_buffer+1
+            MOV.B       #1, lcd_refresh
             JMP         KP_Exit
 
 KP_EnterChk:
             CMP.B       #'#', R12
             JNE         KP_Exit
-            ; finalize — threshold already set on second digit
+            ; finalize (do nothing—threshold already computed on second digit)
+            MOV.B       #1, lcd_refresh
             JMP         KP_Exit
 
 KP_DigitFound:
@@ -472,21 +489,22 @@ KP_DigitFound:
             ; First digit
             MOV.B       R13, digit_buffer
             MOV.B       #1, digit_count
+            MOV.B       #1, lcd_refresh
             JMP         KP_Exit
 
 KP_Second:
             CMP.B       #1, digit_count
             JNZ         KP_Exit
 
-            ; Second digit -> compute threshold
+            ; Second digit
             MOV.B       R13, digit_buffer+1
 
-            ; threshold = clamp( d0*10 + d1, 1..99 )
+            ; threshold = min(max( (d0*10 + d1), 1 ), 99)
             MOV.B       digit_buffer, R14   ; d0
             MOV.B       #10, R15
             CALL        #Multiply8          ; R12 = R14 * 10
             ADD.B       digit_buffer+1, R12
-
+            ; clamp to 1..99
             CMP.B       #100, R12
             JL          KP_ClampLo
             MOV.B       #99, R12
@@ -497,6 +515,7 @@ KP_ClampLo:
 KP_Store:
             MOV.B       R12, threshold
             MOV.B       #2, digit_count
+            MOV.B       #1, lcd_refresh
 
 KP_Exit:
             POP.W       R15
@@ -557,16 +576,17 @@ Disp_OK:
             POP.W       R12
             RET
 
-; 8-bit multiply: R12 = R14 * R15  (caller loads R14=opA, R15=opB)
+; 8-bit multiply: R12 = R14 * R15  (caller loads)
 Multiply8:
             PUSH.W      R13
+            MOV.B       R14, R12
             MOV.B       #0,  R13
-Mul_L:      CMP.B       #0,  R15
-            JEQ         Mul_D
-            ADD.B       R14, R13
+MulClr:     CMP.B       #0, R15
+            JEQ         MulDone
+            ADD.B       R12, R13
             DEC.B       R15
-            JMP         Mul_L
-Mul_D:      MOV.B       R13, R12
+            JMP         MulClr
+MulDone:    MOV.B       R13, R12
             POP.W       R13
             RET
 
@@ -720,7 +740,6 @@ W2_S:       BIT.B       #UCTXSTP, &UCB1CTL1
             POP.W       R13
             POP.W       R12
             RET
-
 
 ; ---------------------------------------------------------------------
 ; LCD Content Update Functions
