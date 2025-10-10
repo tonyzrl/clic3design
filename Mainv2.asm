@@ -48,7 +48,7 @@ timing          DB      0           ; 1 = timing
 s3_debounced    DB      0
 s3_last         DB      0
 s3_raw          DB      0
-debounce_cnt    DW      0
+s3_debounce_cnt DW      0
 
 ; ---- Alarm / blink ----
 threshold       DB      10          ; default threshold (10 s)
@@ -120,7 +120,7 @@ main:
             MOV.B       #0,      s3_debounced
             MOV.B       #0,      s3_last
             MOV.B       #0,      s3_raw
-            MOV.W       #0,      debounce_cnt
+            MOV.W       #0,      s3_debounce_cnt
             MOV.B       #0,      flag_switch
             MOV.B       #0,      flag_second
             MOV.B       #0,      flag_blink
@@ -129,7 +129,7 @@ main:
             MOV.B       #0,      g_key_last
             MOV.B       #0,      g_key_stable
             MOV.W       #0,      key_poll_ms
-            MOV.W       #0,      key_debounce_cnt
+            MOV.W       #0,      key_debounce_ticks
             MOV.B       #0,      key_processed
 
             ; Initial displays
@@ -337,13 +337,13 @@ EnsureD0Off:
             BIS.B       #LED_D0, leds       ; force OFF when no alarm
 
 PostBlinkLEDs:
-            ; ---- Improved keypad polling with debouncing ----
+            ; ---- Improved keypad polling with tick-based debouncing ----
             INC.W       key_poll_ms
-            CMP.W       #20, key_poll_ms
+            CMP.W       #KEY_POLL_MS, key_poll_ms
             JL          WriteLEDs
             MOV.W       #0, key_poll_ms
 
-            ; Read keypad
+            ; Read keypad (this happens every 20ms)
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
             MOV.B       BusData, R12        ; only LSB used
@@ -352,20 +352,20 @@ PostBlinkLEDs:
             CMP.B       R12, g_key_last
             JEQ         KP_Timer_Same
             
-            ; Key changed - reset debounce
+            ; Key changed - reset debounce tick counter
             MOV.B       R12, g_key_last
-            MOV.W       #0, key_debounce_cnt
+            MOV.W       #0, key_debounce_ticks
             MOV.B       #0, key_processed    ; mark as not processed yet
             JMP         WriteLEDs
 
 KP_Timer_Same:
-            ; Key hasn't changed - increment debounce counter if needed
-            CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
+            ; Key hasn't changed - increment debounce tick counter
+            CMP.W       #KEY_DEBOUNCE_TICKS, key_debounce_ticks
             JGE         KP_Check_Process     ; Already at stable time
             
-            ; Increment and check if we just reached stable time
-            INC.W       key_debounce_cnt
-            CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
+            ; Increment tick counter (counts number of 20ms polls, not milliseconds)
+            INC.W       key_debounce_ticks
+            CMP.W       #KEY_DEBOUNCE_TICKS, key_debounce_ticks
             JL          WriteLEDs            ; Not stable yet
             
             ; Just became stable - fall through to process
