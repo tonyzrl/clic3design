@@ -1,6 +1,6 @@
 #include "msp430f5308.h"
 ; =====================================================================
-; CLIC3 Timer System - Fixed Keypad Debouncing
+; CLIC3 Timer System - Fixed Keypad Debouncing (CLEANED UP)
 ; =====================================================================
 
             PUBLIC      main
@@ -25,7 +25,7 @@ KEYPAD_ADDR     EQU     4008h       ; Keypad input address
 SWITCH_S3_BIT   EQU     80h         ; S3 is bit 7
 LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
-DEBOUNCE_MS     EQU     20          ; 20ms debounce time
+DEBOUNCE_MS     EQU     20          ; 20ms debounce time for S3
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
 KEY_POLL_MS     EQU     20          ; Poll keypad every 20ms
 KEY_DEBOUNCE_TICKS EQU  2           ; 2 ticks x 20ms = 40ms debounce
@@ -276,13 +276,13 @@ S3_Debounce:
             CMP.B       R13, s3_raw
             JZ          S3_Same
             MOV.B       R13, s3_raw
-            MOV.W       #0, debounce_cnt
+            MOV.W       #0, s3_debounce_cnt
             JMP         UpdateD7
 
 S3_Same:
-            CMP.W       #DEBOUNCE_MS, debounce_cnt
+            CMP.W       #DEBOUNCE_MS, s3_debounce_cnt
             JGE         S3_CheckStable
-            INC.W       debounce_cnt
+            INC.W       s3_debounce_cnt
             JMP         UpdateD7
 
 S3_CheckStable:
