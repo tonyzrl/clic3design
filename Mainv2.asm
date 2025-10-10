@@ -27,7 +27,7 @@ LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
-KEY_DEBOUNCE_MS EQU     50          ; 50ms keypad debounce time
+KEY_DEBOUNCE_MS EQU     30          ; Reduced to 30ms for faster response
 
 ; =====================================================================
 ; Data Segment - Application State Variables
@@ -358,39 +358,36 @@ PostBlinkLEDs:
             JMP         WriteLEDs
 
 KP_Timer_Same:
-            ; Key hasn't changed - increment debounce counter
+            ; Key hasn't changed - increment debounce counter if needed
             CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
-            JGE         KP_Check_Process     ; Already stable
+            JGE         KP_Check_Process     ; Already at stable time
+            
+            ; Increment and check if we just reached stable time
             INC.W       key_debounce_cnt
             CMP.W       #KEY_DEBOUNCE_MS, key_debounce_cnt
             JL          WriteLEDs            ; Not stable yet
             
-            ; Just became stable - check if we should process
-KP_Check_Process:
-            ; Only process if:
-            ; 1. Key is not zero (actual key press)
-            ; 2. We haven't processed this key yet
-            ; 3. The stable key is different from last processed
-            CMP.B       #0, key_processed
-            JNZ         WriteLEDs            ; Already processed this key
+            ; Just became stable - fall through to process
             
+KP_Check_Process:
+            ; Check if already processed this key
+            CMP.B       #0, key_processed
+            JNZ         WriteLEDs            ; Already processed
+            
+            ; Check if key is released (zero)
             CMP.B       #0, g_key_last
             JZ          KP_Released          ; Key released
             
-            ; Stable key press detected
-            CMP.B       g_key_last, g_key_stable
-            JEQ         WriteLEDs            ; Same as last processed key
-            
-            ; New stable key - process it
-            MOV.B       g_key_last, g_key_stable
+            ; Valid key press - process it!
             MOV.B       g_key_last, R12
             MOV.B       #1, key_processed    ; Mark as processed
+            MOV.B       R12, g_key_stable    ; Store stable key
             CALL        #Keypad_HandleRaw
             BIC.W       #LPM0, 6(SP)         ; Wake main for LCD update
             JMP         WriteLEDs
 
 KP_Released:
-            ; Key released - reset processed flag for next key
+            ; Key released - reset for next key
             MOV.B       #0, g_key_stable
             MOV.B       #0, key_processed
 
