@@ -27,7 +27,8 @@ LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
-KEY_LOCKOUT_MS  EQU     200         ; 200ms keypress lockout
+KEY_LOCKOUT_MS  EQU     150         ; 150ms keypress lockout (reduced from 200)
+KEY_STABLE_REQ  EQU     2           ; Require 2 consecutive identical reads (40ms)
 
 ; =====================================================================
 ; Data Segment - Application State Variables
@@ -71,6 +72,8 @@ leds            DB      0FFh
 g_key_last      DB      0           ; last raw code (edge suppress)
 key_poll_ms     DW      0           ; 20 ms poll divider
 key_debounce_timer  DW  0           ; Keypress lockout timer (ms)
+key_stable_cnt  DB      0           ; Stable key detection counter
+key_pending     DB      0           ; Pending key value
 
 ; ---- Seven-segment glyphs for 0..9 ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
@@ -126,6 +129,8 @@ main:
             MOV.B       #0,      g_key_last
             MOV.W       #0,      key_poll_ms
             MOV.W       #0,      key_debounce_timer
+            MOV.B       #0,      key_stable_cnt
+            MOV.B       #0,      key_pending
 
             ; Initial displays
             MOV.B       #0, R12
@@ -341,36 +346,60 @@ PostBlinkLEDs:
             DEC.W       key_debounce_timer
 KeyDebounceTimerDone:
 
-            ; ---- Optional: keypad 20 ms poll ----
+            ; ---- Keypad 20 ms poll with improved debouncing ----
             INC.W       key_poll_ms
             CMP.W       #20, key_poll_ms
             JL          WriteLEDs
             MOV.W       #0, key_poll_ms
 
-            ; Skip reading if still in debounce period
-            CMP.W       #0, key_debounce_timer
-            JNZ         WriteLEDs
-
             ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
             MOV.B       BusData, R12        ; only LSB used
-            ; edge-suppress repeats
+
+            ; Check if this is the same as pending key
+            CMP.B       R12, key_pending
+            JEQ         KeySame
+            
+            ; Different key - reset stability counter
+            MOV.B       R12, key_pending
+            MOV.B       #0,  key_stable_cnt
+            JMP         WriteLEDs
+
+KeySame:
+            ; Same key as last poll - increment stability
+            CMP.B       #0, R12
+            JZ          KeyReleased         ; Zero = no key
+            
+            ; Non-zero key held stable
+            CMP.B       #KEY_STABLE_REQ, key_stable_cnt
+            JGE         KeyStable
+            INC.B       key_stable_cnt
+            JMP         WriteLEDs
+
+KeyStable:
+            ; Key has been stable long enough
+            ; Check if still in lockout period
+            CMP.W       #0, key_debounce_timer
+            JNZ         WriteLEDs
+            
+            ; Check if this is a new key (different from last processed)
             CMP.B       R12, g_key_last
             JEQ         WriteLEDs
+            
+            ; Process the new key
             MOV.B       R12, g_key_last
-            ; handle (0 => no key)
-            CMP.B       #0, R12
-            JZ          WriteLEDs
-
-            ; Start debounce lockout period
             MOV.W       #KEY_LOCKOUT_MS, key_debounce_timer
-
-            ; decode and update threshold / state
+            
+            ; Handle the keypress
             CALL        #Keypad_HandleRaw
-            ; if anything changed that needs UI refresh, request wake
-            ; Keypad_HandleRaw sets lcd_refresh when appropriate
-            BIC.W       #LPM0, 6(SP)
+            BIC.W       #LPM0, 6(SP)        ; wake main
+            JMP         WriteLEDs
+
+KeyReleased:
+            ; Key released - reset g_key_last for next press
+            MOV.B       #0, g_key_last
+            MOV.B       #0, key_stable_cnt
 
 WriteLEDs:
             CALL        #UpdateLEDs
@@ -390,13 +419,14 @@ PORT2_ISR:
             ; Clear IFG early
             BIC.B       #01h, &P2IFG
 
-            ; Check if still in debounce period
             PUSH.W      R12
+            
+            ; Check if still in debounce period
             CMP.W       #0, key_debounce_timer
             JNZ         P2_Done             ; Ignore if timer still running
 
-            ; Debounce tiny delay (very short)
-            MOV.W       #2000, R12
+            ; Small delay for contact settling
+            MOV.W       #1000, R12
 P2_Delay:   DEC.W       R12
             JNZ         P2_Delay
 
@@ -405,20 +435,21 @@ P2_Delay:   DEC.W       R12
             CALLA       #BusRead
             MOV.B       BusData, R12
 
-            ; Edge-suppress / ignore zero
-            CMP.B       R12, g_key_last
-            JEQ         P2_Done
-            MOV.B       R12, g_key_last
+            ; Ignore zero or same as last
             CMP.B       #0, R12
             JZ          P2_Done
-
-            ; Start debounce lockout period
+            CMP.B       R12, g_key_last
+            JEQ         P2_Done
+            
+            ; New valid key
+            MOV.B       R12, g_key_last
+            MOV.B       R12, key_pending
+            MOV.B       #KEY_STABLE_REQ, key_stable_cnt  ; Mark as stable
             MOV.W       #KEY_LOCKOUT_MS, key_debounce_timer
 
             ; Decode & update
             CALL        #Keypad_HandleRaw
-            ; wake main for LCD update
-            BIC.W       #LPM0, 0(SP)       ; saved SR is at 0(SP) (no extra pushes yet)
+            BIC.W       #LPM0, 0(SP)       ; wake main
 
 P2_Done:
             POP.W       R12
