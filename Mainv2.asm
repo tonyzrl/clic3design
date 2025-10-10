@@ -27,7 +27,7 @@ LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
-KEY_LOCKOUT_MS  EQU     250         ; 250ms keypress lockout
+KEY_DEBOUNCE_DELAY EQU  5000        ; Initial debounce delay in cycles
 
 ; =====================================================================
 ; Data Segment - Application State Variables
@@ -68,9 +68,7 @@ digit_buffer    DB      0, 0        ; two digits
 leds            DB      0FFh
 
 ; ---- Keypad helpers ----
-g_key_last      DB      0           ; last raw code (edge suppress)
-key_poll_ms     DW      0           ; 20 ms poll divider
-key_debounce_timer  DW  0           ; Keypress lockout timer (ms)
+g_key_last      DB      0           ; last raw code (not used in interrupt version)
 
 ; ---- Seven-segment glyphs for 0..9 ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
@@ -124,21 +122,18 @@ main:
             MOV.B       #0,      lcd_refresh
             MOV.B       #0FFh,   leds
             MOV.B       #0,      g_key_last
-            MOV.W       #0,      key_poll_ms
-            MOV.W       #0,      key_debounce_timer
 
             ; Initial displays
             MOV.B       #0, R12
             CALL        #UpdateDisplay
             CALL        #UpdateLEDs
 
-            ; ---- Optional: keypad GPIO IRQ on P2.0 (DISABLED FOR TESTING) ----
-            ; Uncomment these lines if you want to enable hardware interrupt
-            ; BIC.B       #01h, &P2DIR        ; P2.0 input
-            ; BIC.B       #01h, &P2REN        ; no pull
-            ; BIS.B       #01h, &P2IES        ; falling edge
-            ; BIC.B       #01h, &P2IFG        ; clear flag
-            ; BIS.B       #01h, &P2IE         ; enable IRQ
+            ; ---- Keypad GPIO IRQ on P2.0 ----
+            BIC.B       #01h, &P2DIR        ; P2.0 input
+            BIC.B       #01h, &P2REN        ; no pull (external pull-up)
+            BIC.B       #01h, &P2IES        ; Rising edge (key press)
+            BIS.B       #01h, &P2IE         ; enable IRQ
+            BIC.B       #01h, &P2IFG        ; clear flag
 
             ; ---- Timer A0: 1ms tick (SMCLK = 25 MHz) ----
             MOV.W       #24999, &TA0CCR0
@@ -336,51 +331,7 @@ EnsureD0Off:
             BIS.B       #LED_D0, leds       ; force OFF when no alarm
 
 PostBlinkLEDs:
-            ; ---- Decrement key debounce timer ----
-            CMP.W       #0, key_debounce_timer
-            JZ          KeyDebounceTimerDone
-            DEC.W       key_debounce_timer
-KeyDebounceTimerDone:
-
-            ; ---- Keypad polling every 50ms (simpler, more reliable) ----
-            INC.W       key_poll_ms
-            CMP.W       #50, key_poll_ms
-            JL          WriteLEDs
-            MOV.W       #0, key_poll_ms
-
-            ; Read keypad
-            MOV.W       #KEYPAD_ADDR, BusAddress
-            CALLA       #BusRead
-            MOV.W       BusData, R12
-            AND.W       #00FFh, R12         ; Only use lower byte
-
-            ; Three conditions must ALL be true to process:
-            ; 1. Key is not zero (something is pressed)
-            ; 2. Key is different from last processed key (new press)
-            ; 3. Not in lockout period
-            
-            CMP.B       #0, R12
-            JZ          KeyIsZero           ; Nothing pressed
-            
-            CMP.B       R12, g_key_last
-            JEQ         WriteLEDs           ; Same as last, ignore
-            
-            CMP.W       #0, key_debounce_timer
-            JNZ         WriteLEDs           ; Still in lockout
-            
-            ; All conditions met - process this key!
-            MOV.B       R12, g_key_last
-            MOV.W       #KEY_LOCKOUT_MS, key_debounce_timer
-            
-            ; Handle the keypress
-            CALL        #Keypad_HandleRaw
-            BIC.W       #LPM0, 6(SP)        ; wake main
-            JMP         WriteLEDs
-
-KeyIsZero:
-            ; When no key is pressed, reset g_key_last
-            ; This allows the same key to be pressed again
-            MOV.B       #0, g_key_last
+            ; ---- No keypad polling - handled by PORT2 ISR only ----
 
 WriteLEDs:
             CALL        #UpdateLEDs
@@ -392,133 +343,105 @@ WriteLEDs:
 
 
 ; ---------------------------------------------------------------------
-; PORT2 ISR (keypad IRQ) — only effective if hardware asserts P2.0
+; PORT2 ISR (keypad IRQ) - Matches C implementation
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
 PORT2_ISR:
-            ; Clear IFG early
+            ; Clear IFG first
             BIC.B       #01h, &P2IFG
 
             PUSH.W      R12
-            
-            ; Check if still in debounce period
-            CMP.W       #0, key_debounce_timer
-            JNZ         P2_Done             ; Ignore if timer still running
+            PUSH.W      R13
+            PUSH.W      R14
+            PUSH.W      R15
 
-            ; Small delay for contact settling
-            MOV.W       #1000, R12
+            ; Debounce delay (5000 cycles)
+            MOV.W       #KEY_DEBOUNCE_DELAY, R12
 P2_Delay:   DEC.W       R12
             JNZ         P2_Delay
 
             ; Read keypad
             MOV.W       #KEYPAD_ADDR, BusAddress
             CALLA       #BusRead
-            MOV.B       BusData, R12
+            MOV.B       BusData, R14        ; scan code in R14
 
-            ; Ignore zero or same as last
-            CMP.B       #0, R12
+            ; Ignore if no key pressed
+            CMP.B       #0, R14
             JZ          P2_Done
-            CMP.B       R12, g_key_last
-            JEQ         P2_Done
-            
-            ; New valid key
-            MOV.B       R12, g_key_last
-            MOV.B       R12, key_pending
-            MOV.B       #KEY_STABLE_REQ, key_stable_cnt  ; Mark as stable
-            MOV.W       #KEY_LOCKOUT_MS, key_debounce_timer
 
-            ; Decode & update
-            CALL        #Keypad_HandleRaw
-            BIC.W       #LPM0, 0(SP)       ; wake main
+            ; Find matching digit (0-9)
+            MOV.B       #0, R13             ; valid flag
+            MOV.B       #0, R15             ; digit index
+            MOV.W       #KeypadLookup, R12
 
-P2_Done:
-            POP.W       R12
-            RETI
+P2_FindDigit:
+            CMP.B       #10, R15
+            JGE         P2_CheckValid
+            CMP.B       @R12, R14
+            JEQ         P2_FoundDigit
+            INC.W       R12
+            INC.B       R15
+            JMP         P2_FindDigit
 
+P2_FoundDigit:
+            MOV.B       #1, R13             ; valid = 1
 
-; ---------------------------------------------------------------------
-; Keypad decode helper (shared by poll + P2 ISR)
-;  In : R12 = raw keypad code (byte)
-;  Out: updates digit_count/digit_buffer/threshold, sets lcd_refresh as needed
-; ---------------------------------------------------------------------
-Keypad_HandleRaw:
-            PUSH.W      R13
-            PUSH.W      R14
-            PUSH.W      R15
+P2_CheckValid:
+            CMP.B       #0, R13
+            JZ          P2_WaitRelease
 
-            ; Try table match for 0..9
-            MOV.B       #0,  R13            ; digit index
-            MOV.W       #KeypadLookup, R14
-KP_Scan:
-            CMP.B       #10, R13
-            JGE         KP_Cmd              ; not a digit -> maybe command
-            MOV.B       @R14, R15
-            CMP.B       R15, R12
-            JEQ         KP_DigitFound
-            INC.W       R14
-            INC.B       R13
-            JMP         KP_Scan
-
-KP_Cmd:
-            ; Optional: treat '*' as clear, '#' as enter if board emits ASCII
-            CMP.B       #'*', R12
-            JNE         KP_EnterChk
-            ; clear threshold entry
-            MOV.B       #0, digit_count
-            MOV.B       #0, digit_buffer
-            MOV.B       #0, digit_buffer+1
-            MOV.B       #1, lcd_refresh
-            JMP         KP_Exit
-
-KP_EnterChk:
-            CMP.B       #'#', R12
-            JNE         KP_Exit
-            ; finalize (do nothing—threshold already computed on second digit)
-            MOV.B       #1, lcd_refresh
-            JMP         KP_Exit
-
-KP_DigitFound:
-            ; R13 = digit 0..9
+            ; Process digit based on digit_count
             CMP.B       #0, digit_count
-            JNZ         KP_Second
+            JNZ         P2_SecondDigit
 
             ; First digit
-            MOV.B       R13, digit_buffer
+            MOV.B       R15, digit_buffer
             MOV.B       #1, digit_count
             MOV.B       #1, lcd_refresh
-            JMP         KP_Exit
+            BIC.W       #LPM0, 8(SP)        ; wake main
+            JMP         P2_WaitRelease
 
-KP_Second:
+P2_SecondDigit:
             CMP.B       #1, digit_count
-            JNZ         KP_Exit
+            JNZ         P2_WaitRelease
 
             ; Second digit
-            MOV.B       R13, digit_buffer+1
-
-            ; threshold = min(max( (d0*10 + d1), 1 ), 99)
-            MOV.B       digit_buffer, R14   ; d0
-            MOV.B       #10, R15
-            CALL        #Multiply8          ; R12 = R14 * 10
+            MOV.B       R15, digit_buffer+1
+            
+            ; Calculate threshold = d0*10 + d1
+            MOV.B       digit_buffer, R12
+            MOV.B       #10, R13
+            CALL        #Multiply8          ; R12 = d0 * 10
             ADD.B       digit_buffer+1, R12
-            ; clamp to 1..99
+            
+            ; Clamp to 1..99
             CMP.B       #100, R12
-            JL          KP_ClampLo
+            JL          P2_ClampLo
             MOV.B       #99, R12
-KP_ClampLo:
+P2_ClampLo:
             CMP.B       #0, R12
-            JNZ         KP_Store
+            JNZ         P2_StoreThresh
             MOV.B       #1, R12
-KP_Store:
+            
+P2_StoreThresh:
             MOV.B       R12, threshold
             MOV.B       #2, digit_count
             MOV.B       #1, lcd_refresh
+            BIC.W       #LPM0, 8(SP)        ; wake main
 
-KP_Exit:
+P2_WaitRelease:
+            ; Additional debounce - wait for key release
+            MOV.W       #10000, R12
+P2_Release: DEC.W       R12
+            JNZ         P2_Release
+
+P2_Done:
             POP.W       R15
             POP.W       R14
             POP.W       R13
-            RET
+            POP.W       R12
+            RETI
 
 
 ; ---------------------------------------------------------------------
