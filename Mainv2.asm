@@ -27,7 +27,8 @@ LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
 LED_D7          EQU     80h         ; S3 status LED (bit 7) - active low in shadow
 DEBOUNCE_MS     EQU     20          ; 20ms debounce time
 BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
-KEY_DEBOUNCE_MS EQU     30          ; Reduced to 30ms for faster response
+KEY_POLL_MS     EQU     20          ; Poll keypad every 20ms
+KEY_DEBOUNCE_TICKS EQU  2           ; 2 ticks x 20ms = 40ms debounce
 
 ; =====================================================================
 ; Data Segment - Application State Variables
@@ -70,8 +71,8 @@ leds            DB      0FFh
 ; ---- Keypad helpers with improved debouncing ----
 g_key_last      DB      0           ; last raw code (edge suppress)
 g_key_stable    DB      0           ; confirmed stable key code
-key_poll_ms     DW      0           ; 20 ms poll divider
-key_debounce_cnt DW     0           ; debounce counter in ms
+key_poll_ms     DW      0           ; ms counter for polling interval
+key_debounce_ticks DW   0           ; tick counter for debouncing (counts polls, not ms)
 key_processed   DB      0           ; flag: 1 = already processed this key
 
 ; ---- Seven-segment glyphs for 0..9 ----
