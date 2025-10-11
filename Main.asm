@@ -1,8 +1,7 @@
 #include "msp430f5308.h"
 ; =====================================================================
-; CLIC3 Timer System - FIXED: Single Keypress Issue Resolved
+; CLIC3 (MSP430F5308 Microcontroller Board) Timer System
 ; =====================================================================
-
             PUBLIC      main
             PUBLIC      BusAddress
             PUBLIC      BusData
@@ -20,7 +19,7 @@ SEG_HIGH        EQU     4006h       ; Tens digit display
 KEYPAD_ADDR     EQU     4008h       ; Keypad input address
 
 ; =====================================================================
-; Configuration Constants
+; Hardware Configuration Constants
 ; =====================================================================
 SWITCH_S3_BIT   EQU     80h         ; S3 is bit 7
 LED_D0          EQU     01h         ; Alarm LED (bit 0) - active low in shadow
@@ -33,44 +32,44 @@ BLINK_MS        EQU     250         ; 250ms for ~2Hz blink (toggle every 250ms)
 ; =====================================================================
             RSEG        DATA16_I
 
-; ---- Bus comms (used by BusRead/BusWrite) ----
+; ---- Bus Comms (Used by BusRead/BusWrite) ----
 BusAddress      DW      0
 BusData         DW      0
 
-; ---- Timing state ----
+; ---- Timing State ----
 seconds         DW      0           ; elapsed seconds (0..99)
 ms_count        DW      0           ; ms within current second
 timing          DB      0           ; 1 = timing
 
-; ---- S3 debounce ----
+; ---- S3 Debounce ----
 s3_debounced    DB      0
 s3_last         DB      0
 s3_raw          DB      0
 debounce_cnt    DW      0
 
-; ---- Alarm / blink ----
-threshold       DB      10          ; default threshold (10 s)
+; ---- Alarm/Blink ----
+threshold       DB      99          ; default threshold (10 s)
 alarm_on        DB      0
 blink_count     DW      0
 
-; ---- Flags for main loop ----
+; ---- Flags for Main Loop ----
 flag_switch     DB      0
 flag_second     DB      0
 flag_blink      DB      0
 lcd_refresh     DB      0
 
-; ---- Threshold entry (keypad) ----
+; ---- Threshold Entry (Keypad) ----
 digit_count     DB      0           ; 0=no input, 1=first digit, 2=done
 digit_buffer    DB      0, 0        ; two digits
 
 ; ---- LED shadow (ACTIVE-LOW: 0=ON, 1=OFF) ----
 leds            DB      0FFh
 
-; ---- Seven-segment glyphs for 0..9 ----
+; ---- Seven-Segment Lookup Table (0..9) ----
 SegmentLookup   DB      40h, 79h, 24h, 30h, 19h
                 DB      12h, 02h, 78h, 00h, 18h
 
-; ---- Keypad scan code lookup (0..9) ----
+; ---- Keypad Scan Lookup Table (0..9) ----
 KeypadLookup    DB      82h, 11h, 12h, 14h, 21h
                 DB      22h, 24h, 41h, 42h, 44h
 
@@ -93,7 +92,6 @@ str_exceeded    DB      'EXCEEDED! '
 ; Code Segment
 ; =====================================================================
             RSEG        CODE
-
 ; ---------------------------------------------------------------------
 ; Main Entry Point
 ; ---------------------------------------------------------------------
@@ -102,7 +100,7 @@ main:
             CALLA       #Initial
             CALL        #LCD_Init
 
-            ; Clear state
+            ; Clear states
             MOV.W       #0,      ms_count
             MOV.W       #0,      seconds
             MOV.B       #0,      timing
@@ -144,14 +142,14 @@ main:
 ; Main Loop
 ; ---------------------------------------------------------------------
 MainLoop:
-            BIS.W       #LPM0|GIE, SR       ; sleep until an event wakes us
+            BIS.W       #LPM0|GIE, SR       ; Sleep until an event occurs
 
             ; switch edge event
             CMP.B       #0, flag_switch
             JZ          CheckSecond
             MOV.B       #0, flag_switch
 
-            ; Rising edge? (last==0 && debounced==1)
+            ; Check rising edge (last==0 && debounced==1)
             CMP.B       #0, s3_last
             JNZ         CheckFall
             CMP.B       #0, s3_debounced
@@ -170,7 +168,7 @@ MainLoop:
             JMP         UpdateS3Last
 
 CheckFall:
-            ; Falling edge? (debounced==0)
+            ; Check falling edge (debounced==0)
             CMP.B       #0, s3_debounced
             JNZ         UpdateS3Last
 
@@ -181,7 +179,7 @@ CheckFall:
             CALL        #UpdateLEDs
             CALL        #ShowElapsedStatus
 
-            ; reset keypad entry state
+            ; Reset keypad threshold entry state
             MOV.B       #0, digit_count
             MOV.B       #0, digit_buffer
             MOV.B       #0, digit_buffer+1
@@ -205,13 +203,13 @@ CheckSecond:
             CALL        #ShowTimingStatus
 
 CheckAlarmSecond:
-            ; threshold check (byte compare is fine, seconds<=99)
+            ; Threshold check (byte compare: seconds >= threshold?)
             MOV.B       threshold, R13
             MOV.B       seconds,   R12
             CMP.B       R13, R12
             JL          CheckBlinkFlag
 
-            ; threshold exceeded
+            ; Threshold exceeded
             CMP.B       #0, alarm_on
             JNZ         CheckBlinkFlag
             MOV.B       #1, alarm_on
@@ -235,9 +233,8 @@ CheckLCDRefresh:
             CALL        #UpdateLCDStatus
             JMP         MainLoop
 
-
 ; ---------------------------------------------------------------------
-; TIMER0_A0 ISR - 1ms tick (NO KEYPAD POLLING - FIXED!)
+; TIMER0_A0 ISR - 1ms tick 
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
@@ -331,9 +328,8 @@ WriteLEDs:
             POP.W       R12
             RETI
 
-
 ; ---------------------------------------------------------------------
-; PORT2 ISR (keypad IRQ) - Enhanced debouncing
+; PORT2 ISR (keypad IRQ and Debouncing)
 ; ---------------------------------------------------------------------
             RSEG        CODE
             EVEN
@@ -381,7 +377,6 @@ P2_Done:
             POP.W       R13
             POP.W       R12
             RETI
-
 
 ; ---------------------------------------------------------------------
 ; Keypad decode helper
@@ -448,7 +443,6 @@ KP_Exit:
             POP.W       R14
             POP.W       R13
             RET
-
 
 ; ---------------------------------------------------------------------
 ; Helper Functions
@@ -535,7 +529,6 @@ DivDone:
             POP.W       R15
             POP.W       R14
             RET
-
 
 ; ---------------------------------------------------------------------
 ; LCD Functions
